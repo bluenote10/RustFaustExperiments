@@ -20,7 +20,8 @@ use faust_benchmarks::benchmark_runner::run_benchmark;
 const SAMPLE_RATE: i32 = 44100;
 
 fn main() {
+    println!("Size of DSP struct: {}", std::mem::size_of::<Dsp>());
     let mut dsp = Dsp::new();
     dsp.init(SAMPLE_RATE);
-    run_benchmark(Box::new(dsp));
+    run_benchmark(Box::new(dsp), SAMPLE_RATE);
 }
