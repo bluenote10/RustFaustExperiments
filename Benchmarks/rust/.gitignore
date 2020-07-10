@@ -1,0 +1,23 @@
+/target/
+
+Cargo.lock
+
+/faust/src/bin/debug_faust_dsp.rs
+/faust/dsp/faust_lib/
+
+/samples/*.wav
+/generated/**/*.wav
+/generated/**/*.png
+/generated/**/*.pdf
+/generated/**/*.log
+
+data/test_songs/*.json
+!data/test_songs/basic*.json
+
+
+# Python
+.idea
+*.pyc
+__pycache__/
+
+perf.data
