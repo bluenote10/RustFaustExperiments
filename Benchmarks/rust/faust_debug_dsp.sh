@@ -20,9 +20,10 @@ echo "FAUSTLIB:   $FAUSTLIB"
 echo "FAUSTINC:   $FAUSTINC"
 echo "FAUSTARCH:  $FAUSTARCH"
 
-faust -a ./architecture/debug_advanced.rs -lang rust "$DSPFILE" -o ./src/bin/debug_faust_dsp.rs --class-name Dsp
+DSP_FILE_BASENAME=$(basename $DSPFILE)
+FILE_WITHOUT_EXTENSION=${DSP_FILE_BASENAME%.dsp}
+RUST_FILE=${FILE_WITHOUT_EXTENSION}.rs
 
-cargo run --bin debug_faust_dsp --release
+faust -a ./architecture/minimal.rs -lang rust "$DSPFILE" -o ./src/bin/$RUST_FILE --class-name Dsp
 
-cd ..
-./py_dev/plot_debug_log.py
+cargo run --bin ${FILE_WITHOUT_EXTENSION} --release
