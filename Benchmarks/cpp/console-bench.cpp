@@ -1,31 +1,13 @@
-/************************************************************************
-    FAUST Architecture File
-    Copyright (C) 2003-2011 GRAME, Centre National de Creation Musicale
-    ---------------------------------------------------------------------
-    This Architecture section is free software; you can redistribute it
-    and/or modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 3 of
-    the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; If not, see <http://www.gnu.org/licenses/>.
-
-    EXCEPTION : As a special exception, you may create a larger work
-    that contains this FAUST architecture section and distribute
-    that work under terms of your choice, so long as this FAUST
-    architecture section is not modified.
-
- ************************************************************************/
+#include <chrono>
+#include <iostream>
+#include <memory>
+#include <vector>
 
 #include <libgen.h>
 
 #include "faust/gui/UI.h"
-#include "faust/dsp/dsp.h"  // or "faust/dsp/llvm-dsp.h"
+#include "faust/dsp/dsp.h"  // or "faust/dsp/llvm-dsp.h" ?
 #include "faust/misc.h"
 
 using namespace std;
@@ -40,7 +22,58 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    auto dsp = new mydsp();
+    int buffer_size = 1024;
+    int sample_rate = 44100;
+    int min_samples = sample_rate * 60;
+
+    for (int i = 0; i < 10; ++i) {
+        auto dsp = std::make_unique<mydsp>();
+        dsp->init(sample_rate);
+
+        int num_inputs = dsp->getNumInputs();
+        int num_outputs = dsp->getNumOutputs();
+
+        // Prepare buffers
+        std::vector<float> in_buffer(num_inputs * buffer_size);
+        std::vector<float> out_buffer(num_outputs * buffer_size);
+
+        // Set input buffers to fixed impulse responses
+        for (int c = 0; c < num_inputs; ++c) {
+            for (int j = 0; j < buffer_size; ++j) {
+                in_buffer[c * buffer_size + j] = (j == 0 ? 1.0 : 0.0);
+            }
+        }
+
+        // Compute
+        float sample_sum = 0.0;
+        int num_samples_written = 0;
+
+        std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+        while (num_samples_written < min_samples) {
+            dsp->compute(
+                buffer_size,
+                (float**) in_buffer.data(),
+                (float**) out_buffer.data());
+
+            // handle outputs
+            for (int c = 0; c < num_outputs; ++c) {
+                for (int j = 0; j < buffer_size; ++j) {
+                    sample_sum += out_buffer[c * buffer_size + j];
+                }
+            }
+            num_samples_written += buffer_size;
+        }
+        std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+
+        auto elapsed_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+        auto elapsed = (double) elapsed_ns / 1e9;
+        auto audio_length = (double) num_samples_written / (double) sample_rate;
+        auto load = 100.0 * 100.0 * elapsed / audio_length;
+        auto throughput = double(num_samples_written * 4) / double(elapsed);
+
+        std::cout << "Rendered audio of length " << audio_length << " sec in " << elapsed << " sec [load: " << load << " %]    " << throughput << " MB/sec\n";
+    }
+
 
     return 0;
 }

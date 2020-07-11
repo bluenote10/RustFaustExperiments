@@ -56,13 +56,13 @@ where
 
         let elapsed = timer.elapsed().as_secs_f64();
         let audio_length = num_samples_written as f64 / sample_rate as f64;
-        let troughput = (num_samples_written * 4) as f64 / elapsed;
+        let throughput = (num_samples_written * 4) as f64 / elapsed;
         println!(
             "Rendered audio of length {:.3} sec in {:.3} sec [load: {:.3} %]    {:.3} MB/sec",
             audio_length,
             elapsed,
             100.0 * elapsed / audio_length,
-            troughput / 1024.0 / 1024.0,
+            throughput / 1024.0 / 1024.0,
         );
 
         println!("Sample sum: {}", sample_sum);

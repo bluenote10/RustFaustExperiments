@@ -32,3 +32,5 @@ g++ -O3 -O3 -march=native -mfpmath=sse -msse -msse2 -msse3 -ffast-math -ftree-ve
   -I$FAUSTINC\
   ./src/$CPP_FILE \
   -o ./bin/$FILE_WITHOUT_EXTENSION
+
+./bin/$FILE_WITHOUT_EXTENSION
