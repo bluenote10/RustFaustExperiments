@@ -24,7 +24,7 @@ DSP_FILE_BASENAME=$(basename $DSPFILE)
 FILE_WITHOUT_EXTENSION=${DSP_FILE_BASENAME%.dsp}
 RUST_FILE=${FILE_WITHOUT_EXTENSION}.rs
 
-faust -a ./architecture/minimal.rs -lang rust "$DSPFILE" -o ./src/bin/$RUST_FILE --class-name Dsp
+faust -a ./architecture/benchmark.rs -lang rust "$DSPFILE" -o ./src/bin/$RUST_FILE --class-name Dsp
 rustfmt ./src/bin/$RUST_FILE
 
 cargo run --bin ${FILE_WITHOUT_EXTENSION} --release
