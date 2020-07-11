@@ -38,7 +38,6 @@ where
 
         let timer = Instant::now();
         while num_samples_written < min_samples {
-
             dsp.compute(
                 buffer_size as i32,
                 in_buffer.iter().map(|buffer| buffer.as_slice()).collect::<Vec<&[FloatType]>>().as_slice(),
@@ -48,15 +47,17 @@ where
             // handle outputs
             for c in 0..num_outputs {
                 for j in 0..buffer_size {
-                    sample_sum += out_buffer[c][j];
+                    unsafe {
+                        sample_sum += out_buffer.get_unchecked(c).get_unchecked(j);
+                    }
                 }
             }
             num_samples_written += buffer_size;
         }
-
         let elapsed = timer.elapsed().as_secs_f64();
+
         let audio_length = num_samples_written as f64 / sample_rate as f64;
-        let throughput = (num_samples_written * 4) as f64 / elapsed;
+        let throughput = (num_samples_written * std::mem::size_of::<FloatType>() * num_outputs) as f64 / elapsed;
         println!(
             "Rendered audio of length {:.3} sec in {:.3} sec [load: {:.3} %]    {:.3} MB/sec",
             audio_length,

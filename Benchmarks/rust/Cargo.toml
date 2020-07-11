@@ -7,9 +7,3 @@ edition = "2018"
 [dependencies]
 
 libm = "*"
-hound = "3.4.0"
-
-num-traits = "0.2"
-
-portaudio = "*"
-rand = "*"

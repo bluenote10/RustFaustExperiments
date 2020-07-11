@@ -72,9 +72,10 @@ int main(int argc, char *argv[])
         auto elapsed = (double) elapsed_ns / 1e9;
         auto audio_length = (double) num_samples_written / (double) sample_rate;
         auto load = 100.0 * elapsed / audio_length;
-        auto throughput = double(num_samples_written * 4) / double(elapsed) / 1024 / 1024;
+        auto throughput = double(num_samples_written * 4 * num_outputs) / double(elapsed) / 1024 / 1024;
 
         std::cout << "Rendered audio of length " << audio_length << " sec in " << elapsed << " sec [load: " << load << " %]    " << throughput << " MB/sec\n";
+        std::cout << "Sample sum: " << sample_sum << "\n";
 
         for (int i = 0; i < num_inputs; ++i) {
             delete [] in_buffer[i];
