@@ -60,9 +60,7 @@ int main(int argc, char *argv[])
 
             // handle outputs
             for (int c = 0; c < num_outputs; ++c) {
-                for (int j = 0; j < buffer_size; ++j) {
-                    sample_sum += out_buffer[c][j];
-                }
+                sample_sum += out_buffer[c][0];
             }
             num_samples_written += buffer_size;
         }

@@ -46,10 +46,8 @@ where
 
             // handle outputs
             for c in 0..num_outputs {
-                for j in 0..buffer_size {
-                    unsafe {
-                        sample_sum += out_buffer.get_unchecked(c).get_unchecked(j);
-                    }
+                unsafe {
+                    sample_sum += out_buffer.get_unchecked(c).get_unchecked(0);
                 }
             }
             num_samples_written += buffer_size;
