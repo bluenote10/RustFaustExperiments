@@ -21,7 +21,10 @@ const SAMPLE_RATE: i32 = 44100;
 
 fn main() {
     println!("Size of DSP struct: {}", std::mem::size_of::<Dsp>());
-    let mut dsp = Dsp::new();
-    dsp.init(SAMPLE_RATE);
-    run_benchmark(Box::new(dsp), SAMPLE_RATE);
+
+    run_benchmark(|| {
+        let mut dsp = Dsp::new();
+        dsp.init(SAMPLE_RATE);
+        Box::new(dsp)
+    }, SAMPLE_RATE);
 }

@@ -6,15 +6,20 @@ use std::time::Instant;
 type FloatType = f32;
 
 
-pub fn run_benchmark(mut dsp: Box<dyn FaustDsp<T=f32>>, sample_rate: i32) {
+pub fn run_benchmark<F>(dsp_initializer: F, sample_rate: i32)
+where
+    F: Fn() -> Box<dyn FaustDsp<T=FloatType>>
+{
     // Generation constants
     let buffer_size = 1024;
     let min_samples = sample_rate as usize * 60;
 
-    let num_inputs = dsp.get_num_inputs() as usize;
-    let num_outputs = dsp.get_num_outputs() as usize;
-
     for _ in 1 ..= 10 {
+
+        let mut dsp = dsp_initializer();
+
+        let num_inputs = dsp.get_num_inputs() as usize;
+        let num_outputs = dsp.get_num_outputs() as usize;
 
         // Prepare buffers
         let mut in_buffer = vec![vec![0 as FloatType; buffer_size]; num_inputs];
