@@ -33,4 +33,6 @@ g++ -O3 -O3 -march=native -mfpmath=sse -msse -msse2 -msse3 -ffast-math -ftree-ve
   ./src/$CPP_FILE \
   -o ./bin/$FILE_WITHOUT_EXTENSION
 
+# It looks like -march=native -ffast-math are the most relevant optimizations?
+
 ./bin/$FILE_WITHOUT_EXTENSION
