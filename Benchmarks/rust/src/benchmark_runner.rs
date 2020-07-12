@@ -5,6 +5,17 @@ use std::time::Instant;
 
 type FloatType = f32;
 
+fn stats(values: &[f64]) -> (f64, f64, f64) {
+    let mut values = values.to_vec();
+    values.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    let mid = values.len() / 2;
+    let median = if values.len() % 2 == 0 {
+        (values[mid] + values[mid + 1]) / 2.0
+    } else {
+        values[mid]
+    };
+    (*values.first().unwrap(), median, *values.last().unwrap())
+}
 
 pub fn run_benchmark<F>(dsp_initializer: F, sample_rate: i32)
 where
@@ -12,9 +23,9 @@ where
 {
     // Generation constants
     let buffer_size = 1024;
-    let min_samples = sample_rate as usize * 60;
+    let min_samples = sample_rate as usize * 60 * 3;
 
-    for _ in 1 ..= 10 {
+    let throughputs: Vec<_> = (1 ..= 10).map(|_| {
 
         let mut dsp = dsp_initializer();
 
@@ -57,13 +68,21 @@ where
         let audio_length = num_samples_written as f64 / sample_rate as f64;
         let throughput = (num_samples_written * std::mem::size_of::<FloatType>() * num_outputs) as f64 / elapsed;
         println!(
-            "Rendered audio of length {:.3} sec in {:.3} sec [load: {:.3} %]    {:.3} MB/sec",
+            "Rendered audio of length {:.1} sec in {:.3} sec [load: {:.3} %]    {:.3} MB/sec    Sample checksum: {}",
             audio_length,
             elapsed,
             100.0 * elapsed / audio_length,
             throughput / 1024.0 / 1024.0,
+            sample_sum,
         );
 
-        println!("Sample sum: {}", sample_sum);
-    }
+        throughput
+    }).collect();
+
+    let (min, median, max) = stats(&throughputs);
+    println!("");
+    println!("Throughput min:    {:.3}", min / 1024.0 / 1024.0);
+    println!("Throughput median: {:.3}", median / 1024.0 / 1024.0);
+    println!("Throughput max:    {:.3}", max / 1024.0 / 1024.0);
+    println!("");
 }

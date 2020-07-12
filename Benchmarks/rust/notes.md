@@ -55,3 +55,27 @@ With explictly sized slices:
                 as f32);
         }
 ```
+
+## Variantions on `reverb`:
+
+```rust
+
+        let inputs0 = &inputs[0][..count as usize];
+        let inputs1 = &inputs[1][..count as usize];
+        assert!(outputs.len() >= 2);
+        let (outputs0, outputs1) = if let [outputs0, outputs1, ..] = &mut outputs[0..2] {
+            let outputs0 = &mut outputs0[..count as usize];
+            let outputs1 = &mut outputs1[..count as usize];
+            (outputs0, outputs1)
+        } else {
+            panic!("wrong number of outputs");
+        };
+
+        for (((input0, input1), output0), output1) in inputs0.iter().zip(inputs1.iter()).zip(outputs0.iter_mut()).zip(outputs1.iter_mut()) {
+            // ...
+            let mut fTemp0: f32 = (*input0 as f32);
+            let mut fTemp3: f32 = (*input1 as f32);
+            // same with output
+        }
+
+```
