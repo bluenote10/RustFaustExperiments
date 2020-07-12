@@ -28,7 +28,7 @@ set -x
 
 faust -a ./console-bench.cpp "$DSPFILE" -o ./src/$CPP_FILE --class-name Dsp
 
-g++ -O3 -O3 -march=native -mfpmath=sse -msse -msse2 -msse3 -ffast-math -ftree-vectorize \
+g++ -O3 -O3 -march=native -mfpmath=sse -msse -msse2 -msse3 -ftree-vectorize $EXTRA_CPP_ARGS \
   -I$FAUSTINC\
   ./src/$CPP_FILE \
   -o ./bin/$FILE_WITHOUT_EXTENSION

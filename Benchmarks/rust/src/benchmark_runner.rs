@@ -55,7 +55,7 @@ where
                 out_buffer.iter_mut().map(|buffer| buffer.as_mut_slice()).collect::<Vec<&mut [FloatType]>>().as_mut_slice(),
             );
 
-            // handle outputs
+            // Lightweight result access to prevent overoptimizations
             for c in 0..num_outputs {
                 unsafe {
                     sample_sum += out_buffer.get_unchecked(c).get_unchecked(0);
@@ -81,8 +81,8 @@ where
 
     let (min, median, max) = stats(&throughputs);
     println!("");
-    println!("Throughput min:    {:.3}", min / 1024.0 / 1024.0);
-    println!("Throughput median: {:.3}", median / 1024.0 / 1024.0);
-    println!("Throughput max:    {:.3}", max / 1024.0 / 1024.0);
+    println!("Throughput min:    {:.3} MB/sec", min / 1024.0 / 1024.0);
+    println!("Throughput median: {:.3} MB/sec", median / 1024.0 / 1024.0);
+    println!("Throughput max:    {:.3} MB/sec", max / 1024.0 / 1024.0);
     println!("");
 }

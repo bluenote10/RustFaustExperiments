@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <memory>
@@ -9,8 +10,6 @@
 #include "faust/gui/UI.h"
 #include "faust/dsp/dsp.h"  // or "faust/dsp/llvm-dsp.h" ?
 #include "faust/misc.h"
-
-using namespace std;
 
 <<includeIntrinsic>>
 
@@ -24,7 +23,9 @@ int main(int argc, char *argv[])
 {
     int buffer_size = 1024;
     int sample_rate = 44100;
-    int min_samples = sample_rate * 60;
+    int min_samples = sample_rate * 60 * 3;
+
+    std::vector<double> throughputs;
 
     for (int i = 0; i < 10; ++i) {
         auto dsp = std::make_unique<mydsp>();
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
         while (num_samples_written < min_samples) {
             dsp->compute(buffer_size, in_buffer, out_buffer);
 
-            // handle outputs
+            // Lightweight result access to prevent overoptimizations
             for (int c = 0; c < num_outputs; ++c) {
                 sample_sum += out_buffer[c][0];
             }
@@ -70,11 +71,18 @@ int main(int argc, char *argv[])
         auto elapsed = (double) elapsed_ns / 1e9;
         auto audio_length = (double) num_samples_written / (double) sample_rate;
         auto load = 100.0 * elapsed / audio_length;
-        auto throughput = double(num_samples_written * 4 * num_outputs) / double(elapsed) / 1024 / 1024;
+        auto throughput = double(num_samples_written * 4 * num_outputs) / double(elapsed);
 
-        std::cout << "Rendered audio of length " << audio_length << " sec in " << elapsed << " sec [load: " << load << " %]    " << throughput << " MB/sec\n";
-        std::cout << "Sample sum: " << sample_sum << "\n";
+        throughputs.emplace_back(throughput);
 
+        std::cout <<
+            "Rendered audio of length " << audio_length <<
+            " sec in " << elapsed <<
+            " sec [load: " << load << " %]    " <<
+            throughput / 1024 / 1024 << " MB/sec" <<
+            "    sample checksum: " << sample_sum << "\n";
+
+        // Cleanup buffers
         for (int i = 0; i < num_inputs; ++i) {
             delete [] in_buffer[i];
         }
@@ -85,6 +93,21 @@ int main(int argc, char *argv[])
         delete [] out_buffer;
     }
 
+    // print throughput stats
+    double min = *std::min_element(std::begin(throughputs), std::end(throughputs));
+    double max = *std::max_element(std::begin(throughputs), std::end(throughputs));
+
+    size_t mid = throughputs.size() / 2;
+    std::sort(throughputs.begin(), throughputs.end());
+    double median = (
+        throughputs.size() % 2 == 0 ?
+        (throughputs[mid] + throughputs[mid + 1]) / 2 :
+        throughputs[mid]
+    );
+    std::cout << "\n";
+    std::cout << "Throughput min:    " << min / 1024 / 1024 << " MB/sec" << std::endl;
+    std::cout << "Throughput median: " << median / 1024 / 1024 << " MB/sec" << std::endl;
+    std::cout << "Throughput max:    " << max / 1024 / 1024 << " MB/sec" << std::endl;
 
     return 0;
 }
