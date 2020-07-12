@@ -40,6 +40,6 @@ df = pd.DataFrame(
     ],
 ).transpose()
 
-print(tabulate.tabulate(df, tablefmt="pipe", headers="keys", floatfmt=".3f"))
+print(tabulate.tabulate(df, tablefmt="pipe", headers="keys", floatfmt=".1f"))
 
 # import IPython; IPython.embed()
