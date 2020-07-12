@@ -1,3 +1,22 @@
+## Relevant resources
+
+- [Taking Advantage of Auto-Vectorization in Rust](https://www.nickwilcox.com/blog/autovec/)
+- [Does rustc have auto-vectorization?](https://www.reddit.com/r/rust/comments/8uccla/does_rustc_have_autovectorization/)
+- [Is there a clear syntax for iterating multiple iterators at once?](https://users.rust-lang.org/t/is-there-a-clear-syntax-for-iterating-multiple-iterators-at-once/4024)
+- [How to “zip” two slices efficiently](https://users.rust-lang.org/t/how-to-zip-two-slices-efficiently/2048)
+- [Iterator and compiler auto-vectorization issue](https://github.com/rust-lang/rust/issues/66268#issuecomment-552193374)
+- [Auto-vectorization in Rust](https://users.rust-lang.org/t/auto-vectorization-in-rust/24379/4)
+- [faster](https://github.com/AdamNiederer/faster)
+- [Towards fearless SIMD](https://raphlinus.github.io/rust/simd/2018/10/19/fearless-simd.html)
+- [fearless_simd](https://github.com/raphlinus/fearless_simd)
+- [synthesizer-io](https://github.com/raphlinus/synthesizer-io/tree/master/synthesizer-io-core)
+- [RFC portable packed SIMD](https://github.com/gnzlbg/rfcs/blob/ppv/text/0000-ppv.md)
+
+## Test on Compiler Explorer
+
+- [`math`](https://rust.godbolt.org/z/z5EW8j)
+
+
 ## Variations on `copy1`:
 
 This is slightly faster:

@@ -7,7 +7,7 @@ DSP throughput comparison of Rust vs C++:
 | copy1     | 5052.4 |             19449.7 |          19261.8 |
 | copy2     | 5040.1 |             65471.4 |          65031.8 |
 | math      |  951.5 |              6688.1 |           7156.8 |
-| karplus32 |   80.5 |                78.0 |             80.9 |
+| karplus32 |   85.0 |                78.0 |             80.9 |
 | reverb    |   81.9 |                86.5 |            105.3 |
 
 Numbers are output throughput in MB/s.
