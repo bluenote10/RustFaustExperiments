@@ -1,6 +1,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -104,6 +105,7 @@ int main(int argc, char *argv[])
         (throughputs[mid] + throughputs[mid + 1]) / 2 :
         throughputs[mid]
     );
+    std::cout << std::fixed << std::setprecision(3);
     std::cout << "\n";
     std::cout << "Throughput min:    " << min / 1024 / 1024 << " MB/sec" << std::endl;
     std::cout << "Throughput median: " << median / 1024 / 1024 << " MB/sec" << std::endl;
