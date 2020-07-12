@@ -34,7 +34,7 @@ This is slightly faster:
     }
 ```
 
-## Variantions on `math`:
+## Variations on `math`:
 
 With unchecked gets:
 
@@ -75,7 +75,7 @@ With explictly sized slices:
         }
 ```
 
-## Variantions on `reverb`:
+## Variations on `reverb`:
 
 ```rust
 
