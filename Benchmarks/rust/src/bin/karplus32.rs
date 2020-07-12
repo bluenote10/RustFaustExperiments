@@ -461,52 +461,17 @@ impl FaustDsp for Dsp {
     fn build_user_interface_static(ui_interface: &mut dyn UI<Self::T>) {
         ui_interface.open_vertical_box("karplus32");
         ui_interface.open_vertical_box("excitator");
-        ui_interface.add_horizontal_slider(
-            "excitation (samples)",
-            ParamIndex(0),
-            128.0,
-            2.0,
-            512.0,
-            1.0,
-        );
+        ui_interface.add_horizontal_slider("excitation (samples)", ParamIndex(0), 128.0, 2.0, 512.0, 1.0);
         ui_interface.add_button("play", ParamIndex(1));
         ui_interface.close_box();
         ui_interface.open_vertical_box("noise generator");
-        ui_interface.add_horizontal_slider(
-            "level",
-            ParamIndex(2),
-            0.5,
-            0.0,
-            1.0,
-            0.10000000000000001,
-        );
+        ui_interface.add_horizontal_slider("level", ParamIndex(2), 0.5, 0.0, 1.0, 0.10000000000000001);
         ui_interface.close_box();
-        ui_interface.add_horizontal_slider(
-            "output volume",
-            ParamIndex(3),
-            0.5,
-            0.0,
-            1.0,
-            0.10000000000000001,
-        );
+        ui_interface.add_horizontal_slider("output volume", ParamIndex(3), 0.5, 0.0, 1.0, 0.10000000000000001);
         ui_interface.open_vertical_box("resonator x32");
-        ui_interface.add_horizontal_slider(
-            "attenuation",
-            ParamIndex(4),
-            0.10000000000000001,
-            0.0,
-            1.0,
-            0.01,
-        );
+        ui_interface.add_horizontal_slider("attenuation", ParamIndex(4), 0.10000000000000001, 0.0, 1.0, 0.01);
         ui_interface.add_horizontal_slider("detune", ParamIndex(5), 32.0, 0.0, 512.0, 1.0);
-        ui_interface.add_horizontal_slider(
-            "duration (samples)",
-            ParamIndex(6),
-            128.0,
-            2.0,
-            512.0,
-            1.0,
-        );
+        ui_interface.add_horizontal_slider("duration (samples)", ParamIndex(6), 128.0, 2.0, 512.0, 1.0);
         ui_interface.add_horizontal_slider("polyphony", ParamIndex(7), 1.0, 0.0, 32.0, 1.0);
         ui_interface.close_box();
         ui_interface.close_box();
@@ -552,153 +517,105 @@ impl FaustDsp for Dsp {
         let mut iSlow8: i32 = (f32::min(4096.0, f32::max(0.0, (fSlow7 + -1.5))) as i32);
         let mut fSlow9: f32 = (((fSlow1 > 2.0) as i32) as f32);
         let mut fSlow10: f32 = (self.fHslider6 as f32);
-        let mut iSlow11: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (2.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow11: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (2.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow12: f32 = (((fSlow1 > 4.0) as i32) as f32);
-        let mut iSlow13: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (4.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow13: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (4.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow14: f32 = (((fSlow1 > 6.0) as i32) as f32);
-        let mut iSlow15: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (6.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow15: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (6.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow16: f32 = (((fSlow1 > 8.0) as i32) as f32);
-        let mut iSlow17: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (8.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow17: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (8.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow18: f32 = (((fSlow1 > 10.0) as i32) as f32);
-        let mut iSlow19: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (10.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow19: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (10.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow20: f32 = (((fSlow1 > 12.0) as i32) as f32);
-        let mut iSlow21: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (12.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow21: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (12.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow22: f32 = (((fSlow1 > 14.0) as i32) as f32);
-        let mut iSlow23: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (14.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow23: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (14.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow24: f32 = (((fSlow1 > 16.0) as i32) as f32);
-        let mut iSlow25: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (16.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow25: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (16.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow26: f32 = (((fSlow1 > 18.0) as i32) as f32);
-        let mut iSlow27: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (18.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow27: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (18.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow28: f32 = (((fSlow1 > 20.0) as i32) as f32);
-        let mut iSlow29: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (20.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow29: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (20.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow30: f32 = (((fSlow1 > 22.0) as i32) as f32);
-        let mut iSlow31: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (22.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow31: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (22.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow32: f32 = (((fSlow1 > 24.0) as i32) as f32);
-        let mut iSlow33: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (24.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow33: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (24.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow34: f32 = (((fSlow1 > 26.0) as i32) as f32);
-        let mut iSlow35: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (26.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow35: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (26.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow36: f32 = (((fSlow1 > 28.0) as i32) as f32);
-        let mut iSlow37: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (28.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow37: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (28.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow38: f32 = (((fSlow1 > 30.0) as i32) as f32);
-        let mut iSlow39: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (30.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow39: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (30.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow40: f32 = (((fSlow1 > 1.0) as i32) as f32);
-        let mut iSlow41: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow10 + fSlow7) + -1.5))) as i32);
+        let mut iSlow41: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow10 + fSlow7) + -1.5))) as i32);
         let mut fSlow42: f32 = (((fSlow1 > 3.0) as i32) as f32);
-        let mut iSlow43: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (3.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow43: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (3.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow44: f32 = (((fSlow1 > 5.0) as i32) as f32);
-        let mut iSlow45: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (5.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow45: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (5.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow46: f32 = (((fSlow1 > 7.0) as i32) as f32);
-        let mut iSlow47: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (7.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow47: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (7.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow48: f32 = (((fSlow1 > 9.0) as i32) as f32);
-        let mut iSlow49: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (9.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow49: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (9.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow50: f32 = (((fSlow1 > 11.0) as i32) as f32);
-        let mut iSlow51: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (11.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow51: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (11.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow52: f32 = (((fSlow1 > 13.0) as i32) as f32);
-        let mut iSlow53: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (13.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow53: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (13.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow54: f32 = (((fSlow1 > 15.0) as i32) as f32);
-        let mut iSlow55: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (15.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow55: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (15.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow56: f32 = (((fSlow1 > 17.0) as i32) as f32);
-        let mut iSlow57: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (17.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow57: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (17.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow58: f32 = (((fSlow1 > 19.0) as i32) as f32);
-        let mut iSlow59: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (19.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow59: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (19.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow60: f32 = (((fSlow1 > 21.0) as i32) as f32);
-        let mut iSlow61: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (21.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow61: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (21.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow62: f32 = (((fSlow1 > 23.0) as i32) as f32);
-        let mut iSlow63: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (23.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow63: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (23.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow64: f32 = (((fSlow1 > 25.0) as i32) as f32);
-        let mut iSlow65: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (25.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow65: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (25.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow66: f32 = (((fSlow1 > 27.0) as i32) as f32);
-        let mut iSlow67: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (27.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow67: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (27.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow68: f32 = (((fSlow1 > 29.0) as i32) as f32);
-        let mut iSlow69: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (29.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow69: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (29.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow70: f32 = (((fSlow1 > 31.0) as i32) as f32);
-        let mut iSlow71: i32 =
-            (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (31.0 * fSlow10)) + -1.5))) as i32);
+        let mut iSlow71: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (31.0 * fSlow10)) + -1.5))) as i32);
         for i in 0..count {
             self.fVec0[0] = fSlow5;
             self.fRec1[0] = ((self.fRec1[1] + ((((fSlow5 - self.fVec0[1]) > 0.0) as i32) as f32))
                 - (fSlow6 * (((self.fRec1[1] > 0.0) as i32) as f32)));
             self.iRec2[0] = ((1103515245 * self.iRec2[1]) + 12345);
-            let mut fTemp0: f32 = (fSlow4
-                * (((((self.fRec1[0] > 0.0) as i32) as f32) + 1.52587891e-05)
-                    * (self.iRec2[0] as f32)));
-            self.fVec1[(self.IOTA & 511) as usize] =
-                ((fSlow3 * (self.fRec0[1] + self.fRec0[2])) + fTemp0);
+            let mut fTemp0: f32 =
+                (fSlow4 * (((((self.fRec1[0] > 0.0) as i32) as f32) + 1.52587891e-05) * (self.iRec2[0] as f32)));
+            self.fVec1[(self.IOTA & 511) as usize] = ((fSlow3 * (self.fRec0[1] + self.fRec0[2])) + fTemp0);
             self.fRec0[0] = self.fVec1[((self.IOTA - iSlow8) & 511) as usize];
-            self.fVec2[(self.IOTA & 2047) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec3[1] + self.fRec3[2])));
+            self.fVec2[(self.IOTA & 2047) as usize] = (fTemp0 + (fSlow3 * (self.fRec3[1] + self.fRec3[2])));
             self.fRec3[0] = self.fVec2[((self.IOTA - iSlow11) & 2047) as usize];
-            self.fVec3[(self.IOTA & 4095) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec4[1] + self.fRec4[2])));
+            self.fVec3[(self.IOTA & 4095) as usize] = (fTemp0 + (fSlow3 * (self.fRec4[1] + self.fRec4[2])));
             self.fRec4[0] = self.fVec3[((self.IOTA - iSlow13) & 4095) as usize];
-            self.fVec4[(self.IOTA & 4095) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec5[1] + self.fRec5[2])));
+            self.fVec4[(self.IOTA & 4095) as usize] = (fTemp0 + (fSlow3 * (self.fRec5[1] + self.fRec5[2])));
             self.fRec5[0] = self.fVec4[((self.IOTA - iSlow15) & 4095) as usize];
-            self.fVec5[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec6[1] + self.fRec6[2])));
+            self.fVec5[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec6[1] + self.fRec6[2])));
             self.fRec6[0] = self.fVec5[((self.IOTA - iSlow17) & 8191) as usize];
-            self.fVec6[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec7[1] + self.fRec7[2])));
+            self.fVec6[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec7[1] + self.fRec7[2])));
             self.fRec7[0] = self.fVec6[((self.IOTA - iSlow19) & 8191) as usize];
-            self.fVec7[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec8[1] + self.fRec8[2])));
+            self.fVec7[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec8[1] + self.fRec8[2])));
             self.fRec8[0] = self.fVec7[((self.IOTA - iSlow21) & 8191) as usize];
-            self.fVec8[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec9[1] + self.fRec9[2])));
+            self.fVec8[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec9[1] + self.fRec9[2])));
             self.fRec9[0] = self.fVec8[((self.IOTA - iSlow23) & 8191) as usize];
-            self.fVec9[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec10[1] + self.fRec10[2])));
+            self.fVec9[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec10[1] + self.fRec10[2])));
             self.fRec10[0] = self.fVec9[((self.IOTA - iSlow25) & 8191) as usize];
-            self.fVec10[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec11[1] + self.fRec11[2])));
+            self.fVec10[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec11[1] + self.fRec11[2])));
             self.fRec11[0] = self.fVec10[((self.IOTA - iSlow27) & 8191) as usize];
-            self.fVec11[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec12[1] + self.fRec12[2])));
+            self.fVec11[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec12[1] + self.fRec12[2])));
             self.fRec12[0] = self.fVec11[((self.IOTA - iSlow29) & 8191) as usize];
-            self.fVec12[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec13[1] + self.fRec13[2])));
+            self.fVec12[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec13[1] + self.fRec13[2])));
             self.fRec13[0] = self.fVec12[((self.IOTA - iSlow31) & 8191) as usize];
-            self.fVec13[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec14[1] + self.fRec14[2])));
+            self.fVec13[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec14[1] + self.fRec14[2])));
             self.fRec14[0] = self.fVec13[((self.IOTA - iSlow33) & 8191) as usize];
-            self.fVec14[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec15[1] + self.fRec15[2])));
+            self.fVec14[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec15[1] + self.fRec15[2])));
             self.fRec15[0] = self.fVec14[((self.IOTA - iSlow35) & 8191) as usize];
-            self.fVec15[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec16[1] + self.fRec16[2])));
+            self.fVec15[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec16[1] + self.fRec16[2])));
             self.fRec16[0] = self.fVec15[((self.IOTA - iSlow37) & 8191) as usize];
-            self.fVec16[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec17[1] + self.fRec17[2])));
+            self.fVec16[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec17[1] + self.fRec17[2])));
             self.fRec17[0] = self.fVec16[((self.IOTA - iSlow39) & 8191) as usize];
             outputs[0][i as usize] = ((fSlow0
                 * ((((((((((((((((fSlow2 * self.fRec0[0]) + (fSlow9 * self.fRec3[0]))
@@ -716,57 +633,40 @@ impl FaustDsp for Dsp {
                     + (fSlow34 * self.fRec15[0]))
                     + (fSlow36 * self.fRec16[0]))
                     + (fSlow38 * self.fRec17[0]))) as f32);
-            self.fVec17[(self.IOTA & 1023) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec18[1] + self.fRec18[2])));
+            self.fVec17[(self.IOTA & 1023) as usize] = (fTemp0 + (fSlow3 * (self.fRec18[1] + self.fRec18[2])));
             self.fRec18[0] = self.fVec17[((self.IOTA - iSlow41) & 1023) as usize];
-            self.fVec18[(self.IOTA & 2047) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec19[1] + self.fRec19[2])));
+            self.fVec18[(self.IOTA & 2047) as usize] = (fTemp0 + (fSlow3 * (self.fRec19[1] + self.fRec19[2])));
             self.fRec19[0] = self.fVec18[((self.IOTA - iSlow43) & 2047) as usize];
-            self.fVec19[(self.IOTA & 4095) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec20[1] + self.fRec20[2])));
+            self.fVec19[(self.IOTA & 4095) as usize] = (fTemp0 + (fSlow3 * (self.fRec20[1] + self.fRec20[2])));
             self.fRec20[0] = self.fVec19[((self.IOTA - iSlow45) & 4095) as usize];
-            self.fVec20[(self.IOTA & 4095) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec21[1] + self.fRec21[2])));
+            self.fVec20[(self.IOTA & 4095) as usize] = (fTemp0 + (fSlow3 * (self.fRec21[1] + self.fRec21[2])));
             self.fRec21[0] = self.fVec20[((self.IOTA - iSlow47) & 4095) as usize];
-            self.fVec21[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec22[1] + self.fRec22[2])));
+            self.fVec21[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec22[1] + self.fRec22[2])));
             self.fRec22[0] = self.fVec21[((self.IOTA - iSlow49) & 8191) as usize];
-            self.fVec22[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec23[1] + self.fRec23[2])));
+            self.fVec22[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec23[1] + self.fRec23[2])));
             self.fRec23[0] = self.fVec22[((self.IOTA - iSlow51) & 8191) as usize];
-            self.fVec23[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec24[1] + self.fRec24[2])));
+            self.fVec23[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec24[1] + self.fRec24[2])));
             self.fRec24[0] = self.fVec23[((self.IOTA - iSlow53) & 8191) as usize];
-            self.fVec24[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec25[1] + self.fRec25[2])));
+            self.fVec24[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec25[1] + self.fRec25[2])));
             self.fRec25[0] = self.fVec24[((self.IOTA - iSlow55) & 8191) as usize];
-            self.fVec25[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec26[1] + self.fRec26[2])));
+            self.fVec25[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec26[1] + self.fRec26[2])));
             self.fRec26[0] = self.fVec25[((self.IOTA - iSlow57) & 8191) as usize];
-            self.fVec26[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec27[1] + self.fRec27[2])));
+            self.fVec26[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec27[1] + self.fRec27[2])));
             self.fRec27[0] = self.fVec26[((self.IOTA - iSlow59) & 8191) as usize];
-            self.fVec27[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec28[1] + self.fRec28[2])));
+            self.fVec27[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec28[1] + self.fRec28[2])));
             self.fRec28[0] = self.fVec27[((self.IOTA - iSlow61) & 8191) as usize];
-            self.fVec28[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec29[1] + self.fRec29[2])));
+            self.fVec28[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec29[1] + self.fRec29[2])));
             self.fRec29[0] = self.fVec28[((self.IOTA - iSlow63) & 8191) as usize];
-            self.fVec29[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec30[1] + self.fRec30[2])));
+            self.fVec29[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec30[1] + self.fRec30[2])));
             self.fRec30[0] = self.fVec29[((self.IOTA - iSlow65) & 8191) as usize];
-            self.fVec30[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec31[1] + self.fRec31[2])));
+            self.fVec30[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec31[1] + self.fRec31[2])));
             self.fRec31[0] = self.fVec30[((self.IOTA - iSlow67) & 8191) as usize];
-            self.fVec31[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec32[1] + self.fRec32[2])));
+            self.fVec31[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec32[1] + self.fRec32[2])));
             self.fRec32[0] = self.fVec31[((self.IOTA - iSlow69) & 8191) as usize];
-            self.fVec32[(self.IOTA & 8191) as usize] =
-                (fTemp0 + (fSlow3 * (self.fRec33[1] + self.fRec33[2])));
+            self.fVec32[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec33[1] + self.fRec33[2])));
             self.fRec33[0] = self.fVec32[((self.IOTA - iSlow71) & 8191) as usize];
             outputs[1][i as usize] = ((fSlow0
-                * ((((((((((((((((fSlow40 * self.fRec18[0])
-                    + (fSlow42 * self.fRec19[0]))
+                * ((((((((((((((((fSlow40 * self.fRec18[0]) + (fSlow42 * self.fRec19[0]))
                     + (fSlow44 * self.fRec20[0]))
                     + (fSlow46 * self.fRec21[0]))
                     + (fSlow48 * self.fRec22[0]))

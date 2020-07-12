@@ -124,8 +124,7 @@ impl FaustDsp for Dsp {
 
     fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
         for i in 0..count {
-            outputs[0][i as usize] = (((((inputs[2][i as usize] as f32)
-                + (inputs[3][i as usize] as f32))
+            outputs[0][i as usize] = (((((inputs[2][i as usize] as f32) + (inputs[3][i as usize] as f32))
                 * ((inputs[0][i as usize] as f32) + (inputs[1][i as usize] as f32)))
                 / (((inputs[6][i as usize] as f32) + (inputs[7][i as usize] as f32))
                     * ((inputs[4][i as usize] as f32) + (inputs[5][i as usize] as f32))))

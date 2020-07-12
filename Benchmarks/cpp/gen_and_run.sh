@@ -1,20 +1,21 @@
 #!/bin/bash
 
+# This script needs to know the root of the Faust installation -- adjust as needed:
+FAUSTROOT=${HOME}/bin/faust
+
 set -e
 
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <DSP-FILE>" >&2
   exit 1
 fi
-
 DSPFILE=$(readlink -f $1)
 
 cd $(dirname $0)
 
-PATH=${HOME}/bin/faust/bin:${PATH}
-
-. ${HOME}/bin/faust/bin/faustpath
-
+# Environment setup
+PATH=${FAUSTROOT}/bin:${PATH}
+. ${FAUSTROOT}/bin/faustpath
 echo "FAUSTLDDIR: $FAUSTLDDIR"
 echo "FAUSTLIB:   $FAUSTLIB"
 echo "FAUSTINC:   $FAUSTINC"
