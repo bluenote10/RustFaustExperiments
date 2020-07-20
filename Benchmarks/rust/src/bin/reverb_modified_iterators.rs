@@ -901,12 +901,24 @@ impl FaustDsp for Dsp {
     }
 
     fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
+        /*
+        // Alternative (does not keep slices, and requires .iter()/.iter_mut() calls in the zip)
         let inputs0 = &inputs[0][..count as usize];
         let inputs1 = &inputs[1][..count as usize];
-        assert!(outputs.len() >= 2);
         let (outputs0, outputs1) = if let [outputs0, outputs1, ..] = &mut outputs[0..2] {
             let outputs0 = &mut outputs0[..count as usize];
             let outputs1 = &mut outputs1[..count as usize];
+            (outputs0, outputs1)
+        } else {
+            panic!("wrong number of outputs");
+        };
+        */
+
+        let inputs0 = inputs[0][..count as usize].iter();
+        let inputs1 = inputs[1][..count as usize].iter();
+        let (outputs0, outputs1) = if let [outputs0, outputs1, ..] = &mut outputs {
+            let outputs0 = outputs0[..count as usize].iter_mut();
+            let outputs1 = outputs1[..count as usize].iter_mut();
             (outputs0, outputs1)
         } else {
             panic!("wrong number of outputs");
@@ -915,7 +927,8 @@ impl FaustDsp for Dsp {
         let mut fSlow0: f32 =
             (0.00100000005 * f32::powf(10.0, (0.0500000007 * (self.fVslider0 as f32))));
         let mut fSlow1: f32 = (0.00100000005 * (self.fVslider1 as f32));
-        for (((input0, input1), output0), output1) in inputs0.iter().zip(inputs1.iter()).zip(outputs0.iter_mut()).zip(outputs1.iter_mut()) {
+        let zipped_iters = inputs0.zip(inputs1).zip(outputs0).zip(outputs1)
+        for (((input0, input1), output0), output1) in zipped_iters {
             self.fRec0[0] = (fSlow0 + (0.999000013 * self.fRec0[1]));
             let mut fTemp0: f32 = (*input0 as f32);
             self.fVec0[(self.IOTA & 16383) as usize] = fTemp0;
