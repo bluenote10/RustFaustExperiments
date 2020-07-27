@@ -123,11 +123,39 @@ impl FaustDsp for Dsp {
     }
 
     fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
-        for i in 0..count {
-            outputs[0][i as usize] = (((((inputs[2][i as usize] as f32) + (inputs[3][i as usize] as f32))
-                * ((inputs[0][i as usize] as f32) + (inputs[1][i as usize] as f32)))
-                / (((inputs[6][i as usize] as f32) + (inputs[7][i as usize] as f32))
-                    * ((inputs[4][i as usize] as f32) + (inputs[5][i as usize] as f32))))
+        let (inputs0, inputs1, inputs2, inputs3, inputs4, inputs5, inputs6, inputs7) =
+            if let [inputs0, inputs1, inputs2, inputs3, inputs4, inputs5, inputs6, inputs7, ..] = inputs {
+                let inputs0 = inputs0[..count as usize].iter();
+                let inputs1 = inputs1[..count as usize].iter();
+                let inputs2 = inputs2[..count as usize].iter();
+                let inputs3 = inputs3[..count as usize].iter();
+                let inputs4 = inputs4[..count as usize].iter();
+                let inputs5 = inputs5[..count as usize].iter();
+                let inputs6 = inputs6[..count as usize].iter();
+                let inputs7 = inputs7[..count as usize].iter();
+                (inputs0, inputs1, inputs2, inputs3, inputs4, inputs5, inputs6, inputs7)
+            } else {
+                panic!("wrong number of inputs");
+            };
+        let (outputs0) = if let [outputs0, ..] = outputs {
+            let outputs0 = outputs0[..count as usize].iter_mut();
+            (outputs0)
+        } else {
+            panic!("wrong number of outputs");
+        };
+        let zipped_iterators = inputs0
+            .zip(inputs1)
+            .zip(inputs2)
+            .zip(inputs3)
+            .zip(inputs4)
+            .zip(inputs5)
+            .zip(inputs6)
+            .zip(inputs7)
+            .zip(outputs0);
+        for ((((((((input0, input1), input2), input3), input4), input5), input6), input7), output0) in zipped_iterators
+        {
+            *output0 = (((((*input2 as f32) + (*input3 as f32)) * ((*input0 as f32) + (*input1 as f32)))
+                / (((*input6 as f32) + (*input7 as f32)) * ((*input4 as f32) + (*input5 as f32))))
                 as f32);
         }
     }

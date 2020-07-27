@@ -16,6 +16,8 @@ use faust_benchmarks::types::{FaustDsp, Meta, ParamIndex, UI};
 // Generated class:
 
 pub struct Dsp {
+    IOTA: i32,
+    fVec0: [f32; 2048],
     fSampleRate: i32,
 }
 
@@ -23,11 +25,15 @@ impl FaustDsp for Dsp {
     type T = f32;
 
     fn new() -> Dsp {
-        Dsp { fSampleRate: 0 }
+        Dsp {
+            IOTA: 0,
+            fVec0: [0.0; 2048],
+            fSampleRate: 0,
+        }
     }
     fn metadata(&self, m: &mut dyn Meta) {
-        m.declare("filename", "copy1.dsp");
-        m.declare("name", "copy1");
+        m.declare("filename", "delay.dsp");
+        m.declare("name", "delay");
     }
 
     fn get_sample_rate(&self) -> i32 {
@@ -66,7 +72,12 @@ impl FaustDsp for Dsp {
 
     fn class_init(sample_rate: i32) {}
     fn instance_reset_params(&mut self) {}
-    fn instance_clear(&mut self) {}
+    fn instance_clear(&mut self) {
+        self.IOTA = 0;
+        for l0 in 0..2048 {
+            self.fVec0[l0 as usize] = 0.0;
+        }
+    }
     fn instance_constants(&mut self, sample_rate: i32) {
         self.fSampleRate = sample_rate;
     }
@@ -85,7 +96,7 @@ impl FaustDsp for Dsp {
     }
 
     fn build_user_interface_static(ui_interface: &mut dyn UI<Self::T>) {
-        ui_interface.open_vertical_box("copy1");
+        ui_interface.open_vertical_box("delay");
         ui_interface.close_box();
     }
 
@@ -116,7 +127,9 @@ impl FaustDsp for Dsp {
         };
         let zipped_iterators = inputs0.zip(outputs0);
         for (input0, output0) in zipped_iterators {
-            *output0 = (*input0 as f32);
+            self.fVec0[(self.IOTA & 2047) as usize] = (*input0 as f32);
+            *output0 = (self.fVec0[((self.IOTA - 1024) & 2047) as usize] as f32);
+            self.IOTA = (self.IOTA + 1);
         }
     }
 }

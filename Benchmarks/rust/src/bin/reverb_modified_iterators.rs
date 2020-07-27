@@ -916,7 +916,7 @@ impl FaustDsp for Dsp {
 
         let inputs0 = inputs[0][..count as usize].iter();
         let inputs1 = inputs[1][..count as usize].iter();
-        let (outputs0, outputs1) = if let [outputs0, outputs1, ..] = &mut outputs {
+        let (outputs0, outputs1) = if let [outputs0, outputs1, ..] = outputs {
             let outputs0 = outputs0[..count as usize].iter_mut();
             let outputs1 = outputs1[..count as usize].iter_mut();
             (outputs0, outputs1)
@@ -927,7 +927,9 @@ impl FaustDsp for Dsp {
         let mut fSlow0: f32 =
             (0.00100000005 * f32::powf(10.0, (0.0500000007 * (self.fVslider0 as f32))));
         let mut fSlow1: f32 = (0.00100000005 * (self.fVslider1 as f32));
-        let zipped_iters = inputs0.zip(inputs1).zip(outputs0).zip(outputs1)
+
+        let zipped_iters = inputs0.zip(inputs1).zip(outputs0).zip(outputs1);
+
         for (((input0, input1), output0), output1) in zipped_iters {
             self.fRec0[0] = (fSlow0 + (0.999000013 * self.fRec0[1]));
             let mut fTemp0: f32 = (*input0 as f32);

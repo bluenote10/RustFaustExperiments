@@ -506,6 +506,13 @@ impl FaustDsp for Dsp {
     }
 
     fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
+        let (outputs0, outputs1) = if let [outputs0, outputs1, ..] = outputs {
+            let outputs0 = outputs0[..count as usize].iter_mut();
+            let outputs1 = outputs1[..count as usize].iter_mut();
+            (outputs0, outputs1)
+        } else {
+            panic!("wrong number of outputs");
+        };
         let mut fSlow0: f32 = (self.fHslider0 as f32);
         let mut fSlow1: f32 = (self.fHslider1 as f32);
         let mut fSlow2: f32 = (((fSlow1 > 0.0) as i32) as f32);
@@ -578,7 +585,8 @@ impl FaustDsp for Dsp {
         let mut iSlow69: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (29.0 * fSlow10)) + -1.5))) as i32);
         let mut fSlow70: f32 = (((fSlow1 > 31.0) as i32) as f32);
         let mut iSlow71: i32 = (f32::min(4096.0, f32::max(0.0, ((fSlow7 + (31.0 * fSlow10)) + -1.5))) as i32);
-        for i in 0..count {
+        let zipped_iterators = outputs0.zip(outputs1);
+        for (output0, output1) in zipped_iterators {
             self.fVec0[0] = fSlow5;
             self.fRec1[0] = ((self.fRec1[1] + ((((fSlow5 - self.fVec0[1]) > 0.0) as i32) as f32))
                 - (fSlow6 * (((self.fRec1[1] > 0.0) as i32) as f32)));
@@ -617,7 +625,7 @@ impl FaustDsp for Dsp {
             self.fRec16[0] = self.fVec15[((self.IOTA - iSlow37) & 8191) as usize];
             self.fVec16[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec17[1] + self.fRec17[2])));
             self.fRec17[0] = self.fVec16[((self.IOTA - iSlow39) & 8191) as usize];
-            outputs[0][i as usize] = ((fSlow0
+            *output0 = ((fSlow0
                 * ((((((((((((((((fSlow2 * self.fRec0[0]) + (fSlow9 * self.fRec3[0]))
                     + (fSlow12 * self.fRec4[0]))
                     + (fSlow14 * self.fRec5[0]))
@@ -665,7 +673,7 @@ impl FaustDsp for Dsp {
             self.fRec32[0] = self.fVec31[((self.IOTA - iSlow69) & 8191) as usize];
             self.fVec32[(self.IOTA & 8191) as usize] = (fTemp0 + (fSlow3 * (self.fRec33[1] + self.fRec33[2])));
             self.fRec33[0] = self.fVec32[((self.IOTA - iSlow71) & 8191) as usize];
-            outputs[1][i as usize] = ((fSlow0
+            *output1 = ((fSlow0
                 * ((((((((((((((((fSlow40 * self.fRec18[0]) + (fSlow42 * self.fRec19[0]))
                     + (fSlow44 * self.fRec20[0]))
                     + (fSlow46 * self.fRec21[0]))

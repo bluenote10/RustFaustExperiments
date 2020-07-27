@@ -881,11 +881,26 @@ impl FaustDsp for Dsp {
     }
 
     fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
+        let (inputs0, inputs1) = if let [inputs0, inputs1, ..] = inputs {
+            let inputs0 = inputs0[..count as usize].iter();
+            let inputs1 = inputs1[..count as usize].iter();
+            (inputs0, inputs1)
+        } else {
+            panic!("wrong number of inputs");
+        };
+        let (outputs0, outputs1) = if let [outputs0, outputs1, ..] = outputs {
+            let outputs0 = outputs0[..count as usize].iter_mut();
+            let outputs1 = outputs1[..count as usize].iter_mut();
+            (outputs0, outputs1)
+        } else {
+            panic!("wrong number of outputs");
+        };
         let mut fSlow0: f32 = (0.00100000005 * f32::powf(10.0, (0.0500000007 * (self.fVslider0 as f32))));
         let mut fSlow1: f32 = (0.00100000005 * (self.fVslider1 as f32));
-        for i in 0..count {
+        let zipped_iterators = inputs0.zip(inputs1).zip(outputs0).zip(outputs1);
+        for (((input0, input1), output0), output1) in zipped_iterators {
             self.fRec0[0] = (fSlow0 + (0.999000013 * self.fRec0[1]));
-            let mut fTemp0: f32 = (inputs[0][i as usize] as f32);
+            let mut fTemp0: f32 = (*input0 as f32);
             self.fVec0[(self.IOTA & 16383) as usize] = fTemp0;
             self.fRec1[0] = (fSlow1 + (0.999000013 * self.fRec1[1]));
             let mut fTemp1: f32 = (self.fRec1[0] + 1.0);
@@ -895,7 +910,7 @@ impl FaustDsp for Dsp {
             self.fRec14[0] = ((self.fConst14 * self.fRec14[1])
                 + (self.fConst15 * (self.fRec11[1] + (self.fConst16 * self.fRec15[0]))));
             self.fVec1[(self.IOTA & 32767) as usize] = ((0.353553385 * self.fRec14[0]) + 9.99999968e-21);
-            let mut fTemp3: f32 = (inputs[1][i as usize] as f32);
+            let mut fTemp3: f32 = (*input1 as f32);
             self.fVec2[(self.IOTA & 16383) as usize] = fTemp3;
             let mut fTemp4: f32 = (0.300000012 * self.fVec2[((self.IOTA - self.iConst22) & 16383) as usize]);
             let mut fTemp5: f32 = (((0.600000024 * self.fRec12[1])
@@ -1029,7 +1044,7 @@ impl FaustDsp for Dsp {
             let mut fTemp25: f32 = (self.fConst123 * self.fRec2[1]);
             self.fRec2[0] = (fTemp24 - (fTemp25 + (self.fConst2 * self.fRec2[2])));
             let mut fTemp26: f32 = (self.fConst2 * self.fRec2[0]);
-            outputs[0][i as usize] = ((0.5
+            *output0 = ((0.5
                 * (self.fRec0[0]
                     * ((fTemp0 * fTemp1)
                         + (fTemp2
@@ -1046,7 +1061,7 @@ impl FaustDsp for Dsp {
             let mut fTemp31: f32 = (self.fConst123 * self.fRec44[1]);
             self.fRec44[0] = (fTemp30 - (fTemp31 + (self.fConst2 * self.fRec44[2])));
             let mut fTemp32: f32 = (self.fConst2 * self.fRec44[0]);
-            outputs[1][i as usize] = ((0.5
+            *output1 = ((0.5
                 * (self.fRec0[0]
                     * ((fTemp3 * fTemp1)
                         + (fTemp2
