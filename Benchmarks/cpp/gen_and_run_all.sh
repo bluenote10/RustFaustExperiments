@@ -2,13 +2,17 @@
 
 set -e
 
-export EXTRA_CPP_ARGS=""
-# export EXTRA_CPP_ARGS="-ffast-math"
+if [[ "$#" -eq 1 && "$1" == "fastmath" ]]; then
+  echo "Benchmarking with fastmath"
+  export EXTRA_CPP_ARGS="-ffast-math"
+  RESULT_FILE=cpp_fastmath.json
+else
+  echo "Benchmarking without fastmath"
+  export EXTRA_CPP_ARGS=""
+  RESULT_FILE=cpp_no_fastmath.json
+fi
 
 cd $(dirname $0)
-
-RESULT_FILE=cpp_no_fastmath.json
-# RESULT_FILE=cpp_fastmath.json
 
 ./gen_and_run.sh ../dsp/copy1.dsp "../results/copy1/$RESULT_FILE"
 ./gen_and_run.sh ../dsp/copy2.dsp "../results/copy2/$RESULT_FILE"
