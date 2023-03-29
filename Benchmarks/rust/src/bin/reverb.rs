@@ -1,3 +1,8 @@
+/* ------------------------------------------------------------
+name: "reverb"
+Code generated with Faust 2.58.13 (https://faust.grame.fr)
+Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0
+------------------------------------------------------------ */
 #![allow(unused_parens)]
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
@@ -256,6 +261,10 @@ impl FaustDsp for Dsp {
     fn metadata(&self, m: &mut dyn Meta) {
         m.declare("basics.lib/name", "Faust Basic Element Library");
         m.declare("basics.lib/version", "0.9");
+        m.declare(
+            "compile_options",
+            "-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0",
+        );
         m.declare("delays.lib/name", "Faust Delay Library");
         m.declare("delays.lib/version", "0.1");
         m.declare("demos.lib/name", "Faust Demos Library");
@@ -319,7 +328,7 @@ impl FaustDsp for Dsp {
         m.declare("maths.lib/copyright", "GRAME");
         m.declare("maths.lib/license", "LGPL with exception");
         m.declare("maths.lib/name", "Faust Math Library");
-        m.declare("maths.lib/version", "2.5");
+        m.declare("maths.lib/version", "2.6");
         m.declare("name", "reverb");
         m.declare("platform.lib/name", "Generic Platform Library");
         m.declare("platform.lib/version", "0.3");

@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "reverb"
-Code generated with Faust 2.56.1 (https://faust.grame.fr)
-Compilation options: -a ./console-bench.cpp -lang cpp -cn Dsp -es 1 -mcd 16 -single -ftz 0
+Code generated with Faust 2.58.13 (https://faust.grame.fr)
+Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0
 ------------------------------------------------------------ */
 
 #ifndef  __Dsp_H__
@@ -166,11 +166,12 @@ class Dsp : public dsp {
 	float fRec45[3];
 	
  public:
-	
+	Dsp() {}
+
 	void metadata(Meta* m) { 
 		m->declare("basics.lib/name", "Faust Basic Element Library");
 		m->declare("basics.lib/version", "0.9");
-		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -cn Dsp -es 1 -mcd 16 -single -ftz 0");
+		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0");
 		m->declare("delays.lib/name", "Faust Delay Library");
 		m->declare("delays.lib/version", "0.1");
 		m->declare("demos.lib/name", "Faust Demos Library");
@@ -210,7 +211,7 @@ class Dsp : public dsp {
 		m->declare("maths.lib/copyright", "GRAME");
 		m->declare("maths.lib/license", "LGPL with exception");
 		m->declare("maths.lib/name", "Faust Math Library");
-		m->declare("maths.lib/version", "2.5");
+		m->declare("maths.lib/version", "2.6");
 		m->declare("name", "reverb");
 		m->declare("platform.lib/name", "Generic Platform Library");
 		m->declare("platform.lib/version", "0.3");

@@ -1,3 +1,8 @@
+/* ------------------------------------------------------------
+name: "copy2"
+Code generated with Faust 2.58.13 (https://faust.grame.fr)
+Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0
+------------------------------------------------------------ */
 #![allow(unused_parens)]
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
@@ -32,6 +37,10 @@ impl FaustDsp for Dsp {
         Dsp { fSampleRate: 0 }
     }
     fn metadata(&self, m: &mut dyn Meta) {
+        m.declare(
+            "compile_options",
+            "-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0",
+        );
         m.declare("filename", "copy2.dsp");
         m.declare("name", "copy2");
     }

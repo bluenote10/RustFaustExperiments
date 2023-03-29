@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "math"
-Code generated with Faust 2.56.1 (https://faust.grame.fr)
-Compilation options: -a ./console-bench.cpp -lang cpp -cn Dsp -es 1 -mcd 16 -single -ftz 0
+Code generated with Faust 2.58.13 (https://faust.grame.fr)
+Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0
 ------------------------------------------------------------ */
 
 #ifndef  __Dsp_H__
@@ -54,9 +54,10 @@ class Dsp : public dsp {
 	int fSampleRate;
 	
  public:
-	
+	Dsp() {}
+
 	void metadata(Meta* m) { 
-		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -cn Dsp -es 1 -mcd 16 -single -ftz 0");
+		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0");
 		m->declare("filename", "math.dsp");
 		m->declare("name", "math");
 	}
