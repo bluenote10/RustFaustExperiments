@@ -2,24 +2,24 @@
 
 DSP throughput comparison of Rust vs C++:
 
-|           |   Rust |   C++ (no fastmath) |   C++ (fastmath) |
-|:----------|-------:|--------------------:|-----------------:|
-| copy1     | 5052.4 |             19449.7 |          19261.8 |
-| copy2     | 5040.1 |             65471.4 |          65031.8 |
-| math      |  951.5 |              6688.1 |           7156.8 |
-| karplus32 |   85.0 |                78.0 |             80.9 |
-| reverb    |   81.9 |                86.5 |            105.3 |
+|           |   Rust (`rust-wip`) |   Rust (`master-dev`) |   C++ (no fastmath) |   C++ (fastmath) |
+|:----------|--------------------:|----------------------:|--------------------:|-----------------:|
+| copy1     |             36549.4 |                5052.4 |             19449.7 |          19261.8 |
+| copy2     |             41046.5 |                5040.1 |             65471.4 |          65031.8 |
+| math      |              6537.1 |                 951.5 |              6688.1 |           7156.8 |
+| delay     |              1948.2 |                     - |              4703.0 |           4742.7 |
+| karplus32 |                85.6 |                  85.0 |                78.0 |             80.9 |
+| reverb    |                82.7 |                  81.9 |                86.5 |            105.3 |
 
 Numbers are output throughput in MB/s.
 
 Some observations:
 
-- Especially on the extremely lightweight / trivial DSPs, Rust suffers from bounds checks.
-  On more complex DSPs like `karplus32` or `reverb` the overhead of bounds checks aren't
-  too big though.
+- On `master-dev` Rust suffers some bounds checks (preventing auto-vectorization) on the extremely
+  lightweight / trivial DSPs.
+  This is solved on the `rust-wip` branch, which uses iterators instead.
 
-- On the `math` DSPs Rust fails to autovectorize, most likely due to bound checks as well.
+- Without fast-math, the performance of Rust and C++ are basically the same.
 
-- Another difference comes from avoiding fastmath optimizations. In the long term this
-  could be solved by using [fastmath intrinsics](https://doc.rust-lang.org/core/intrinsics/fn.fadd_fast.html)
+  In the long term this could be solved by using [fastmath intrinsics](https://doc.rust-lang.org/core/intrinsics/fn.fadd_fast.html)
   (currently a nightly feature) or [future higher-level solutions](https://github.com/rust-lang/rust/issues/21690).
