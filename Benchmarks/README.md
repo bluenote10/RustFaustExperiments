@@ -11,7 +11,9 @@ DSP throughput comparison of Rust vs C++:
 | karplus32 |                85.6 |                  85.0 |                78.0 |             80.9 |
 | reverb    |                82.7 |                  81.9 |                86.5 |            105.3 |
 
-Numbers are output throughput in MB/s.
+Numbers are output throughput in MiB/s, i.e., higher is better.
+
+Faust version: 2.26.0 (or the `rust-wip` branch)
 
 Some observations:
 
