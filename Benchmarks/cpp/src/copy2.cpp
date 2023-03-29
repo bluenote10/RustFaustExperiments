@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "copy2"
-Code generated with Faust 2.26.0 (https://faust.grame.fr)
-Compilation options: -lang cpp -scal -ftz 0
+Code generated with Faust 2.56.1 (https://faust.grame.fr)
+Compilation options: -a ./console-bench.cpp -lang cpp -cn Dsp -es 1 -mcd 16 -single -ftz 0
 ------------------------------------------------------------ */
 
 #ifndef  __Dsp_H__
@@ -12,6 +12,7 @@ Compilation options: -lang cpp -scal -ftz 0
 #include <chrono>
 #include <iomanip>
 #include <iostream>
+#include <fstream>
 #include <memory>
 #include <vector>
 
@@ -28,7 +29,7 @@ Compilation options: -lang cpp -scal -ftz 0
 
 #include <algorithm>
 #include <cmath>
-
+#include <cstdint>
 
 #ifndef FAUSTCLASS 
 #define FAUSTCLASS Dsp
@@ -39,6 +40,13 @@ Compilation options: -lang cpp -scal -ftz 0
 #define exp10 __exp10
 #endif
 
+#if defined(_WIN32)
+#define RESTRICT __restrict
+#else
+#define RESTRICT __restrict__
+#endif
+
+
 class Dsp : public dsp {
 	
  private:
@@ -48,6 +56,7 @@ class Dsp : public dsp {
  public:
 	
 	void metadata(Meta* m) { 
+		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -cn Dsp -es 1 -mcd 16 -single -ftz 0");
 		m->declare("filename", "copy2.dsp");
 		m->declare("name", "copy2");
 	}
@@ -57,42 +66,6 @@ class Dsp : public dsp {
 	}
 	virtual int getNumOutputs() {
 		return 2;
-	}
-	virtual int getInputRate(int channel) {
-		int rate;
-		switch ((channel)) {
-			case 0: {
-				rate = 1;
-				break;
-			}
-			case 1: {
-				rate = 1;
-				break;
-			}
-			default: {
-				rate = -1;
-				break;
-			}
-		}
-		return rate;
-	}
-	virtual int getOutputRate(int channel) {
-		int rate;
-		switch ((channel)) {
-			case 0: {
-				rate = 1;
-				break;
-			}
-			case 1: {
-				rate = 1;
-				break;
-			}
-			default: {
-				rate = -1;
-				break;
-			}
-		}
-		return rate;
 	}
 	
 	static void classInit(int sample_rate) {
@@ -131,14 +104,14 @@ class Dsp : public dsp {
 		ui_interface->closeBox();
 	}
 	
-	virtual void compute(int count, FAUSTFLOAT** inputs, FAUSTFLOAT** outputs) {
+	virtual void compute(int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOAT** RESTRICT outputs) {
 		FAUSTFLOAT* input0 = inputs[0];
 		FAUSTFLOAT* input1 = inputs[1];
 		FAUSTFLOAT* output0 = outputs[0];
 		FAUSTFLOAT* output1 = outputs[1];
-		for (int i = 0; (i < count); i = (i + 1)) {
-			output0[i] = FAUSTFLOAT(float(input0[i]));
-			output1[i] = FAUSTFLOAT(float(input1[i]));
+		for (int i0 = 0; i0 < count; i0 = i0 + 1) {
+			output0[i0] = FAUSTFLOAT(float(input0[i0]));
+			output1[i0] = FAUSTFLOAT(float(input1[i0]));
 		}
 	}
 
@@ -150,6 +123,12 @@ class Dsp : public dsp {
 
 int main(int argc, char *argv[])
 {
+    if (argc != 2) {
+        throw std::runtime_error("Wrong number of arguments");
+    }
+    std::ofstream result_file(argv[1], std::ios::out);
+    result_file << "[";
+
     int buffer_size = 1024;
     int sample_rate = 44100;
     int min_samples = sample_rate * 60 * 3;
@@ -188,7 +167,7 @@ int main(int argc, char *argv[])
         while (num_samples_written < min_samples) {
             dsp->compute(buffer_size, in_buffer, out_buffer);
 
-            // Lightweight result access to prevent overoptimizations
+            // Lightweight result access to prevent over-optimizations
             for (int c = 0; c < num_outputs; ++c) {
                 sample_sum += out_buffer[c][0];
             }
@@ -203,6 +182,10 @@ int main(int argc, char *argv[])
         auto throughput = double(num_samples_written * 4 * num_outputs) / double(elapsed);
 
         throughputs.emplace_back(throughput);
+        if (throughputs.size() > 1) {
+            result_file << ", ";
+        }
+        result_file << throughput;
 
         std::cout <<
             "Rendered audio of length " << audio_length <<
@@ -239,6 +222,7 @@ int main(int argc, char *argv[])
     std::cout << "Throughput median: " << median / 1024 / 1024 << " MB/sec" << std::endl;
     std::cout << "Throughput max:    " << max / 1024 / 1024 << " MB/sec" << std::endl;
 
+    result_file << "]";
     return 0;
 }
 

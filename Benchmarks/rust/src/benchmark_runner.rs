@@ -1,7 +1,9 @@
 use super::types::FaustDsp;
 
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
 use std::time::Instant;
-
 
 type FloatType = f32;
 
@@ -17,15 +19,18 @@ fn stats(values: &[f64]) -> (f64, f64, f64) {
     (*values.first().unwrap(), median, *values.last().unwrap())
 }
 
-pub fn run_benchmark<F>(dsp_initializer: F, sample_rate: i32)
+pub fn run_benchmark<F>(dsp_initializer: F, sample_rate: i32, result_file: &Path)
 where
-    F: Fn() -> Box<dyn FaustDsp<T=FloatType>>
+    F: Fn() -> Box<dyn FaustDsp<T = FloatType>>,
 {
+    let mut result_file = File::create(result_file).expect("Could not create result file");
+    write!(result_file, "[").unwrap();
+
     // Generation constants
     let buffer_size = 1024;
     let min_samples = sample_rate as usize * 60 * 3;
 
-    let throughputs: Vec<_> = (1 ..= 10).map(|_| {
+    let throughputs: Vec<_> = (1 ..= 10).map(|i| {
 
         let mut dsp = dsp_initializer();
 
@@ -33,8 +38,8 @@ where
         let num_outputs = dsp.get_num_outputs() as usize;
 
         // Prepare buffers
-        let mut in_buffer = vec![vec![0 as FloatType; buffer_size]; num_inputs];
-        let mut out_buffer = vec![vec![0 as FloatType; buffer_size]; num_outputs];
+        let mut in_buffer = vec![vec![0.0; buffer_size]; num_inputs];
+        let mut out_buffer = vec![vec![0.0; buffer_size]; num_outputs];
 
         // Set input buffers to fixed impulse responses
         for c in 0..num_inputs {
@@ -55,7 +60,7 @@ where
                 out_buffer.iter_mut().map(|buffer| buffer.as_mut_slice()).collect::<Vec<&mut [FloatType]>>().as_mut_slice(),
             );
 
-            // Lightweight result access to prevent overoptimizations
+            // Lightweight result access to prevent over-optimizations
             for c in 0..num_outputs {
                 unsafe {
                     sample_sum += out_buffer.get_unchecked(c).get_unchecked(0);
@@ -76,6 +81,11 @@ where
             sample_sum,
         );
 
+        if i > 1 {
+            write!(result_file, ", ").unwrap();
+        }
+        write!(result_file, "{}", throughput).unwrap();
+
         throughput
     }).collect();
 
@@ -85,4 +95,6 @@ where
     println!("Throughput median: {:.3} MB/sec", median / 1024.0 / 1024.0);
     println!("Throughput max:    {:.3} MB/sec", max / 1024.0 / 1024.0);
     println!("");
+
+    write!(result_file, "]").unwrap();
 }

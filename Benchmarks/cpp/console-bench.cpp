@@ -3,6 +3,7 @@
 #include <chrono>
 #include <iomanip>
 #include <iostream>
+#include <fstream>
 #include <memory>
 #include <vector>
 
@@ -22,6 +23,12 @@
 
 int main(int argc, char *argv[])
 {
+    if (argc != 2) {
+        throw std::runtime_error("Wrong number of arguments");
+    }
+    std::ofstream result_file(argv[1], std::ios::out);
+    result_file << "[";
+
     int buffer_size = 1024;
     int sample_rate = 44100;
     int min_samples = sample_rate * 60 * 3;
@@ -60,7 +67,7 @@ int main(int argc, char *argv[])
         while (num_samples_written < min_samples) {
             dsp->compute(buffer_size, in_buffer, out_buffer);
 
-            // Lightweight result access to prevent overoptimizations
+            // Lightweight result access to prevent over-optimizations
             for (int c = 0; c < num_outputs; ++c) {
                 sample_sum += out_buffer[c][0];
             }
@@ -75,6 +82,10 @@ int main(int argc, char *argv[])
         auto throughput = double(num_samples_written * 4 * num_outputs) / double(elapsed);
 
         throughputs.emplace_back(throughput);
+        if (throughputs.size() > 1) {
+            result_file << ", ";
+        }
+        result_file << throughput;
 
         std::cout <<
             "Rendered audio of length " << audio_length <<
@@ -111,5 +122,6 @@ int main(int argc, char *argv[])
     std::cout << "Throughput median: " << median / 1024 / 1024 << " MB/sec" << std::endl;
     std::cout << "Throughput max:    " << max / 1024 / 1024 << " MB/sec" << std::endl;
 
+    result_file << "]";
     return 0;
 }

@@ -8,19 +8,25 @@
 
 extern crate libm;
 
+use std::env;
+use std::path::PathBuf;
+
 use faust_benchmarks::benchmark_runner::run_benchmark;
 use faust_benchmarks::types::{FaustDsp, Meta, ParamIndex, UI};
+
+type F32 = f32;
 
 // Generated intrinsics:
 
 // Generated class:
 
+#[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
 pub struct Dsp {
     fSampleRate: i32,
 }
 
 impl FaustDsp for Dsp {
-    type T = f32;
+    type T = F32;
 
     fn new() -> Dsp {
         Dsp { fSampleRate: 0 }
@@ -38,30 +44,6 @@ impl FaustDsp for Dsp {
     }
     fn get_num_outputs(&self) -> i32 {
         return 1;
-    }
-    fn get_input_rate(&self, channel: i32) -> i32 {
-        let mut rate: i32;
-        match (channel) {
-            0 => {
-                rate = 1;
-            }
-            _ => {
-                rate = -1;
-            }
-        }
-        return rate;
-    }
-    fn get_output_rate(&self, channel: i32) -> i32 {
-        let mut rate: i32;
-        match (channel) {
-            0 => {
-                rate = 1;
-            }
-            _ => {
-                rate = -1;
-            }
-        }
-        return rate;
     }
 
     fn class_init(sample_rate: i32) {}
@@ -116,7 +98,7 @@ impl FaustDsp for Dsp {
         };
         let zipped_iterators = inputs0.zip(outputs0);
         for (input0, output0) in zipped_iterators {
-            *output0 = (*input0 as f32);
+            *output0 = *input0;
         }
     }
 }
@@ -124,6 +106,10 @@ impl FaustDsp for Dsp {
 const SAMPLE_RATE: i32 = 44100;
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    assert_eq!(args.len(), 2);
+    let result_file = PathBuf::from(args[1].clone());
+
     println!("Size of DSP struct: {}", std::mem::size_of::<Dsp>());
 
     run_benchmark(
@@ -133,5 +119,6 @@ fn main() {
             Box::new(dsp)
         },
         SAMPLE_RATE,
+        &result_file,
     );
 }
