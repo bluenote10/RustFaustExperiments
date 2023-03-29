@@ -13,9 +13,10 @@ DSP throughput comparison of Rust vs C++:
 
 Numbers are output throughput in MiB/s, i.e., higher is better.
 
-Faust version: 2.58.13
-Rust version: 1.68.0
-g++ version: 11.3.0
+Versions:
+- Faust version: 2.58.13
+- Rust version: 1.68.0
+- g++ version: 11.3.0
 
 Note about fastmath:
 In the long term this could be solved by using [fastmath intrinsics](https://doc.rust-lang.org/core/intrinsics/fn.fadd_fast.html)
