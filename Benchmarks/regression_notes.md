@@ -6,10 +6,12 @@ over time.
 Around Faust version 2.26.0 and the (early) `rust-wip` branch the throughput was ~85 MiB/s,
 but now it is ~31 MiB/s.
 
-Trying to replicate the old performance now seems tricky. Attempt at bisecting the regression:
+Trying to replicate the old performance now seems tricky.
 
 
 ## Faust versions
+
+Attempt at bisecting the regression on Faust side:
 
 ```
 Faust versions:
@@ -29,6 +31,7 @@ then).
 
 On first glance it looks like all Faust versions now end up in the 30 MiB/s area, no matter what.
 
+
 ## Rust versions
 
 Current Rust version is ~1.68.0.
@@ -37,6 +40,21 @@ The old benchmarks were run in mid 2020. Checking the old releases (https://gith
 suggest that this must have been in the 1.40 or so.
 
 Trying 1.43.0 in combination with the 2.26.0 Faust branch immediately reproduces the old 83.8 MiB/s.
+
+Switching back to the latest Faust version also produces 86.7 MiB/s. So bisecting:
+
+```
+1.68.0 => 31.6 MiB/s
+1.67.0 => 30.9 MiB/s
+1.66.0 => 88.5 MiB/s
+1.65.0 => 87.7 MiB/s
+1.62.0 => 83.9 MiB/s
+1.56.0 => 85.6 MiB/s
+1.50.0 => 86.1 MiB/s
+1.43.0 => 86.7 MiB/s
+```
+
+Conclusion: The regression seems to be introduced in Rust version 1.67.
 
 Steps to try out old Rust versions:
 
@@ -48,6 +66,9 @@ rustup toolchain list
 # otherwise I was getting an error related to fetching the libm dependency, see:
 # https://github.com/rust-lang/cargo/issues/10303
 RUSTUP_TOOLCHAIN=1.43.0 CARGO_NET_GIT_FETCH_WITH_CLI=true ./gen_and_run_all.sh
+
+# When done with experiments, it makes sense to clean up:
+rustup uninstall 1.43.0
 ```
 
 
