@@ -18,11 +18,11 @@ Versions:
 - Rust version: 1.68.0
 - g++ version: 11.3.0
 
-Note about fastmath:
+**Note about fastmath:**
 In the long term this could be solved by using [fastmath intrinsics](https://doc.rust-lang.org/core/intrinsics/fn.fadd_fast.html)
 (currently a nightly feature) or [future higher-level solutions](https://github.com/rust-lang/rust/issues/21690).
 
-**Performance regression**
+## Performance regression
 
 It looks like [Rust version 1.67.0](https://github.com/rust-lang/rust/blob/master/RELEASES.md#version-1670-2023-01-26)
 has lead to a performance regression. Comparing 1.66.0 and 1.67.0 directly:
