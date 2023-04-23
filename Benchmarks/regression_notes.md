@@ -224,3 +224,6 @@ pub trait UI<T> {
 }
 
 ```
+
+Link to deleted question:
+https://stackoverflow.com/questions/75905096/what-might-have-caused-performance-regression-in-rust-version-1-67

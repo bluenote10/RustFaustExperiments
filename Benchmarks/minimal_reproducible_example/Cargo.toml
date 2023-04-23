@@ -1,0 +1,9 @@
+[package]
+name = "faust_benchmarks"
+version = "0.1.0"
+authors = ["Fabian Keller <github.100.fkeller@spamgourmet.com>"]
+edition = "2018"
+
+[dependencies]
+
+libm = "*"
