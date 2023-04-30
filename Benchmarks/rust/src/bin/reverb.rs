@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "reverb"
-Code generated with Faust 2.58.13 (https://faust.grame.fr)
+Code generated with Faust 2.59.4 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(unused_parens)]
@@ -30,6 +30,7 @@ fn Dsp_faustpower2_f(value: F32) -> F32 {
 }
 
 #[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
+#[repr(C)]
 pub struct Dsp {
     fSampleRate: i32,
     fConst10: F32,

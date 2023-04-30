@@ -26,6 +26,10 @@ echo "FAUSTLIB:   $FAUSTLIB"
 echo "FAUSTINC:   $FAUSTINC"
 echo "FAUSTARCH:  $FAUSTARCH"
 
+# Version check
+echo "Faust version: $(faust --version)"
+echo "g++ version: $(g++ --version)"
+
 DSP_FILE_BASENAME=$(basename $DSP_FILE)
 FILE_WITHOUT_EXTENSION=${DSP_FILE_BASENAME%.dsp}
 CPP_FILE=${FILE_WITHOUT_EXTENSION}.cpp
@@ -34,11 +38,10 @@ set -x
 
 faust -a ./console-bench.cpp "$DSP_FILE" -o ./src/$CPP_FILE --class-name Dsp
 
+# It looks like -march=native -ffast-math are the most relevant optimizations?
 g++ -O3 -march=native -mfpmath=sse -msse -msse2 -msse3 -ftree-vectorize $EXTRA_CPP_ARGS \
   -I$FAUSTINC\
   ./src/$CPP_FILE \
   -o ./bin/$FILE_WITHOUT_EXTENSION
-
-# It looks like -march=native -ffast-math are the most relevant optimizations?
 
 ./bin/$FILE_WITHOUT_EXTENSION "$RESULT_FILE"

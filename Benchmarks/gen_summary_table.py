@@ -49,8 +49,8 @@ def print_table(benchmarks: List[str], entries: List[str]):
 benchmarks = [
     "copy1",
     "copy2",
-    "math",
     "delay",
+    "math",
     "karplus32",
     "reverb",
 ]
@@ -64,12 +64,15 @@ print_table(
     ],
 )
 
-print_table(
-    benchmarks,
-    entries=[
-        "rust_1_67_0",
-        "rust_1_66_0",
-        "cpp_no_fastmath",
-        "cpp_fastmath",
-    ],
-)
+print_performance_regression_table = False
+
+if print_performance_regression_table:
+    print_table(
+        benchmarks,
+        entries=[
+            "rust_1_67_0",
+            "rust_1_66_0",
+            "cpp_no_fastmath",
+            "cpp_fastmath",
+        ],
+    )

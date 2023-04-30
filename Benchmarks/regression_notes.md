@@ -1,5 +1,31 @@
 # Regression notes
 
+After switching to [Rust version 1.67.0](https://github.com/rust-lang/rust/blob/master/RELEASES.md#version-1670-2023-01-26)
+there was a performance regression in the benchmarks.
+
+This issue has now been solved, for details see:
+- [Rust internals thread](https://internals.rust-lang.org/t/unexpected-3-x-performance-regression-starting-with-rust-version-1-67/18724/4)
+- [Deleted question on SO](https://stackoverflow.com/questions/75905096/what-might-have-caused-performance-regression-in-rust-version-1-67)
+
+Below is the stuff collected during the investigation. Now outdated, but keeping for reference.
+
+
+## Summary
+
+Comparing 1.66.0 and 1.67.0 directly:
+
+|           |   Rust (1.67.0) |   Rust (1.66.0) |   C++ (no fastmath) |   C++ (fastmath) |
+|:----------|----------------:|----------------:|--------------------:|-----------------:|
+| copy1     |         38558.3 |         38737.5 |             23097.8 |          23036.6 |
+| copy2     |         35880.5 |         35690.7 |             52926.9 |          52878.0 |
+| math      |          6644.2 |          6710.4 |              7199.6 |           7314.6 |
+| delay     |         19124.8 |          9833.7 |              4922.1 |           4916.4 |
+| karplus32 |            31.4 |            88.6 |                61.4 |             68.8 |
+| reverb    |            54.2 |            90.2 |                88.2 |            109.2 |
+
+
+## Investigation
+
 It looks like the Rust performance in particular of the karplus32 dsp regressed
 over time.
 
@@ -9,7 +35,7 @@ but now it is ~31 MiB/s.
 Trying to replicate the old performance now seems tricky.
 
 
-## Faust versions
+### Faust versions
 
 Attempt at bisecting the regression on Faust side:
 
@@ -32,7 +58,7 @@ then).
 On first glance it looks like all Faust versions now end up in the 30 MiB/s area, no matter what.
 
 
-## Rust versions
+### Rust versions
 
 Current Rust version is ~1.68.0.
 
@@ -72,7 +98,7 @@ rustup uninstall 1.43.0
 ```
 
 
-## Legacy code snippets
+### Legacy code snippets
 
 On Rust side, compiling older versions requires to switch out various versions of the trait
 definitions:
@@ -224,6 +250,3 @@ pub trait UI<T> {
 }
 
 ```
-
-Link to deleted question:
-https://stackoverflow.com/questions/75905096/what-might-have-caused-performance-regression-in-rust-version-1-67

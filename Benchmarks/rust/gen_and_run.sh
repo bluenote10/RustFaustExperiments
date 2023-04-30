@@ -26,9 +26,15 @@ echo "FAUSTLIB:   $FAUSTLIB"
 echo "FAUSTINC:   $FAUSTINC"
 echo "FAUSTARCH:  $FAUSTARCH"
 
+# Version check
+echo "Faust version: $(faust --version)"
+echo "Rust version: $(rustc --version)"
+
 DSP_FILE_BASENAME=$(basename $DSP_FILE)
 FILE_WITHOUT_EXTENSION=${DSP_FILE_BASENAME%.dsp}
 RUST_FILE=${FILE_WITHOUT_EXTENSION}.rs
+
+set -x
 
 faust -a ./architecture/benchmark.rs -lang rust "$DSP_FILE" -o ./src/bin/$RUST_FILE --class-name Dsp
 rustfmt --config max_width=120 ./src/bin/$RUST_FILE

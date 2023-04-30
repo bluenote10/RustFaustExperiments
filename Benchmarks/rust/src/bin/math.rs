@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "math"
-Code generated with Faust 2.58.13 (https://faust.grame.fr)
+Code generated with Faust 2.59.4 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(unused_parens)]
@@ -26,6 +26,7 @@ type F32 = f32;
 // Generated class:
 
 #[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
+#[repr(C)]
 pub struct Dsp {
     fSampleRate: i32,
 }
