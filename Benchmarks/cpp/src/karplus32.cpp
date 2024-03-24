@@ -4,8 +4,8 @@ copyright: "(c)GRAME 2006"
 license: "BSD"
 name: "karplus32"
 version: "1.0"
-Code generated with Faust 2.58.13 (https://faust.grame.fr)
-Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0
+Code generated with Faust 2.72.11 (https://faust.grame.fr)
+Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
 #ifndef  __Dsp_H__
@@ -138,15 +138,15 @@ class Dsp : public dsp {
 
 	void metadata(Meta* m) { 
 		m->declare("author", "Grame");
-		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0");
+		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
 		m->declare("copyright", "(c)GRAME 2006");
 		m->declare("delays.lib/name", "Faust Delay Library");
-		m->declare("delays.lib/version", "0.1");
+		m->declare("delays.lib/version", "1.1.0");
 		m->declare("filename", "karplus32.dsp");
 		m->declare("license", "BSD");
 		m->declare("name", "karplus32");
 		m->declare("noises.lib/name", "Faust Noise Generator Library");
-		m->declare("noises.lib/version", "0.4");
+		m->declare("noises.lib/version", "1.4.1");
 		m->declare("version", "1.0");
 	}
 
@@ -384,6 +384,7 @@ class Dsp : public dsp {
 		classInit(sample_rate);
 		instanceInit(sample_rate);
 	}
+	
 	virtual void instanceInit(int sample_rate) {
 		instanceConstants(sample_rate);
 		instanceResetUserInterface();

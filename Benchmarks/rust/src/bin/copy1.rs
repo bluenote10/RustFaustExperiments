@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "copy1"
-Code generated with Faust 2.59.4 (https://faust.grame.fr)
-Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0
+Code generated with Faust 2.72.11 (https://faust.grame.fr)
+Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(unused_parens)]
 #![allow(non_snake_case)]
@@ -25,6 +25,21 @@ type F32 = f32;
 
 // Generated class:
 
+mod ffi {
+    use std::os::raw::c_float;
+    #[link(name = "m")]
+    extern "C" {
+        pub fn remainderf(from: c_float, to: c_float) -> c_float;
+        pub fn rintf(val: c_float) -> c_float;
+    }
+}
+fn remainder_f32(from: f32, to: f32) -> f32 {
+    unsafe { ffi::remainderf(from, to) }
+}
+fn rint_f32(val: f32) -> f32 {
+    unsafe { ffi::rintf(val) }
+}
+
 #[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
 #[repr(C)]
 pub struct Dsp {
@@ -40,10 +55,10 @@ impl FaustDsp for Dsp {
     fn metadata(&self, m: &mut dyn Meta) {
         m.declare(
             "compile_options",
-            "-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0",
+            r"-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0",
         );
-        m.declare("filename", "copy1.dsp");
-        m.declare("name", "copy1");
+        m.declare("filename", r"copy1.dsp");
+        m.declare("name", r"copy1");
     }
 
     fn get_sample_rate(&self) -> i32 {

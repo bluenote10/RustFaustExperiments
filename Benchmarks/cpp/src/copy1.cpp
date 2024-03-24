@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "copy1"
-Code generated with Faust 2.58.13 (https://faust.grame.fr)
-Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0
+Code generated with Faust 2.72.11 (https://faust.grame.fr)
+Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
 #ifndef  __Dsp_H__
@@ -57,7 +57,7 @@ class Dsp : public dsp {
 	Dsp() {}
 
 	void metadata(Meta* m) { 
-		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -single -ftz 0");
+		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
 		m->declare("filename", "copy1.dsp");
 		m->declare("name", "copy1");
 	}
@@ -86,6 +86,7 @@ class Dsp : public dsp {
 		classInit(sample_rate);
 		instanceInit(sample_rate);
 	}
+	
 	virtual void instanceInit(int sample_rate) {
 		instanceConstants(sample_rate);
 		instanceResetUserInterface();
