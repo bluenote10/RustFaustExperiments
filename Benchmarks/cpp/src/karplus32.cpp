@@ -4,7 +4,7 @@ copyright: "(c)GRAME 2006"
 license: "BSD"
 name: "karplus32"
 version: "1.0"
-Code generated with Faust 2.72.11 (https://faust.grame.fr)
+Code generated with Faust 2.75.12 (https://faust.grame.fr)
 Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
@@ -134,8 +134,9 @@ class Dsp : public dsp {
 	int fSampleRate;
 	
  public:
-	Dsp() {}
-
+	Dsp() {
+	}
+	
 	void metadata(Meta* m) { 
 		m->declare("author", "Grame");
 		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
@@ -504,7 +505,7 @@ class Dsp : public dsp {
 			fRec3[0] = fVec2[(IOTA0 - iSlow9) & 8191];
 			fVec3[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec4[1] + fRec4[2]);
 			fRec4[0] = fVec3[(IOTA0 - iSlow11) & 8191];
-			fVec4[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec5[1] + fRec5[2]);
+			fVec4[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec5[2] + fRec5[1]);
 			fRec5[0] = fVec4[(IOTA0 - iSlow13) & 8191];
 			fVec5[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec6[1] + fRec6[2]);
 			fRec6[0] = fVec5[(IOTA0 - iSlow15) & 8191];
@@ -545,7 +546,7 @@ class Dsp : public dsp {
 			fRec23[0] = fVec22[(IOTA0 - iSlow50) & 8191];
 			fVec23[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec24[1] + fRec24[2]);
 			fRec24[0] = fVec23[(IOTA0 - iSlow52) & 8191];
-			fVec24[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec25[1] + fRec25[2]);
+			fVec24[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec25[2] + fRec25[1]);
 			fRec25[0] = fVec24[(IOTA0 - iSlow54) & 8191];
 			fVec25[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec26[1] + fRec26[2]);
 			fRec26[0] = fVec25[(IOTA0 - iSlow56) & 8191];

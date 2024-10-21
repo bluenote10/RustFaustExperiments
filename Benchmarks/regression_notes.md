@@ -1,5 +1,7 @@
 # Regression notes
 
+## Regression 1
+
 After switching to [Rust version 1.67.0](https://github.com/rust-lang/rust/blob/master/RELEASES.md#version-1670-2023-01-26)
 there was a performance regression in the benchmarks.
 
@@ -10,7 +12,7 @@ This issue has now been solved, for details see:
 Below is the stuff collected during the investigation. Now outdated, but keeping for reference.
 
 
-## Summary
+### Summary
 
 Comparing 1.66.0 and 1.67.0 directly:
 
@@ -24,7 +26,7 @@ Comparing 1.66.0 and 1.67.0 directly:
 | reverb    |            54.2 |            90.2 |                88.2 |            109.2 |
 
 
-## Investigation
+### Investigation
 
 It looks like the Rust performance in particular of the karplus32 dsp regressed
 over time.
@@ -35,7 +37,7 @@ but now it is ~31 MiB/s.
 Trying to replicate the old performance now seems tricky.
 
 
-### Faust versions
+#### Faust versions
 
 Attempt at bisecting the regression on Faust side:
 
@@ -58,7 +60,7 @@ then).
 On first glance it looks like all Faust versions now end up in the 30 MiB/s area, no matter what.
 
 
-### Rust versions
+#### Rust versions
 
 Current Rust version is ~1.68.0.
 
@@ -97,8 +99,17 @@ RUSTUP_TOOLCHAIN=1.43.0 CARGO_NET_GIT_FETCH_WITH_CLI=true ./gen_and_run_all.sh
 rustup uninstall 1.43.0
 ```
 
+# Regression 2
 
-### Legacy code snippets
+After updating
+
+- Faust version: 2.72.11 -> 2.75.12
+- Rust version: 1.77.0 -> 1.81.0
+
+The throughput of the "delay" benchmark dropped from 12820.8 to 5499.7.
+
+
+# Legacy code snippets
 
 On Rust side, compiling older versions requires to switch out various versions of the trait
 definitions:

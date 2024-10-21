@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "math"
-Code generated with Faust 2.72.11 (https://faust.grame.fr)
+Code generated with Faust 2.75.12 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(unused_parens)]
@@ -25,9 +25,11 @@ type F32 = f32;
 
 // Generated class:
 
+use std::convert::TryInto;
 mod ffi {
     use std::os::raw::c_float;
-    #[link(name = "m")]
+    // Conditionally compile the link attribute only on non-Windows platforms
+    #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
     extern "C" {
         pub fn remainderf(from: c_float, to: c_float) -> c_float;
         pub fn rintf(val: c_float) -> c_float;
@@ -44,6 +46,35 @@ fn rint_f32(val: f32) -> f32 {
 #[repr(C)]
 pub struct Dsp {
     fSampleRate: i32,
+}
+
+impl Dsp {
+    fn compute_arrays(&mut self, count: i32, inputs: &[&[F32]; 8], outputs: &mut [&mut [F32]; 1]) {
+        let [inputs0, inputs1, inputs2, inputs3, inputs4, inputs5, inputs6, inputs7] = inputs;
+        let inputs0 = inputs0[..count as usize].iter();
+        let inputs1 = inputs1[..count as usize].iter();
+        let inputs2 = inputs2[..count as usize].iter();
+        let inputs3 = inputs3[..count as usize].iter();
+        let inputs4 = inputs4[..count as usize].iter();
+        let inputs5 = inputs5[..count as usize].iter();
+        let inputs6 = inputs6[..count as usize].iter();
+        let inputs7 = inputs7[..count as usize].iter();
+        let [outputs0] = outputs;
+        let outputs0 = outputs0[..count as usize].iter_mut();
+        let zipped_iterators = inputs0
+            .zip(inputs1)
+            .zip(inputs2)
+            .zip(inputs3)
+            .zip(inputs4)
+            .zip(inputs5)
+            .zip(inputs6)
+            .zip(inputs7)
+            .zip(outputs0);
+        for ((((((((input0, input1), input2), input3), input4), input5), input6), input7), output0) in zipped_iterators
+        {
+            *output0 = (*input2 + *input3) * (*input0 + *input1) / ((*input6 + *input7) * (*input4 + *input5));
+        }
+    }
 }
 
 impl FaustDsp for Dsp {
@@ -109,39 +140,9 @@ impl FaustDsp for Dsp {
     }
 
     fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
-        let (inputs0, inputs1, inputs2, inputs3, inputs4, inputs5, inputs6, inputs7) =
-            if let [inputs0, inputs1, inputs2, inputs3, inputs4, inputs5, inputs6, inputs7, ..] = inputs {
-                let inputs0 = inputs0[..count as usize].iter();
-                let inputs1 = inputs1[..count as usize].iter();
-                let inputs2 = inputs2[..count as usize].iter();
-                let inputs3 = inputs3[..count as usize].iter();
-                let inputs4 = inputs4[..count as usize].iter();
-                let inputs5 = inputs5[..count as usize].iter();
-                let inputs6 = inputs6[..count as usize].iter();
-                let inputs7 = inputs7[..count as usize].iter();
-                (inputs0, inputs1, inputs2, inputs3, inputs4, inputs5, inputs6, inputs7)
-            } else {
-                panic!("wrong number of inputs");
-            };
-        let (outputs0) = if let [outputs0, ..] = outputs {
-            let outputs0 = outputs0[..count as usize].iter_mut();
-            (outputs0)
-        } else {
-            panic!("wrong number of outputs");
-        };
-        let zipped_iterators = inputs0
-            .zip(inputs1)
-            .zip(inputs2)
-            .zip(inputs3)
-            .zip(inputs4)
-            .zip(inputs5)
-            .zip(inputs6)
-            .zip(inputs7)
-            .zip(outputs0);
-        for ((((((((input0, input1), input2), input3), input4), input5), input6), input7), output0) in zipped_iterators
-        {
-            *output0 = (*input2 + *input3) * (*input0 + *input1) / ((*input6 + *input7) * (*input4 + *input5));
-        }
+        let input_array = inputs.split_at(8).0.try_into().expect("too few input buffers");
+        let output_array = outputs.split_at_mut(1).0.try_into().expect("too few output buffers");
+        self.compute_arrays(count, input_array, output_array);
     }
 }
 

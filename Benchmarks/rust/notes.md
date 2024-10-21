@@ -52,7 +52,7 @@ With unchecked gets:
         }
 ```
 
-With explictly sized slices:
+With explicitly sized slices:
 
 ```
         let input0 = &inputs[0][..count as usize];
