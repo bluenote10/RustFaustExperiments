@@ -4,18 +4,18 @@ DSP throughput comparison of Rust vs C++:
 
 |           |   Rust (latest) |   C++ (no fastmath) |   C++ (fastmath) |
 |:----------|----------------:|--------------------:|-----------------:|
-| copy1     |         34889.1 |             22681.0 |          23166.0 |
-| copy2     |         35055.0 |             49778.7 |          53310.5 |
-| delay     |          5499.7 |              4903.0 |           4790.3 |
-| math      |          6643.5 |              7179.6 |           7076.1 |
-| karplus32 |           100.2 |                59.9 |             69.2 |
-| reverb    |            92.6 |                95.4 |            103.9 |
+| copy1     |         38287.4 |             22320.0 |          22688.7 |
+| copy2     |         36223.0 |             48987.4 |          52091.4 |
+| delay     |          5429.0 |              4735.6 |           4809.5 |
+| math      |          6505.3 |              7160.5 |           7081.6 |
+| karplus32 |           101.4 |                59.4 |             69.8 |
+| reverb    |            92.6 |                95.3 |            104.1 |
 
 Numbers are output throughput in MiB/s, i.e., higher is better.
 
 Versions:
 - Faust version: 2.75.12
-- Rust version: 1.81.0
+- Rust version: 1.82.0
 - g++ version: 11.4.0
 
 OS: Ubuntu 22.04
