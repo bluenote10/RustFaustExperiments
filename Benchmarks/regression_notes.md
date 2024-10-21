@@ -87,6 +87,9 @@ Conclusion: The regression seems to be introduced in Rust version 1.67.
 Steps to try out old Rust versions:
 
 ```sh
+# EDIT: Installing the version manually is actually not needed, because using
+# RUSTUP_TOOLCHAIN=... will implicitly install it. But cleaning up afterwards
+# could still make sense, because the ad-hoc installed versions seem to be kept.
 rustup install 1.43.0
 rustup toolchain list
 
@@ -107,6 +110,20 @@ After updating
 - Rust version: 1.77.0 -> 1.81.0
 
 The throughput of the "delay" benchmark dropped from 12820.8 to 5499.7.
+
+Result of a small investigation: Since the codegen has almost not changed,
+it was likely that it is a Rust version thing.
+
+Bisecting indicates it was a regression from 1.77.2 to 1.78.0:
+
+```sh
+# This runs at ~12.8 GB/sec
+RUSTUP_TOOLCHAIN=1.77.2 cargo run --bin delay --release -- rust.json
+# This runs at ~5.5 GB/sec
+RUSTUP_TOOLCHAIN=1.78.0 cargo run --bin delay --release -- rust.json
+```
+
+Also, there seems to be no difference in using the Faust codegen from 2.72.11 vs 2.75.12.
 
 
 # Legacy code snippets
