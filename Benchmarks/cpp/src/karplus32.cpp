@@ -4,7 +4,7 @@ copyright: "(c)GRAME 2006"
 license: "BSD"
 name: "karplus32"
 version: "1.0"
-Code generated with Faust 2.75.12 (https://faust.grame.fr)
+Code generated with Faust 2.76.0 (https://faust.grame.fr)
 Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
@@ -505,7 +505,7 @@ class Dsp : public dsp {
 			fRec3[0] = fVec2[(IOTA0 - iSlow9) & 8191];
 			fVec3[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec4[1] + fRec4[2]);
 			fRec4[0] = fVec3[(IOTA0 - iSlow11) & 8191];
-			fVec4[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec5[2] + fRec5[1]);
+			fVec4[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec5[1] + fRec5[2]);
 			fRec5[0] = fVec4[(IOTA0 - iSlow13) & 8191];
 			fVec5[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec6[1] + fRec6[2]);
 			fRec6[0] = fVec5[(IOTA0 - iSlow15) & 8191];
@@ -536,7 +536,7 @@ class Dsp : public dsp {
 			fRec18[0] = fVec17[(IOTA0 - iSlow40) & 8191];
 			fVec18[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec19[1] + fRec19[2]);
 			fRec19[0] = fVec18[(IOTA0 - iSlow42) & 8191];
-			fVec19[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec20[1] + fRec20[2]);
+			fVec19[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec20[2] + fRec20[1]);
 			fRec20[0] = fVec19[(IOTA0 - iSlow44) & 8191];
 			fVec20[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec21[1] + fRec21[2]);
 			fRec21[0] = fVec20[(IOTA0 - iSlow46) & 8191];
@@ -544,13 +544,13 @@ class Dsp : public dsp {
 			fRec22[0] = fVec21[(IOTA0 - iSlow48) & 8191];
 			fVec22[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec23[1] + fRec23[2]);
 			fRec23[0] = fVec22[(IOTA0 - iSlow50) & 8191];
-			fVec23[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec24[1] + fRec24[2]);
+			fVec23[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec24[2] + fRec24[1]);
 			fRec24[0] = fVec23[(IOTA0 - iSlow52) & 8191];
-			fVec24[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec25[2] + fRec25[1]);
+			fVec24[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec25[1] + fRec25[2]);
 			fRec25[0] = fVec24[(IOTA0 - iSlow54) & 8191];
 			fVec25[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec26[1] + fRec26[2]);
 			fRec26[0] = fVec25[(IOTA0 - iSlow56) & 8191];
-			fVec26[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec27[1] + fRec27[2]);
+			fVec26[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec27[2] + fRec27[1]);
 			fRec27[0] = fVec26[(IOTA0 - iSlow58) & 8191];
 			fVec27[IOTA0 & 8191] = fTemp0 + fSlow0 * (fRec28[1] + fRec28[2]);
 			fRec28[0] = fVec27[(IOTA0 - iSlow60) & 8191];

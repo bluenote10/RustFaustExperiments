@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "copy1"
-Code generated with Faust 2.75.12 (https://faust.grame.fr)
+Code generated with Faust 2.76.0 (https://faust.grame.fr)
 Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 

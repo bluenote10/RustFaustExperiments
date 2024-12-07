@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "math"
-Code generated with Faust 2.75.12 (https://faust.grame.fr)
+Code generated with Faust 2.76.0 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(unused_parens)]
@@ -25,6 +25,7 @@ type F32 = f32;
 
 // Generated class:
 
+pub type FaustFloat = F32;
 use std::convert::TryInto;
 mod ffi {
     use std::os::raw::c_float;
@@ -42,6 +43,11 @@ fn rint_f32(val: f32) -> f32 {
     unsafe { ffi::rintf(val) }
 }
 
+pub const FAUST_INPUTS: usize = 8;
+pub const FAUST_OUTPUTS: usize = 1;
+pub const FAUST_ACTIVES: usize = 0;
+pub const FAUST_PASSIVES: usize = 0;
+
 #[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
 #[repr(C)]
 pub struct Dsp {
@@ -49,18 +55,71 @@ pub struct Dsp {
 }
 
 impl Dsp {
-    fn compute_arrays(&mut self, count: i32, inputs: &[&[F32]; 8], outputs: &mut [&mut [F32]; 1]) {
+    pub fn new() -> Dsp {
+        Dsp { fSampleRate: 0 }
+    }
+    pub fn metadata(&self, m: &mut dyn Meta) {
+        m.declare(
+            "compile_options",
+            r"-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0",
+        );
+        m.declare("filename", r"math.dsp");
+        m.declare("name", r"math");
+    }
+
+    pub fn get_sample_rate(&self) -> i32 {
+        self.fSampleRate as i32
+    }
+
+    pub fn class_init(sample_rate: i32) {}
+    pub fn instance_reset_params(&mut self) {}
+    pub fn instance_clear(&mut self) {}
+    pub fn instance_constants(&mut self, sample_rate: i32) {
+        self.fSampleRate = sample_rate;
+    }
+    pub fn instance_init(&mut self, sample_rate: i32) {
+        self.instance_constants(sample_rate);
+        self.instance_reset_params();
+        self.instance_clear();
+    }
+    pub fn init(&mut self, sample_rate: i32) {
+        Dsp::class_init(sample_rate);
+        self.instance_init(sample_rate);
+    }
+
+    pub fn build_user_interface(&self, ui_interface: &mut dyn UI<FaustFloat>) {
+        Self::build_user_interface_static(ui_interface);
+    }
+
+    pub fn build_user_interface_static(ui_interface: &mut dyn UI<FaustFloat>) {
+        ui_interface.open_vertical_box("math");
+        ui_interface.close_box();
+    }
+
+    pub fn get_param(&self, param: ParamIndex) -> Option<FaustFloat> {
+        match param.0 {
+            _ => None,
+        }
+    }
+
+    pub fn set_param(&mut self, param: ParamIndex, value: FaustFloat) {
+        match param.0 {
+            _ => {}
+        }
+    }
+
+    pub fn compute_arrays(&mut self, count: usize, inputs: &[&[FaustFloat]; 8], outputs: &mut [&mut [FaustFloat]; 1]) {
         let [inputs0, inputs1, inputs2, inputs3, inputs4, inputs5, inputs6, inputs7] = inputs;
-        let inputs0 = inputs0[..count as usize].iter();
-        let inputs1 = inputs1[..count as usize].iter();
-        let inputs2 = inputs2[..count as usize].iter();
-        let inputs3 = inputs3[..count as usize].iter();
-        let inputs4 = inputs4[..count as usize].iter();
-        let inputs5 = inputs5[..count as usize].iter();
-        let inputs6 = inputs6[..count as usize].iter();
-        let inputs7 = inputs7[..count as usize].iter();
+        let inputs0 = inputs0[..count].iter();
+        let inputs1 = inputs1[..count].iter();
+        let inputs2 = inputs2[..count].iter();
+        let inputs3 = inputs3[..count].iter();
+        let inputs4 = inputs4[..count].iter();
+        let inputs5 = inputs5[..count].iter();
+        let inputs6 = inputs6[..count].iter();
+        let inputs7 = inputs7[..count].iter();
         let [outputs0] = outputs;
-        let outputs0 = outputs0[..count as usize].iter_mut();
+        let outputs0 = outputs0[..count].iter_mut();
         let zipped_iterators = inputs0
             .zip(inputs1)
             .zip(inputs2)
@@ -75,74 +134,72 @@ impl Dsp {
             *output0 = (*input2 + *input3) * (*input0 + *input1) / ((*input6 + *input7) * (*input4 + *input5));
         }
     }
-}
 
-impl FaustDsp for Dsp {
-    type T = F32;
-
-    fn new() -> Dsp {
-        Dsp { fSampleRate: 0 }
-    }
-    fn metadata(&self, m: &mut dyn Meta) {
-        m.declare(
-            "compile_options",
-            r"-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0",
-        );
-        m.declare("filename", r"math.dsp");
-        m.declare("name", r"math");
-    }
-
-    fn get_sample_rate(&self) -> i32 {
-        return self.fSampleRate;
-    }
-    fn get_num_inputs(&self) -> i32 {
-        return 8;
-    }
-    fn get_num_outputs(&self) -> i32 {
-        return 1;
-    }
-
-    fn class_init(sample_rate: i32) {}
-    fn instance_reset_params(&mut self) {}
-    fn instance_clear(&mut self) {}
-    fn instance_constants(&mut self, sample_rate: i32) {
-        self.fSampleRate = sample_rate;
-    }
-    fn instance_init(&mut self, sample_rate: i32) {
-        self.instance_constants(sample_rate);
-        self.instance_reset_params();
-        self.instance_clear();
-    }
-    fn init(&mut self, sample_rate: i32) {
-        Dsp::class_init(sample_rate);
-        self.instance_init(sample_rate);
-    }
-
-    fn build_user_interface(&self, ui_interface: &mut dyn UI<Self::T>) {
-        Self::build_user_interface_static(ui_interface);
-    }
-
-    fn build_user_interface_static(ui_interface: &mut dyn UI<Self::T>) {
-        ui_interface.open_vertical_box("math");
-        ui_interface.close_box();
-    }
-
-    fn get_param(&self, param: ParamIndex) -> Option<Self::T> {
-        match param.0 {
-            _ => None,
-        }
-    }
-
-    fn set_param(&mut self, param: ParamIndex, value: Self::T) {
-        match param.0 {
-            _ => {}
-        }
-    }
-
-    fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
+    pub fn compute(&mut self, count: usize, inputs: &[&[FaustFloat]], outputs: &mut [&mut [FaustFloat]]) {
         let input_array = inputs.split_at(8).0.try_into().expect("too few input buffers");
         let output_array = outputs.split_at_mut(1).0.try_into().expect("too few output buffers");
         self.compute_arrays(count, input_array, output_array);
+    }
+}
+
+impl FaustDsp for Dsp {
+    type T = FaustFloat;
+    fn new() -> Self
+    where
+        Self: Sized,
+    {
+        Self::new()
+    }
+    fn metadata(&self, m: &mut dyn Meta) {
+        self.metadata(m)
+    }
+    fn get_sample_rate(&self) -> i32 {
+        self.get_sample_rate()
+    }
+    fn get_num_inputs(&self) -> i32 {
+        FAUST_INPUTS as i32
+    }
+    fn get_num_outputs(&self) -> i32 {
+        FAUST_OUTPUTS as i32
+    }
+    fn class_init(sample_rate: i32)
+    where
+        Self: Sized,
+    {
+        Self::class_init(sample_rate);
+    }
+    fn instance_reset_params(&mut self) {
+        self.instance_reset_params()
+    }
+    fn instance_clear(&mut self) {
+        self.instance_clear()
+    }
+    fn instance_constants(&mut self, sample_rate: i32) {
+        self.instance_constants(sample_rate)
+    }
+    fn instance_init(&mut self, sample_rate: i32) {
+        self.instance_init(sample_rate)
+    }
+    fn init(&mut self, sample_rate: i32) {
+        self.init(sample_rate)
+    }
+    fn build_user_interface(&self, ui_interface: &mut dyn UI<Self::T>) {
+        self.build_user_interface(ui_interface)
+    }
+    fn build_user_interface_static(ui_interface: &mut dyn UI<Self::T>)
+    where
+        Self: Sized,
+    {
+        Self::build_user_interface_static(ui_interface);
+    }
+    fn get_param(&self, param: ParamIndex) -> Option<Self::T> {
+        self.get_param(param)
+    }
+    fn set_param(&mut self, param: ParamIndex, value: Self::T) {
+        self.set_param(param, value)
+    }
+    fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
+        self.compute(count as usize, inputs, outputs)
     }
 }
 

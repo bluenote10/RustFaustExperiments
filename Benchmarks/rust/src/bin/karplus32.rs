@@ -4,7 +4,7 @@ copyright: "(c)GRAME 2006"
 license: "BSD"
 name: "karplus32"
 version: "1.0"
-Code generated with Faust 2.75.12 (https://faust.grame.fr)
+Code generated with Faust 2.76.0 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(unused_parens)]
@@ -29,6 +29,7 @@ type F32 = f32;
 
 // Generated class:
 
+pub type FaustFloat = F32;
 use std::convert::TryInto;
 mod ffi {
     use std::os::raw::c_float;
@@ -45,6 +46,11 @@ fn remainder_f32(from: f32, to: f32) -> f32 {
 fn rint_f32(val: f32) -> f32 {
     unsafe { ffi::rintf(val) }
 }
+
+pub const FAUST_INPUTS: usize = 0;
+pub const FAUST_OUTPUTS: usize = 2;
+pub const FAUST_ACTIVES: usize = 8;
+pub const FAUST_PASSIVES: usize = 0;
 
 #[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
 #[repr(C)]
@@ -129,264 +135,7 @@ pub struct Dsp {
 }
 
 impl Dsp {
-    fn compute_arrays(&mut self, count: i32, inputs: &[&[F32]; 0], outputs: &mut [&mut [F32]; 2]) {
-        let [outputs0, outputs1] = outputs;
-        let outputs0 = outputs0[..count as usize].iter_mut();
-        let outputs1 = outputs1[..count as usize].iter_mut();
-        let mut fSlow0: F32 = 0.5 * (1.0 - self.fHslider0);
-        let mut fSlow1: F32 = 1.0 / self.fHslider1;
-        let mut fSlow2: F32 = self.fButton0;
-        let mut fSlow3: F32 = 4.656613e-10 * self.fHslider2;
-        let mut fSlow4: F32 = self.fHslider3;
-        let mut fSlow5: F32 = self.fHslider4;
-        let mut iSlow6: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 3e+01 * fSlow4 + -1.5))) as i32;
-        let mut fSlow7: F32 = self.fHslider5;
-        let mut fSlow8: F32 = ((fSlow7 > 3e+01) as i32) as u32 as F32;
-        let mut iSlow9: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 28.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow10: F32 = ((fSlow7 > 28.0) as i32) as u32 as F32;
-        let mut iSlow11: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 26.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow12: F32 = ((fSlow7 > 26.0) as i32) as u32 as F32;
-        let mut iSlow13: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 24.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow14: F32 = ((fSlow7 > 24.0) as i32) as u32 as F32;
-        let mut iSlow15: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 22.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow16: F32 = ((fSlow7 > 22.0) as i32) as u32 as F32;
-        let mut iSlow17: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 2e+01 * fSlow4 + -1.5))) as i32;
-        let mut fSlow18: F32 = ((fSlow7 > 2e+01) as i32) as u32 as F32;
-        let mut iSlow19: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 18.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow20: F32 = ((fSlow7 > 18.0) as i32) as u32 as F32;
-        let mut iSlow21: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 16.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow22: F32 = ((fSlow7 > 16.0) as i32) as u32 as F32;
-        let mut iSlow23: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 14.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow24: F32 = ((fSlow7 > 14.0) as i32) as u32 as F32;
-        let mut iSlow25: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 12.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow26: F32 = ((fSlow7 > 12.0) as i32) as u32 as F32;
-        let mut iSlow27: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 1e+01 * fSlow4 + -1.5))) as i32;
-        let mut fSlow28: F32 = ((fSlow7 > 1e+01) as i32) as u32 as F32;
-        let mut iSlow29: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 8.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow30: F32 = ((fSlow7 > 8.0) as i32) as u32 as F32;
-        let mut iSlow31: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 6.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow32: F32 = ((fSlow7 > 6.0) as i32) as u32 as F32;
-        let mut iSlow33: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 4.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow34: F32 = ((fSlow7 > 4.0) as i32) as u32 as F32;
-        let mut iSlow35: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 2.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow36: F32 = ((fSlow7 > 2.0) as i32) as u32 as F32;
-        let mut iSlow37: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + -1.5))) as i32;
-        let mut fSlow38: F32 = ((fSlow7 > 0.0) as i32) as u32 as F32;
-        let mut fSlow39: F32 = self.fHslider6;
-        let mut iSlow40: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 31.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow41: F32 = ((fSlow7 > 31.0) as i32) as u32 as F32;
-        let mut iSlow42: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 29.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow43: F32 = ((fSlow7 > 29.0) as i32) as u32 as F32;
-        let mut iSlow44: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 27.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow45: F32 = ((fSlow7 > 27.0) as i32) as u32 as F32;
-        let mut iSlow46: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 25.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow47: F32 = ((fSlow7 > 25.0) as i32) as u32 as F32;
-        let mut iSlow48: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 23.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow49: F32 = ((fSlow7 > 23.0) as i32) as u32 as F32;
-        let mut iSlow50: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 21.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow51: F32 = ((fSlow7 > 21.0) as i32) as u32 as F32;
-        let mut iSlow52: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 19.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow53: F32 = ((fSlow7 > 19.0) as i32) as u32 as F32;
-        let mut iSlow54: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 17.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow55: F32 = ((fSlow7 > 17.0) as i32) as u32 as F32;
-        let mut iSlow56: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 15.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow57: F32 = ((fSlow7 > 15.0) as i32) as u32 as F32;
-        let mut iSlow58: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 13.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow59: F32 = ((fSlow7 > 13.0) as i32) as u32 as F32;
-        let mut iSlow60: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 11.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow61: F32 = ((fSlow7 > 11.0) as i32) as u32 as F32;
-        let mut iSlow62: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 9.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow63: F32 = ((fSlow7 > 9.0) as i32) as u32 as F32;
-        let mut iSlow64: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 7.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow65: F32 = ((fSlow7 > 7.0) as i32) as u32 as F32;
-        let mut iSlow66: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 5.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow67: F32 = ((fSlow7 > 5.0) as i32) as u32 as F32;
-        let mut iSlow68: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 3.0 * fSlow4 + -1.5))) as i32;
-        let mut fSlow69: F32 = ((fSlow7 > 3.0) as i32) as u32 as F32;
-        let mut iSlow70: i32 = (F32::min(4096.0, F32::max(0.0, fSlow4 + fSlow5 + -1.5))) as i32;
-        let mut fSlow71: F32 = ((fSlow7 > 1.0) as i32) as u32 as F32;
-        let zipped_iterators = outputs0.zip(outputs1);
-        for (output0, output1) in zipped_iterators {
-            self.iRec1[0] = i32::wrapping_add(i32::wrapping_mul(1103515245, self.iRec1[1]), 12345);
-            self.fVec0[0] = fSlow2;
-            self.fRec2[0] = self.fRec2[1] + (((fSlow2 - self.fVec0[1]) > 0.0) as i32) as u32 as F32
-                - fSlow1 * ((self.fRec2[1] > 0.0) as i32) as u32 as F32;
-            let mut fTemp0: F32 =
-                fSlow3 * (((self.fRec2[0] > 0.0) as i32) as u32 as F32 + 1.5258789e-05) * (self.iRec1[0]) as F32;
-            self.fVec1[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec0[1] + self.fRec0[2]);
-            self.fRec0[0] = self.fVec1[((i32::wrapping_sub(self.IOTA0, iSlow6)) & 8191) as usize];
-            self.fVec2[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec3[1] + self.fRec3[2]);
-            self.fRec3[0] = self.fVec2[((i32::wrapping_sub(self.IOTA0, iSlow9)) & 8191) as usize];
-            self.fVec3[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec4[2] + self.fRec4[1]);
-            self.fRec4[0] = self.fVec3[((i32::wrapping_sub(self.IOTA0, iSlow11)) & 8191) as usize];
-            self.fVec4[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec5[1] + self.fRec5[2]);
-            self.fRec5[0] = self.fVec4[((i32::wrapping_sub(self.IOTA0, iSlow13)) & 8191) as usize];
-            self.fVec5[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec6[1] + self.fRec6[2]);
-            self.fRec6[0] = self.fVec5[((i32::wrapping_sub(self.IOTA0, iSlow15)) & 8191) as usize];
-            self.fVec6[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec7[1] + self.fRec7[2]);
-            self.fRec7[0] = self.fVec6[((i32::wrapping_sub(self.IOTA0, iSlow17)) & 8191) as usize];
-            self.fVec7[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec8[1] + self.fRec8[2]);
-            self.fRec8[0] = self.fVec7[((i32::wrapping_sub(self.IOTA0, iSlow19)) & 8191) as usize];
-            self.fVec8[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec9[1] + self.fRec9[2]);
-            self.fRec9[0] = self.fVec8[((i32::wrapping_sub(self.IOTA0, iSlow21)) & 8191) as usize];
-            self.fVec9[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec10[1] + self.fRec10[2]);
-            self.fRec10[0] = self.fVec9[((i32::wrapping_sub(self.IOTA0, iSlow23)) & 8191) as usize];
-            self.fVec10[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec11[2] + self.fRec11[1]);
-            self.fRec11[0] = self.fVec10[((i32::wrapping_sub(self.IOTA0, iSlow25)) & 8191) as usize];
-            self.fVec11[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec12[1] + self.fRec12[2]);
-            self.fRec12[0] = self.fVec11[((i32::wrapping_sub(self.IOTA0, iSlow27)) & 8191) as usize];
-            self.fVec12[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec13[1] + self.fRec13[2]);
-            self.fRec13[0] = self.fVec12[((i32::wrapping_sub(self.IOTA0, iSlow29)) & 8191) as usize];
-            self.fVec13[(self.IOTA0 & 4095) as usize] = fTemp0 + fSlow0 * (self.fRec14[1] + self.fRec14[2]);
-            self.fRec14[0] = self.fVec13[((i32::wrapping_sub(self.IOTA0, iSlow31)) & 4095) as usize];
-            self.fVec14[(self.IOTA0 & 4095) as usize] = fTemp0 + fSlow0 * (self.fRec15[1] + self.fRec15[2]);
-            self.fRec15[0] = self.fVec14[((i32::wrapping_sub(self.IOTA0, iSlow33)) & 4095) as usize];
-            self.fVec15[(self.IOTA0 & 2047) as usize] = fTemp0 + fSlow0 * (self.fRec16[1] + self.fRec16[2]);
-            self.fRec16[0] = self.fVec15[((i32::wrapping_sub(self.IOTA0, iSlow35)) & 2047) as usize];
-            self.fVec16[(self.IOTA0 & 511) as usize] = fSlow0 * (self.fRec17[1] + self.fRec17[2]) + fTemp0;
-            self.fRec17[0] = self.fVec16[((i32::wrapping_sub(self.IOTA0, iSlow37)) & 511) as usize];
-            *output0 = fSlow39
-                * (fSlow38 * self.fRec17[0]
-                    + fSlow36 * self.fRec16[0]
-                    + fSlow34 * self.fRec15[0]
-                    + fSlow32 * self.fRec14[0]
-                    + fSlow30 * self.fRec13[0]
-                    + fSlow28 * self.fRec12[0]
-                    + fSlow26 * self.fRec11[0]
-                    + fSlow24 * self.fRec10[0]
-                    + fSlow22 * self.fRec9[0]
-                    + fSlow20 * self.fRec8[0]
-                    + fSlow18 * self.fRec7[0]
-                    + fSlow16 * self.fRec6[0]
-                    + fSlow14 * self.fRec5[0]
-                    + fSlow12 * self.fRec4[0]
-                    + fSlow10 * self.fRec3[0]
-                    + fSlow8 * self.fRec0[0]);
-            self.fVec17[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec18[1] + self.fRec18[2]);
-            self.fRec18[0] = self.fVec17[((i32::wrapping_sub(self.IOTA0, iSlow40)) & 8191) as usize];
-            self.fVec18[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec19[1] + self.fRec19[2]);
-            self.fRec19[0] = self.fVec18[((i32::wrapping_sub(self.IOTA0, iSlow42)) & 8191) as usize];
-            self.fVec19[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec20[1] + self.fRec20[2]);
-            self.fRec20[0] = self.fVec19[((i32::wrapping_sub(self.IOTA0, iSlow44)) & 8191) as usize];
-            self.fVec20[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec21[1] + self.fRec21[2]);
-            self.fRec21[0] = self.fVec20[((i32::wrapping_sub(self.IOTA0, iSlow46)) & 8191) as usize];
-            self.fVec21[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec22[1] + self.fRec22[2]);
-            self.fRec22[0] = self.fVec21[((i32::wrapping_sub(self.IOTA0, iSlow48)) & 8191) as usize];
-            self.fVec22[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec23[1] + self.fRec23[2]);
-            self.fRec23[0] = self.fVec22[((i32::wrapping_sub(self.IOTA0, iSlow50)) & 8191) as usize];
-            self.fVec23[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec24[1] + self.fRec24[2]);
-            self.fRec24[0] = self.fVec23[((i32::wrapping_sub(self.IOTA0, iSlow52)) & 8191) as usize];
-            self.fVec24[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec25[1] + self.fRec25[2]);
-            self.fRec25[0] = self.fVec24[((i32::wrapping_sub(self.IOTA0, iSlow54)) & 8191) as usize];
-            self.fVec25[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec26[1] + self.fRec26[2]);
-            self.fRec26[0] = self.fVec25[((i32::wrapping_sub(self.IOTA0, iSlow56)) & 8191) as usize];
-            self.fVec26[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec27[2] + self.fRec27[1]);
-            self.fRec27[0] = self.fVec26[((i32::wrapping_sub(self.IOTA0, iSlow58)) & 8191) as usize];
-            self.fVec27[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec28[1] + self.fRec28[2]);
-            self.fRec28[0] = self.fVec27[((i32::wrapping_sub(self.IOTA0, iSlow60)) & 8191) as usize];
-            self.fVec28[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec29[1] + self.fRec29[2]);
-            self.fRec29[0] = self.fVec28[((i32::wrapping_sub(self.IOTA0, iSlow62)) & 8191) as usize];
-            self.fVec29[(self.IOTA0 & 4095) as usize] = fTemp0 + fSlow0 * (self.fRec30[1] + self.fRec30[2]);
-            self.fRec30[0] = self.fVec29[((i32::wrapping_sub(self.IOTA0, iSlow64)) & 4095) as usize];
-            self.fVec30[(self.IOTA0 & 4095) as usize] = fTemp0 + fSlow0 * (self.fRec31[1] + self.fRec31[2]);
-            self.fRec31[0] = self.fVec30[((i32::wrapping_sub(self.IOTA0, iSlow66)) & 4095) as usize];
-            self.fVec31[(self.IOTA0 & 2047) as usize] = fTemp0 + fSlow0 * (self.fRec32[1] + self.fRec32[2]);
-            self.fRec32[0] = self.fVec31[((i32::wrapping_sub(self.IOTA0, iSlow68)) & 2047) as usize];
-            self.fVec32[(self.IOTA0 & 1023) as usize] = fTemp0 + fSlow0 * (self.fRec33[1] + self.fRec33[2]);
-            self.fRec33[0] = self.fVec32[((i32::wrapping_sub(self.IOTA0, iSlow70)) & 1023) as usize];
-            *output1 = fSlow39
-                * (fSlow71 * self.fRec33[0]
-                    + fSlow69 * self.fRec32[0]
-                    + fSlow67 * self.fRec31[0]
-                    + fSlow65 * self.fRec30[0]
-                    + fSlow63 * self.fRec29[0]
-                    + fSlow61 * self.fRec28[0]
-                    + fSlow59 * self.fRec27[0]
-                    + fSlow57 * self.fRec26[0]
-                    + fSlow55 * self.fRec25[0]
-                    + fSlow53 * self.fRec24[0]
-                    + fSlow51 * self.fRec23[0]
-                    + fSlow49 * self.fRec22[0]
-                    + fSlow47 * self.fRec21[0]
-                    + fSlow45 * self.fRec20[0]
-                    + fSlow43 * self.fRec19[0]
-                    + fSlow41 * self.fRec18[0]);
-            self.iRec1[1] = self.iRec1[0];
-            self.fVec0[1] = self.fVec0[0];
-            self.fRec2[1] = self.fRec2[0];
-            self.IOTA0 = i32::wrapping_add(self.IOTA0, 1);
-            self.fRec0[2] = self.fRec0[1];
-            self.fRec0[1] = self.fRec0[0];
-            self.fRec3[2] = self.fRec3[1];
-            self.fRec3[1] = self.fRec3[0];
-            self.fRec4[2] = self.fRec4[1];
-            self.fRec4[1] = self.fRec4[0];
-            self.fRec5[2] = self.fRec5[1];
-            self.fRec5[1] = self.fRec5[0];
-            self.fRec6[2] = self.fRec6[1];
-            self.fRec6[1] = self.fRec6[0];
-            self.fRec7[2] = self.fRec7[1];
-            self.fRec7[1] = self.fRec7[0];
-            self.fRec8[2] = self.fRec8[1];
-            self.fRec8[1] = self.fRec8[0];
-            self.fRec9[2] = self.fRec9[1];
-            self.fRec9[1] = self.fRec9[0];
-            self.fRec10[2] = self.fRec10[1];
-            self.fRec10[1] = self.fRec10[0];
-            self.fRec11[2] = self.fRec11[1];
-            self.fRec11[1] = self.fRec11[0];
-            self.fRec12[2] = self.fRec12[1];
-            self.fRec12[1] = self.fRec12[0];
-            self.fRec13[2] = self.fRec13[1];
-            self.fRec13[1] = self.fRec13[0];
-            self.fRec14[2] = self.fRec14[1];
-            self.fRec14[1] = self.fRec14[0];
-            self.fRec15[2] = self.fRec15[1];
-            self.fRec15[1] = self.fRec15[0];
-            self.fRec16[2] = self.fRec16[1];
-            self.fRec16[1] = self.fRec16[0];
-            self.fRec17[2] = self.fRec17[1];
-            self.fRec17[1] = self.fRec17[0];
-            self.fRec18[2] = self.fRec18[1];
-            self.fRec18[1] = self.fRec18[0];
-            self.fRec19[2] = self.fRec19[1];
-            self.fRec19[1] = self.fRec19[0];
-            self.fRec20[2] = self.fRec20[1];
-            self.fRec20[1] = self.fRec20[0];
-            self.fRec21[2] = self.fRec21[1];
-            self.fRec21[1] = self.fRec21[0];
-            self.fRec22[2] = self.fRec22[1];
-            self.fRec22[1] = self.fRec22[0];
-            self.fRec23[2] = self.fRec23[1];
-            self.fRec23[1] = self.fRec23[0];
-            self.fRec24[2] = self.fRec24[1];
-            self.fRec24[1] = self.fRec24[0];
-            self.fRec25[2] = self.fRec25[1];
-            self.fRec25[1] = self.fRec25[0];
-            self.fRec26[2] = self.fRec26[1];
-            self.fRec26[1] = self.fRec26[0];
-            self.fRec27[2] = self.fRec27[1];
-            self.fRec27[1] = self.fRec27[0];
-            self.fRec28[2] = self.fRec28[1];
-            self.fRec28[1] = self.fRec28[0];
-            self.fRec29[2] = self.fRec29[1];
-            self.fRec29[1] = self.fRec29[0];
-            self.fRec30[2] = self.fRec30[1];
-            self.fRec30[1] = self.fRec30[0];
-            self.fRec31[2] = self.fRec31[1];
-            self.fRec31[1] = self.fRec31[0];
-            self.fRec32[2] = self.fRec32[1];
-            self.fRec32[1] = self.fRec32[0];
-            self.fRec33[2] = self.fRec33[1];
-            self.fRec33[1] = self.fRec33[0];
-        }
-    }
-}
-
-impl FaustDsp for Dsp {
-    type T = F32;
-
-    fn new() -> Dsp {
+    pub fn new() -> Dsp {
         Dsp {
             fHslider0: 0.0,
             iRec1: [0; 2],
@@ -467,7 +216,7 @@ impl FaustDsp for Dsp {
             fSampleRate: 0,
         }
     }
-    fn metadata(&self, m: &mut dyn Meta) {
+    pub fn metadata(&self, m: &mut dyn Meta) {
         m.declare("author", r"Grame");
         m.declare(
             "compile_options",
@@ -484,18 +233,12 @@ impl FaustDsp for Dsp {
         m.declare("version", r"1.0");
     }
 
-    fn get_sample_rate(&self) -> i32 {
-        return self.fSampleRate;
-    }
-    fn get_num_inputs(&self) -> i32 {
-        return 0;
-    }
-    fn get_num_outputs(&self) -> i32 {
-        return 2;
+    pub fn get_sample_rate(&self) -> i32 {
+        self.fSampleRate as i32
     }
 
-    fn class_init(sample_rate: i32) {}
-    fn instance_reset_params(&mut self) {
+    pub fn class_init(sample_rate: i32) {}
+    pub fn instance_reset_params(&mut self) {
         self.fHslider0 = 0.1;
         self.fHslider1 = 128.0;
         self.fButton0 = 0.0;
@@ -505,7 +248,7 @@ impl FaustDsp for Dsp {
         self.fHslider5 = 1.0;
         self.fHslider6 = 0.5;
     }
-    fn instance_clear(&mut self) {
+    pub fn instance_clear(&mut self) {
         for l0 in 0..2 {
             self.iRec1[l0 as usize] = 0;
         }
@@ -709,24 +452,24 @@ impl FaustDsp for Dsp {
             self.fRec33[l66 as usize] = 0.0;
         }
     }
-    fn instance_constants(&mut self, sample_rate: i32) {
+    pub fn instance_constants(&mut self, sample_rate: i32) {
         self.fSampleRate = sample_rate;
     }
-    fn instance_init(&mut self, sample_rate: i32) {
+    pub fn instance_init(&mut self, sample_rate: i32) {
         self.instance_constants(sample_rate);
         self.instance_reset_params();
         self.instance_clear();
     }
-    fn init(&mut self, sample_rate: i32) {
+    pub fn init(&mut self, sample_rate: i32) {
         Dsp::class_init(sample_rate);
         self.instance_init(sample_rate);
     }
 
-    fn build_user_interface(&self, ui_interface: &mut dyn UI<Self::T>) {
+    pub fn build_user_interface(&self, ui_interface: &mut dyn UI<FaustFloat>) {
         Self::build_user_interface_static(ui_interface);
     }
 
-    fn build_user_interface_static(ui_interface: &mut dyn UI<Self::T>) {
+    pub fn build_user_interface_static(ui_interface: &mut dyn UI<FaustFloat>) {
         ui_interface.open_vertical_box("karplus32");
         ui_interface.open_vertical_box("excitator");
         ui_interface.add_horizontal_slider("excitation (samples)", ParamIndex(0), 128.0, 2.0, 512.0, 1.0);
@@ -745,7 +488,7 @@ impl FaustDsp for Dsp {
         ui_interface.close_box();
     }
 
-    fn get_param(&self, param: ParamIndex) -> Option<Self::T> {
+    pub fn get_param(&self, param: ParamIndex) -> Option<FaustFloat> {
         match param.0 {
             1 => Some(self.fButton0),
             4 => Some(self.fHslider0),
@@ -759,7 +502,7 @@ impl FaustDsp for Dsp {
         }
     }
 
-    fn set_param(&mut self, param: ParamIndex, value: Self::T) {
+    pub fn set_param(&mut self, param: ParamIndex, value: FaustFloat) {
         match param.0 {
             1 => self.fButton0 = value,
             4 => self.fHslider0 = value,
@@ -773,10 +516,324 @@ impl FaustDsp for Dsp {
         }
     }
 
-    fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
+    pub fn compute_arrays(&mut self, count: usize, inputs: &[&[FaustFloat]; 0], outputs: &mut [&mut [FaustFloat]; 2]) {
+        let [outputs0, outputs1] = outputs;
+        let outputs0 = outputs0[..count].iter_mut();
+        let outputs1 = outputs1[..count].iter_mut();
+        let mut fSlow0: F32 = 0.5 * (1.0 - self.fHslider0);
+        let mut fSlow1: F32 = 1.0 / self.fHslider1;
+        let mut fSlow2: F32 = self.fButton0;
+        let mut fSlow3: F32 = 4.656613e-10 * self.fHslider2;
+        let mut fSlow4: F32 = self.fHslider3;
+        let mut fSlow5: F32 = self.fHslider4;
+        let mut iSlow6: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 3e+01 * fSlow4 + -1.5))) as i32;
+        let mut fSlow7: F32 = self.fHslider5;
+        let mut fSlow8: F32 = ((fSlow7 > 3e+01) as i32) as u32 as F32;
+        let mut iSlow9: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 28.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow10: F32 = ((fSlow7 > 28.0) as i32) as u32 as F32;
+        let mut iSlow11: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 26.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow12: F32 = ((fSlow7 > 26.0) as i32) as u32 as F32;
+        let mut iSlow13: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 24.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow14: F32 = ((fSlow7 > 24.0) as i32) as u32 as F32;
+        let mut iSlow15: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 22.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow16: F32 = ((fSlow7 > 22.0) as i32) as u32 as F32;
+        let mut iSlow17: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 2e+01 * fSlow4 + -1.5))) as i32;
+        let mut fSlow18: F32 = ((fSlow7 > 2e+01) as i32) as u32 as F32;
+        let mut iSlow19: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 18.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow20: F32 = ((fSlow7 > 18.0) as i32) as u32 as F32;
+        let mut iSlow21: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 16.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow22: F32 = ((fSlow7 > 16.0) as i32) as u32 as F32;
+        let mut iSlow23: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 14.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow24: F32 = ((fSlow7 > 14.0) as i32) as u32 as F32;
+        let mut iSlow25: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 12.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow26: F32 = ((fSlow7 > 12.0) as i32) as u32 as F32;
+        let mut iSlow27: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 1e+01 * fSlow4 + -1.5))) as i32;
+        let mut fSlow28: F32 = ((fSlow7 > 1e+01) as i32) as u32 as F32;
+        let mut iSlow29: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 8.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow30: F32 = ((fSlow7 > 8.0) as i32) as u32 as F32;
+        let mut iSlow31: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 6.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow32: F32 = ((fSlow7 > 6.0) as i32) as u32 as F32;
+        let mut iSlow33: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 4.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow34: F32 = ((fSlow7 > 4.0) as i32) as u32 as F32;
+        let mut iSlow35: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 2.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow36: F32 = ((fSlow7 > 2.0) as i32) as u32 as F32;
+        let mut iSlow37: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + -1.5))) as i32;
+        let mut fSlow38: F32 = ((fSlow7 > 0.0) as i32) as u32 as F32;
+        let mut fSlow39: F32 = self.fHslider6;
+        let mut iSlow40: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 31.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow41: F32 = ((fSlow7 > 31.0) as i32) as u32 as F32;
+        let mut iSlow42: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 29.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow43: F32 = ((fSlow7 > 29.0) as i32) as u32 as F32;
+        let mut iSlow44: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 27.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow45: F32 = ((fSlow7 > 27.0) as i32) as u32 as F32;
+        let mut iSlow46: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 25.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow47: F32 = ((fSlow7 > 25.0) as i32) as u32 as F32;
+        let mut iSlow48: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 23.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow49: F32 = ((fSlow7 > 23.0) as i32) as u32 as F32;
+        let mut iSlow50: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 21.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow51: F32 = ((fSlow7 > 21.0) as i32) as u32 as F32;
+        let mut iSlow52: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 19.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow53: F32 = ((fSlow7 > 19.0) as i32) as u32 as F32;
+        let mut iSlow54: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 17.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow55: F32 = ((fSlow7 > 17.0) as i32) as u32 as F32;
+        let mut iSlow56: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 15.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow57: F32 = ((fSlow7 > 15.0) as i32) as u32 as F32;
+        let mut iSlow58: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 13.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow59: F32 = ((fSlow7 > 13.0) as i32) as u32 as F32;
+        let mut iSlow60: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 11.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow61: F32 = ((fSlow7 > 11.0) as i32) as u32 as F32;
+        let mut iSlow62: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 9.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow63: F32 = ((fSlow7 > 9.0) as i32) as u32 as F32;
+        let mut iSlow64: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 7.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow65: F32 = ((fSlow7 > 7.0) as i32) as u32 as F32;
+        let mut iSlow66: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 5.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow67: F32 = ((fSlow7 > 5.0) as i32) as u32 as F32;
+        let mut iSlow68: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 3.0 * fSlow4 + -1.5))) as i32;
+        let mut fSlow69: F32 = ((fSlow7 > 3.0) as i32) as u32 as F32;
+        let mut iSlow70: i32 = (F32::min(4096.0, F32::max(0.0, fSlow4 + fSlow5 + -1.5))) as i32;
+        let mut fSlow71: F32 = ((fSlow7 > 1.0) as i32) as u32 as F32;
+        let zipped_iterators = outputs0.zip(outputs1);
+        for (output0, output1) in zipped_iterators {
+            self.iRec1[0] = i32::wrapping_add(i32::wrapping_mul(1103515245, self.iRec1[1]), 12345);
+            self.fVec0[0] = fSlow2;
+            self.fRec2[0] = self.fRec2[1] + (((fSlow2 - self.fVec0[1]) > 0.0) as i32) as u32 as F32
+                - fSlow1 * ((self.fRec2[1] > 0.0) as i32) as u32 as F32;
+            let mut fTemp0: F32 =
+                fSlow3 * (((self.fRec2[0] > 0.0) as i32) as u32 as F32 + 1.5258789e-05) * (self.iRec1[0]) as F32;
+            self.fVec1[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec0[1] + self.fRec0[2]);
+            self.fRec0[0] = self.fVec1[((i32::wrapping_sub(self.IOTA0, iSlow6)) & 8191) as usize];
+            self.fVec2[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec3[2] + self.fRec3[1]);
+            self.fRec3[0] = self.fVec2[((i32::wrapping_sub(self.IOTA0, iSlow9)) & 8191) as usize];
+            self.fVec3[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec4[1] + self.fRec4[2]);
+            self.fRec4[0] = self.fVec3[((i32::wrapping_sub(self.IOTA0, iSlow11)) & 8191) as usize];
+            self.fVec4[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec5[1] + self.fRec5[2]);
+            self.fRec5[0] = self.fVec4[((i32::wrapping_sub(self.IOTA0, iSlow13)) & 8191) as usize];
+            self.fVec5[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec6[1] + self.fRec6[2]);
+            self.fRec6[0] = self.fVec5[((i32::wrapping_sub(self.IOTA0, iSlow15)) & 8191) as usize];
+            self.fVec6[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec7[1] + self.fRec7[2]);
+            self.fRec7[0] = self.fVec6[((i32::wrapping_sub(self.IOTA0, iSlow17)) & 8191) as usize];
+            self.fVec7[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec8[1] + self.fRec8[2]);
+            self.fRec8[0] = self.fVec7[((i32::wrapping_sub(self.IOTA0, iSlow19)) & 8191) as usize];
+            self.fVec8[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec9[1] + self.fRec9[2]);
+            self.fRec9[0] = self.fVec8[((i32::wrapping_sub(self.IOTA0, iSlow21)) & 8191) as usize];
+            self.fVec9[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec10[1] + self.fRec10[2]);
+            self.fRec10[0] = self.fVec9[((i32::wrapping_sub(self.IOTA0, iSlow23)) & 8191) as usize];
+            self.fVec10[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec11[1] + self.fRec11[2]);
+            self.fRec11[0] = self.fVec10[((i32::wrapping_sub(self.IOTA0, iSlow25)) & 8191) as usize];
+            self.fVec11[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec12[1] + self.fRec12[2]);
+            self.fRec12[0] = self.fVec11[((i32::wrapping_sub(self.IOTA0, iSlow27)) & 8191) as usize];
+            self.fVec12[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec13[1] + self.fRec13[2]);
+            self.fRec13[0] = self.fVec12[((i32::wrapping_sub(self.IOTA0, iSlow29)) & 8191) as usize];
+            self.fVec13[(self.IOTA0 & 4095) as usize] = fTemp0 + fSlow0 * (self.fRec14[1] + self.fRec14[2]);
+            self.fRec14[0] = self.fVec13[((i32::wrapping_sub(self.IOTA0, iSlow31)) & 4095) as usize];
+            self.fVec14[(self.IOTA0 & 4095) as usize] = fTemp0 + fSlow0 * (self.fRec15[1] + self.fRec15[2]);
+            self.fRec15[0] = self.fVec14[((i32::wrapping_sub(self.IOTA0, iSlow33)) & 4095) as usize];
+            self.fVec15[(self.IOTA0 & 2047) as usize] = fTemp0 + fSlow0 * (self.fRec16[1] + self.fRec16[2]);
+            self.fRec16[0] = self.fVec15[((i32::wrapping_sub(self.IOTA0, iSlow35)) & 2047) as usize];
+            self.fVec16[(self.IOTA0 & 511) as usize] = fSlow0 * (self.fRec17[1] + self.fRec17[2]) + fTemp0;
+            self.fRec17[0] = self.fVec16[((i32::wrapping_sub(self.IOTA0, iSlow37)) & 511) as usize];
+            *output0 = fSlow39
+                * (fSlow38 * self.fRec17[0]
+                    + fSlow36 * self.fRec16[0]
+                    + fSlow34 * self.fRec15[0]
+                    + fSlow32 * self.fRec14[0]
+                    + fSlow30 * self.fRec13[0]
+                    + fSlow28 * self.fRec12[0]
+                    + fSlow26 * self.fRec11[0]
+                    + fSlow24 * self.fRec10[0]
+                    + fSlow22 * self.fRec9[0]
+                    + fSlow20 * self.fRec8[0]
+                    + fSlow18 * self.fRec7[0]
+                    + fSlow16 * self.fRec6[0]
+                    + fSlow14 * self.fRec5[0]
+                    + fSlow12 * self.fRec4[0]
+                    + fSlow10 * self.fRec3[0]
+                    + fSlow8 * self.fRec0[0]);
+            self.fVec17[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec18[1] + self.fRec18[2]);
+            self.fRec18[0] = self.fVec17[((i32::wrapping_sub(self.IOTA0, iSlow40)) & 8191) as usize];
+            self.fVec18[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec19[2] + self.fRec19[1]);
+            self.fRec19[0] = self.fVec18[((i32::wrapping_sub(self.IOTA0, iSlow42)) & 8191) as usize];
+            self.fVec19[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec20[1] + self.fRec20[2]);
+            self.fRec20[0] = self.fVec19[((i32::wrapping_sub(self.IOTA0, iSlow44)) & 8191) as usize];
+            self.fVec20[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec21[1] + self.fRec21[2]);
+            self.fRec21[0] = self.fVec20[((i32::wrapping_sub(self.IOTA0, iSlow46)) & 8191) as usize];
+            self.fVec21[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec22[1] + self.fRec22[2]);
+            self.fRec22[0] = self.fVec21[((i32::wrapping_sub(self.IOTA0, iSlow48)) & 8191) as usize];
+            self.fVec22[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec23[1] + self.fRec23[2]);
+            self.fRec23[0] = self.fVec22[((i32::wrapping_sub(self.IOTA0, iSlow50)) & 8191) as usize];
+            self.fVec23[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec24[1] + self.fRec24[2]);
+            self.fRec24[0] = self.fVec23[((i32::wrapping_sub(self.IOTA0, iSlow52)) & 8191) as usize];
+            self.fVec24[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec25[1] + self.fRec25[2]);
+            self.fRec25[0] = self.fVec24[((i32::wrapping_sub(self.IOTA0, iSlow54)) & 8191) as usize];
+            self.fVec25[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec26[2] + self.fRec26[1]);
+            self.fRec26[0] = self.fVec25[((i32::wrapping_sub(self.IOTA0, iSlow56)) & 8191) as usize];
+            self.fVec26[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec27[1] + self.fRec27[2]);
+            self.fRec27[0] = self.fVec26[((i32::wrapping_sub(self.IOTA0, iSlow58)) & 8191) as usize];
+            self.fVec27[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec28[1] + self.fRec28[2]);
+            self.fRec28[0] = self.fVec27[((i32::wrapping_sub(self.IOTA0, iSlow60)) & 8191) as usize];
+            self.fVec28[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec29[2] + self.fRec29[1]);
+            self.fRec29[0] = self.fVec28[((i32::wrapping_sub(self.IOTA0, iSlow62)) & 8191) as usize];
+            self.fVec29[(self.IOTA0 & 4095) as usize] = fTemp0 + fSlow0 * (self.fRec30[1] + self.fRec30[2]);
+            self.fRec30[0] = self.fVec29[((i32::wrapping_sub(self.IOTA0, iSlow64)) & 4095) as usize];
+            self.fVec30[(self.IOTA0 & 4095) as usize] = fTemp0 + fSlow0 * (self.fRec31[1] + self.fRec31[2]);
+            self.fRec31[0] = self.fVec30[((i32::wrapping_sub(self.IOTA0, iSlow66)) & 4095) as usize];
+            self.fVec31[(self.IOTA0 & 2047) as usize] = fTemp0 + fSlow0 * (self.fRec32[1] + self.fRec32[2]);
+            self.fRec32[0] = self.fVec31[((i32::wrapping_sub(self.IOTA0, iSlow68)) & 2047) as usize];
+            self.fVec32[(self.IOTA0 & 1023) as usize] = fTemp0 + fSlow0 * (self.fRec33[1] + self.fRec33[2]);
+            self.fRec33[0] = self.fVec32[((i32::wrapping_sub(self.IOTA0, iSlow70)) & 1023) as usize];
+            *output1 = fSlow39
+                * (fSlow71 * self.fRec33[0]
+                    + fSlow69 * self.fRec32[0]
+                    + fSlow67 * self.fRec31[0]
+                    + fSlow65 * self.fRec30[0]
+                    + fSlow63 * self.fRec29[0]
+                    + fSlow61 * self.fRec28[0]
+                    + fSlow59 * self.fRec27[0]
+                    + fSlow57 * self.fRec26[0]
+                    + fSlow55 * self.fRec25[0]
+                    + fSlow53 * self.fRec24[0]
+                    + fSlow51 * self.fRec23[0]
+                    + fSlow49 * self.fRec22[0]
+                    + fSlow47 * self.fRec21[0]
+                    + fSlow45 * self.fRec20[0]
+                    + fSlow43 * self.fRec19[0]
+                    + fSlow41 * self.fRec18[0]);
+            self.iRec1[1] = self.iRec1[0];
+            self.fVec0[1] = self.fVec0[0];
+            self.fRec2[1] = self.fRec2[0];
+            self.IOTA0 = i32::wrapping_add(self.IOTA0, 1);
+            self.fRec0[2] = self.fRec0[1];
+            self.fRec0[1] = self.fRec0[0];
+            self.fRec3[2] = self.fRec3[1];
+            self.fRec3[1] = self.fRec3[0];
+            self.fRec4[2] = self.fRec4[1];
+            self.fRec4[1] = self.fRec4[0];
+            self.fRec5[2] = self.fRec5[1];
+            self.fRec5[1] = self.fRec5[0];
+            self.fRec6[2] = self.fRec6[1];
+            self.fRec6[1] = self.fRec6[0];
+            self.fRec7[2] = self.fRec7[1];
+            self.fRec7[1] = self.fRec7[0];
+            self.fRec8[2] = self.fRec8[1];
+            self.fRec8[1] = self.fRec8[0];
+            self.fRec9[2] = self.fRec9[1];
+            self.fRec9[1] = self.fRec9[0];
+            self.fRec10[2] = self.fRec10[1];
+            self.fRec10[1] = self.fRec10[0];
+            self.fRec11[2] = self.fRec11[1];
+            self.fRec11[1] = self.fRec11[0];
+            self.fRec12[2] = self.fRec12[1];
+            self.fRec12[1] = self.fRec12[0];
+            self.fRec13[2] = self.fRec13[1];
+            self.fRec13[1] = self.fRec13[0];
+            self.fRec14[2] = self.fRec14[1];
+            self.fRec14[1] = self.fRec14[0];
+            self.fRec15[2] = self.fRec15[1];
+            self.fRec15[1] = self.fRec15[0];
+            self.fRec16[2] = self.fRec16[1];
+            self.fRec16[1] = self.fRec16[0];
+            self.fRec17[2] = self.fRec17[1];
+            self.fRec17[1] = self.fRec17[0];
+            self.fRec18[2] = self.fRec18[1];
+            self.fRec18[1] = self.fRec18[0];
+            self.fRec19[2] = self.fRec19[1];
+            self.fRec19[1] = self.fRec19[0];
+            self.fRec20[2] = self.fRec20[1];
+            self.fRec20[1] = self.fRec20[0];
+            self.fRec21[2] = self.fRec21[1];
+            self.fRec21[1] = self.fRec21[0];
+            self.fRec22[2] = self.fRec22[1];
+            self.fRec22[1] = self.fRec22[0];
+            self.fRec23[2] = self.fRec23[1];
+            self.fRec23[1] = self.fRec23[0];
+            self.fRec24[2] = self.fRec24[1];
+            self.fRec24[1] = self.fRec24[0];
+            self.fRec25[2] = self.fRec25[1];
+            self.fRec25[1] = self.fRec25[0];
+            self.fRec26[2] = self.fRec26[1];
+            self.fRec26[1] = self.fRec26[0];
+            self.fRec27[2] = self.fRec27[1];
+            self.fRec27[1] = self.fRec27[0];
+            self.fRec28[2] = self.fRec28[1];
+            self.fRec28[1] = self.fRec28[0];
+            self.fRec29[2] = self.fRec29[1];
+            self.fRec29[1] = self.fRec29[0];
+            self.fRec30[2] = self.fRec30[1];
+            self.fRec30[1] = self.fRec30[0];
+            self.fRec31[2] = self.fRec31[1];
+            self.fRec31[1] = self.fRec31[0];
+            self.fRec32[2] = self.fRec32[1];
+            self.fRec32[1] = self.fRec32[0];
+            self.fRec33[2] = self.fRec33[1];
+            self.fRec33[1] = self.fRec33[0];
+        }
+    }
+
+    pub fn compute(&mut self, count: usize, inputs: &[&[FaustFloat]], outputs: &mut [&mut [FaustFloat]]) {
         let input_array = inputs.split_at(0).0.try_into().expect("too few input buffers");
         let output_array = outputs.split_at_mut(2).0.try_into().expect("too few output buffers");
         self.compute_arrays(count, input_array, output_array);
+    }
+}
+
+impl FaustDsp for Dsp {
+    type T = FaustFloat;
+    fn new() -> Self
+    where
+        Self: Sized,
+    {
+        Self::new()
+    }
+    fn metadata(&self, m: &mut dyn Meta) {
+        self.metadata(m)
+    }
+    fn get_sample_rate(&self) -> i32 {
+        self.get_sample_rate()
+    }
+    fn get_num_inputs(&self) -> i32 {
+        FAUST_INPUTS as i32
+    }
+    fn get_num_outputs(&self) -> i32 {
+        FAUST_OUTPUTS as i32
+    }
+    fn class_init(sample_rate: i32)
+    where
+        Self: Sized,
+    {
+        Self::class_init(sample_rate);
+    }
+    fn instance_reset_params(&mut self) {
+        self.instance_reset_params()
+    }
+    fn instance_clear(&mut self) {
+        self.instance_clear()
+    }
+    fn instance_constants(&mut self, sample_rate: i32) {
+        self.instance_constants(sample_rate)
+    }
+    fn instance_init(&mut self, sample_rate: i32) {
+        self.instance_init(sample_rate)
+    }
+    fn init(&mut self, sample_rate: i32) {
+        self.init(sample_rate)
+    }
+    fn build_user_interface(&self, ui_interface: &mut dyn UI<Self::T>) {
+        self.build_user_interface(ui_interface)
+    }
+    fn build_user_interface_static(ui_interface: &mut dyn UI<Self::T>)
+    where
+        Self: Sized,
+    {
+        Self::build_user_interface_static(ui_interface);
+    }
+    fn get_param(&self, param: ParamIndex) -> Option<Self::T> {
+        self.get_param(param)
+    }
+    fn set_param(&mut self, param: ParamIndex, value: Self::T) {
+        self.set_param(param, value)
+    }
+    fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut [&mut [Self::T]]) {
+        self.compute(count as usize, inputs, outputs)
     }
 }
 

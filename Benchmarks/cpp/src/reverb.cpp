@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "reverb"
-Code generated with Faust 2.75.12 (https://faust.grame.fr)
+Code generated with Faust 2.76.0 (https://faust.grame.fr)
 Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
@@ -251,7 +251,7 @@ class Dsp : public dsp {
 	void metadata(Meta* m) { 
 		m->declare("basics.lib/name", "Faust Basic Element Library");
 		m->declare("basics.lib/tabulateNd", "Copyright (C) 2023 Bart Brouns <bart@magnetophon.nl>");
-		m->declare("basics.lib/version", "1.19.1");
+		m->declare("basics.lib/version", "1.20.0");
 		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
 		m->declare("delays.lib/name", "Faust Delay Library");
 		m->declare("delays.lib/version", "1.1.0");
@@ -287,17 +287,17 @@ class Dsp : public dsp {
 		m->declare("filters.lib/tf2:author", "Julius O. Smith III");
 		m->declare("filters.lib/tf2:copyright", "Copyright (C) 2003-2019 by Julius O. Smith III <jos@ccrma.stanford.edu>");
 		m->declare("filters.lib/tf2:license", "MIT-style STK-4.3 license");
-		m->declare("filters.lib/version", "1.3.0");
+		m->declare("filters.lib/version", "1.5.0");
 		m->declare("maths.lib/author", "GRAME");
 		m->declare("maths.lib/copyright", "GRAME");
 		m->declare("maths.lib/license", "LGPL with exception");
 		m->declare("maths.lib/name", "Faust Math Library");
-		m->declare("maths.lib/version", "2.8.0");
+		m->declare("maths.lib/version", "2.8.1");
 		m->declare("name", "reverb");
 		m->declare("platform.lib/name", "Generic Platform Library");
 		m->declare("platform.lib/version", "1.3.0");
 		m->declare("reverbs.lib/name", "Faust Reverb Library");
-		m->declare("reverbs.lib/version", "1.3.0");
+		m->declare("reverbs.lib/version", "1.3.1");
 		m->declare("routes.lib/hadamard:author", "Remy Muller, revised by Romain Michon");
 		m->declare("routes.lib/name", "Faust Signal Routing Library");
 		m->declare("routes.lib/version", "1.2.0");
@@ -647,8 +647,8 @@ class Dsp : public dsp {
 		ui_interface->openHorizontalBox("Zita Light");
 		ui_interface->declare(&fVslider0, "1", "");
 		ui_interface->declare(&fVslider0, "style", "knob");
-		ui_interface->declare(&fVslider0, "tooltip", "-1 = dry, 1 = wet");
-		ui_interface->addVerticalSlider("Dry/Wet Mix", &fVslider0, FAUSTFLOAT(0.0f), FAUSTFLOAT(-1.0f), FAUSTFLOAT(1.0f), FAUSTFLOAT(0.01f));
+		ui_interface->declare(&fVslider0, "tooltip", "Ratio of dry and wet signal. -1 = fully wet, +1 = fully dry");
+		ui_interface->addVerticalSlider("Wet/Dry Mix", &fVslider0, FAUSTFLOAT(0.0f), FAUSTFLOAT(-1.0f), FAUSTFLOAT(1.0f), FAUSTFLOAT(0.01f));
 		ui_interface->declare(&fVslider1, "2", "");
 		ui_interface->declare(&fVslider1, "style", "knob");
 		ui_interface->declare(&fVslider1, "tooltip", "Output scale         factor");
