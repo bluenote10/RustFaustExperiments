@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "osci"
-Code generated with Faust 2.76.0 (https://faust.grame.fr)
+Code generated with Faust 2.81.0 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
@@ -25,9 +25,24 @@ type F32 = f32;
 // Generated intrinsics:
 
 // Generated class:
+#[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
+#[repr(C)]
+pub struct Dsp {
+    iVec1: [i32; 2],
+    fSampleRate: i32,
+    fConst0: F32,
+    fConst1: F32,
+    fRec1: [F32; 2],
+    fVec2: [F32; 2],
+    iRec2: [i32; 2],
+    fConst2: F32,
+    fRec3: [F32; 2],
+    fConst3: F32,
+    fConst4: F32,
+    fConst5: F32,
+}
 
 pub type FaustFloat = F32;
-use std::convert::TryInto;
 
 pub struct DspSIG0 {
     iVec0: [i32; 2],
@@ -90,23 +105,6 @@ pub const FAUST_OUTPUTS: usize = 1;
 pub const FAUST_ACTIVES: usize = 0;
 pub const FAUST_PASSIVES: usize = 0;
 
-#[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
-#[repr(C)]
-pub struct Dsp {
-    iVec1: [i32; 2],
-    fSampleRate: i32,
-    fConst0: F32,
-    fConst1: F32,
-    fRec1: [F32; 2],
-    fVec2: [F32; 2],
-    iRec2: [i32; 2],
-    fConst2: F32,
-    fRec3: [F32; 2],
-    fConst3: F32,
-    fConst4: F32,
-    fConst5: F32,
-}
-
 impl Dsp {
     pub fn new() -> Dsp {
         Dsp {
@@ -126,11 +124,7 @@ impl Dsp {
     }
     pub fn metadata(&self, m: &mut dyn Meta) {
         m.declare("basics.lib/name", r"Faust Basic Element Library");
-        m.declare(
-            "basics.lib/tabulateNd",
-            r"Copyright (C) 2023 Bart Brouns <bart@magnetophon.nl>",
-        );
-        m.declare("basics.lib/version", r"1.20.0");
+        m.declare("basics.lib/version", r"1.21.0");
         m.declare(
             "compile_options",
             r"-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0",
@@ -149,7 +143,7 @@ impl Dsp {
         m.declare("maths.lib/version", r"2.8.1");
         m.declare("name", r"osci");
         m.declare("oscillators.lib/name", r"Faust Oscillator Library");
-        m.declare("oscillators.lib/version", r"1.5.1");
+        m.declare("oscillators.lib/version", r"1.6.0");
         m.declare("platform.lib/name", r"Generic Platform Library");
         m.declare("platform.lib/version", r"1.3.0");
     }
@@ -221,12 +215,21 @@ impl Dsp {
         }
     }
 
-    pub fn compute_arrays(&mut self, count: usize, inputs: &[&[FaustFloat]; 2], outputs: &mut [&mut [FaustFloat]; 1]) {
-        let [inputs0, inputs1] = inputs;
-        let inputs0 = inputs0[..count].iter();
-        let inputs1 = inputs1[..count].iter();
-        let [outputs0] = outputs;
-        let outputs0 = outputs0[..count].iter_mut();
+    pub fn compute(
+        &mut self,
+        count: usize,
+        inputs: &[impl AsRef<[FaustFloat]>],
+        outputs: &mut [impl AsMut<[FaustFloat]>],
+    ) {
+        let [inputs0, inputs1, ..] = inputs.as_ref() else {
+            panic!("wrong number of input buffers");
+        };
+        let inputs0 = inputs0.as_ref()[..count].iter();
+        let inputs1 = inputs1.as_ref()[..count].iter();
+        let [outputs0, ..] = outputs.as_mut() else {
+            panic!("wrong number of output buffers");
+        };
+        let outputs0 = outputs0.as_mut()[..count].iter_mut();
         let zipped_iterators = inputs0.zip(inputs1).zip(outputs0);
         for ((input0, input1), output0) in zipped_iterators {
             self.iVec1[0] = 1;
@@ -255,12 +258,6 @@ impl Dsp {
             self.iRec2[1] = self.iRec2[0];
             self.fRec3[1] = self.fRec3[0];
         }
-    }
-
-    pub fn compute(&mut self, count: usize, inputs: &[&[FaustFloat]], outputs: &mut [&mut [FaustFloat]]) {
-        let input_array = inputs.split_at(2).0.try_into().expect("too few input buffers");
-        let output_array = outputs.split_at_mut(1).0.try_into().expect("too few output buffers");
-        self.compute_arrays(count, input_array, output_array);
     }
 }
 

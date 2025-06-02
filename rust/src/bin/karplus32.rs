@@ -4,7 +4,7 @@ copyright: "(c)GRAME 2006"
 license: "BSD"
 name: "karplus32"
 version: "1.0"
-Code generated with Faust 2.76.0 (https://faust.grame.fr)
+Code generated with Faust 2.81.0 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
@@ -29,30 +29,6 @@ type F32 = f32;
 // Generated intrinsics:
 
 // Generated class:
-
-pub type FaustFloat = F32;
-use std::convert::TryInto;
-mod ffi {
-    use std::os::raw::c_float;
-    // Conditionally compile the link attribute only on non-Windows platforms
-    #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
-    extern "C" {
-        pub fn remainderf(from: c_float, to: c_float) -> c_float;
-        pub fn rintf(val: c_float) -> c_float;
-    }
-}
-fn remainder_f32(from: f32, to: f32) -> f32 {
-    unsafe { ffi::remainderf(from, to) }
-}
-fn rint_f32(val: f32) -> f32 {
-    unsafe { ffi::rintf(val) }
-}
-
-pub const FAUST_INPUTS: usize = 0;
-pub const FAUST_OUTPUTS: usize = 2;
-pub const FAUST_ACTIVES: usize = 8;
-pub const FAUST_PASSIVES: usize = 0;
-
 #[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
 #[repr(C)]
 pub struct Dsp {
@@ -134,6 +110,28 @@ pub struct Dsp {
     fRec33: [F32; 3],
     fSampleRate: i32,
 }
+
+pub type FaustFloat = F32;
+mod ffi {
+    use std::os::raw::c_float;
+    // Conditionally compile the link attribute only on non-Windows platforms
+    #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
+    extern "C" {
+        pub fn remainderf(from: c_float, to: c_float) -> c_float;
+        pub fn rintf(val: c_float) -> c_float;
+    }
+}
+fn remainder_f32(from: f32, to: f32) -> f32 {
+    unsafe { ffi::remainderf(from, to) }
+}
+fn rint_f32(val: f32) -> f32 {
+    unsafe { ffi::rintf(val) }
+}
+
+pub const FAUST_INPUTS: usize = 0;
+pub const FAUST_OUTPUTS: usize = 2;
+pub const FAUST_ACTIVES: usize = 8;
+pub const FAUST_PASSIVES: usize = 0;
 
 impl Dsp {
     pub fn new() -> Dsp {
@@ -517,10 +515,17 @@ impl Dsp {
         }
     }
 
-    pub fn compute_arrays(&mut self, count: usize, inputs: &[&[FaustFloat]; 0], outputs: &mut [&mut [FaustFloat]; 2]) {
-        let [outputs0, outputs1] = outputs;
-        let outputs0 = outputs0[..count].iter_mut();
-        let outputs1 = outputs1[..count].iter_mut();
+    pub fn compute(
+        &mut self,
+        count: usize,
+        inputs: &[impl AsRef<[FaustFloat]>],
+        outputs: &mut [impl AsMut<[FaustFloat]>],
+    ) {
+        let [outputs0, outputs1, ..] = outputs.as_mut() else {
+            panic!("wrong number of output buffers");
+        };
+        let outputs0 = outputs0.as_mut()[..count].iter_mut();
+        let outputs1 = outputs1.as_mut()[..count].iter_mut();
         let mut fSlow0: F32 = 0.5 * (1.0 - self.fHslider0);
         let mut fSlow1: F32 = 1.0 / self.fHslider1;
         let mut fSlow2: F32 = self.fButton0;
@@ -603,7 +608,7 @@ impl Dsp {
                 fSlow3 * (((self.fRec2[0] > 0.0) as i32) as u32 as F32 + 1.5258789e-05) * (self.iRec1[0]) as F32;
             self.fVec1[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec0[1] + self.fRec0[2]);
             self.fRec0[0] = self.fVec1[((i32::wrapping_sub(self.IOTA0, iSlow6)) & 8191) as usize];
-            self.fVec2[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec3[2] + self.fRec3[1]);
+            self.fVec2[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec3[1] + self.fRec3[2]);
             self.fRec3[0] = self.fVec2[((i32::wrapping_sub(self.IOTA0, iSlow9)) & 8191) as usize];
             self.fVec3[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec4[1] + self.fRec4[2]);
             self.fRec4[0] = self.fVec3[((i32::wrapping_sub(self.IOTA0, iSlow11)) & 8191) as usize];
@@ -660,7 +665,7 @@ impl Dsp {
             self.fRec21[0] = self.fVec20[((i32::wrapping_sub(self.IOTA0, iSlow46)) & 8191) as usize];
             self.fVec21[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec22[1] + self.fRec22[2]);
             self.fRec22[0] = self.fVec21[((i32::wrapping_sub(self.IOTA0, iSlow48)) & 8191) as usize];
-            self.fVec22[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec23[2] + self.fRec23[1]);
+            self.fVec22[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec23[1] + self.fRec23[2]);
             self.fRec23[0] = self.fVec22[((i32::wrapping_sub(self.IOTA0, iSlow50)) & 8191) as usize];
             self.fVec23[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec24[1] + self.fRec24[2]);
             self.fRec24[0] = self.fVec23[((i32::wrapping_sub(self.IOTA0, iSlow52)) & 8191) as usize];
@@ -768,12 +773,6 @@ impl Dsp {
             self.fRec33[2] = self.fRec33[1];
             self.fRec33[1] = self.fRec33[0];
         }
-    }
-
-    pub fn compute(&mut self, count: usize, inputs: &[&[FaustFloat]], outputs: &mut [&mut [FaustFloat]]) {
-        let input_array = inputs.split_at(0).0.try_into().expect("too few input buffers");
-        let output_array = outputs.split_at_mut(2).0.try_into().expect("too few output buffers");
-        self.compute_arrays(count, input_array, output_array);
     }
 }
 

@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "osci"
-Code generated with Faust 2.76.0 (https://faust.grame.fr)
+Code generated with Faust 2.81.0 (https://faust.grame.fr)
 Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
@@ -112,8 +112,7 @@ class Dsp : public dsp {
 	
 	void metadata(Meta* m) { 
 		m->declare("basics.lib/name", "Faust Basic Element Library");
-		m->declare("basics.lib/tabulateNd", "Copyright (C) 2023 Bart Brouns <bart@magnetophon.nl>");
-		m->declare("basics.lib/version", "1.20.0");
+		m->declare("basics.lib/version", "1.21.0");
 		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
 		m->declare("envelopes.lib/adsr:author", "Yann Orlarey and Andrey Bundin");
 		m->declare("envelopes.lib/author", "GRAME");
@@ -129,7 +128,7 @@ class Dsp : public dsp {
 		m->declare("maths.lib/version", "2.8.1");
 		m->declare("name", "osci");
 		m->declare("oscillators.lib/name", "Faust Oscillator Library");
-		m->declare("oscillators.lib/version", "1.5.1");
+		m->declare("oscillators.lib/version", "1.6.0");
 		m->declare("platform.lib/name", "Generic Platform Library");
 		m->declare("platform.lib/version", "1.3.0");
 	}

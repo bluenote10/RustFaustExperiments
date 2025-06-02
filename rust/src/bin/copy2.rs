@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "copy2"
-Code generated with Faust 2.76.0 (https://faust.grame.fr)
+Code generated with Faust 2.81.0 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
@@ -25,9 +25,13 @@ type F32 = f32;
 // Generated intrinsics:
 
 // Generated class:
+#[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
+#[repr(C)]
+pub struct Dsp {
+    fSampleRate: i32,
+}
 
 pub type FaustFloat = F32;
-use std::convert::TryInto;
 mod ffi {
     use std::os::raw::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
@@ -48,12 +52,6 @@ pub const FAUST_INPUTS: usize = 2;
 pub const FAUST_OUTPUTS: usize = 2;
 pub const FAUST_ACTIVES: usize = 0;
 pub const FAUST_PASSIVES: usize = 0;
-
-#[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
-#[repr(C)]
-pub struct Dsp {
-    fSampleRate: i32,
-}
 
 impl Dsp {
     pub fn new() -> Dsp {
@@ -109,24 +107,27 @@ impl Dsp {
         }
     }
 
-    pub fn compute_arrays(&mut self, count: usize, inputs: &[&[FaustFloat]; 2], outputs: &mut [&mut [FaustFloat]; 2]) {
-        let [inputs0, inputs1] = inputs;
-        let inputs0 = inputs0[..count].iter();
-        let inputs1 = inputs1[..count].iter();
-        let [outputs0, outputs1] = outputs;
-        let outputs0 = outputs0[..count].iter_mut();
-        let outputs1 = outputs1[..count].iter_mut();
+    pub fn compute(
+        &mut self,
+        count: usize,
+        inputs: &[impl AsRef<[FaustFloat]>],
+        outputs: &mut [impl AsMut<[FaustFloat]>],
+    ) {
+        let [inputs0, inputs1, ..] = inputs.as_ref() else {
+            panic!("wrong number of input buffers");
+        };
+        let inputs0 = inputs0.as_ref()[..count].iter();
+        let inputs1 = inputs1.as_ref()[..count].iter();
+        let [outputs0, outputs1, ..] = outputs.as_mut() else {
+            panic!("wrong number of output buffers");
+        };
+        let outputs0 = outputs0.as_mut()[..count].iter_mut();
+        let outputs1 = outputs1.as_mut()[..count].iter_mut();
         let zipped_iterators = inputs0.zip(inputs1).zip(outputs0).zip(outputs1);
         for (((input0, input1), output0), output1) in zipped_iterators {
             *output0 = *input0;
             *output1 = *input1;
         }
-    }
-
-    pub fn compute(&mut self, count: usize, inputs: &[&[FaustFloat]], outputs: &mut [&mut [FaustFloat]]) {
-        let input_array = inputs.split_at(2).0.try_into().expect("too few input buffers");
-        let output_array = outputs.split_at_mut(2).0.try_into().expect("too few output buffers");
-        self.compute_arrays(count, input_array, output_array);
     }
 }
 
