@@ -7,13 +7,14 @@ version: "1.0"
 Code generated with Faust 2.76.0 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
-#![allow(unused_parens)]
-#![allow(non_snake_case)]
-#![allow(non_camel_case_types)]
 #![allow(dead_code)]
-#![allow(unused_variables)]
-#![allow(unused_mut)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
+#![allow(unexpected_cfgs)]
+#![allow(unused_mut)]
+#![allow(unused_parens)]
+#![allow(unused_variables)]
 
 extern crate libm;
 
@@ -651,7 +652,7 @@ impl Dsp {
                     + fSlow8 * self.fRec0[0]);
             self.fVec17[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec18[1] + self.fRec18[2]);
             self.fRec18[0] = self.fVec17[((i32::wrapping_sub(self.IOTA0, iSlow40)) & 8191) as usize];
-            self.fVec18[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec19[2] + self.fRec19[1]);
+            self.fVec18[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec19[1] + self.fRec19[2]);
             self.fRec19[0] = self.fVec18[((i32::wrapping_sub(self.IOTA0, iSlow42)) & 8191) as usize];
             self.fVec19[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec20[1] + self.fRec20[2]);
             self.fRec20[0] = self.fVec19[((i32::wrapping_sub(self.IOTA0, iSlow44)) & 8191) as usize];
@@ -659,19 +660,19 @@ impl Dsp {
             self.fRec21[0] = self.fVec20[((i32::wrapping_sub(self.IOTA0, iSlow46)) & 8191) as usize];
             self.fVec21[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec22[1] + self.fRec22[2]);
             self.fRec22[0] = self.fVec21[((i32::wrapping_sub(self.IOTA0, iSlow48)) & 8191) as usize];
-            self.fVec22[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec23[1] + self.fRec23[2]);
+            self.fVec22[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec23[2] + self.fRec23[1]);
             self.fRec23[0] = self.fVec22[((i32::wrapping_sub(self.IOTA0, iSlow50)) & 8191) as usize];
             self.fVec23[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec24[1] + self.fRec24[2]);
             self.fRec24[0] = self.fVec23[((i32::wrapping_sub(self.IOTA0, iSlow52)) & 8191) as usize];
             self.fVec24[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec25[1] + self.fRec25[2]);
             self.fRec25[0] = self.fVec24[((i32::wrapping_sub(self.IOTA0, iSlow54)) & 8191) as usize];
-            self.fVec25[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec26[2] + self.fRec26[1]);
+            self.fVec25[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec26[1] + self.fRec26[2]);
             self.fRec26[0] = self.fVec25[((i32::wrapping_sub(self.IOTA0, iSlow56)) & 8191) as usize];
             self.fVec26[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec27[1] + self.fRec27[2]);
             self.fRec27[0] = self.fVec26[((i32::wrapping_sub(self.IOTA0, iSlow58)) & 8191) as usize];
             self.fVec27[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec28[1] + self.fRec28[2]);
             self.fRec28[0] = self.fVec27[((i32::wrapping_sub(self.IOTA0, iSlow60)) & 8191) as usize];
-            self.fVec28[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec29[2] + self.fRec29[1]);
+            self.fVec28[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec29[1] + self.fRec29[2]);
             self.fRec29[0] = self.fVec28[((i32::wrapping_sub(self.IOTA0, iSlow62)) & 8191) as usize];
             self.fVec29[(self.IOTA0 & 4095) as usize] = fTemp0 + fSlow0 * (self.fRec30[1] + self.fRec30[2]);
             self.fRec30[0] = self.fVec29[((i32::wrapping_sub(self.IOTA0, iSlow64)) & 4095) as usize];
