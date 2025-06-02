@@ -237,35 +237,38 @@ impl Dsp {
         };
         let outputs0 = outputs0.as_mut()[..count].iter_mut();
         let zipped_iterators = inputs0.zip(inputs1).zip(outputs0);
-        for ((input0, input1), output0) in zipped_iterators {
-            self.iVec1[0] = 1;
-            let mut fTemp0: F32 = (if i32::wrapping_sub(1, self.iVec1[1]) != 0 {
-                0.0
-            } else {
-                self.fRec1[1] + self.fConst1 * *input1
-            });
-            self.fRec1[0] = fTemp0 - F32::floor(fTemp0);
-            let mut fTemp1: F32 = *input0;
-            self.fVec2[0] = fTemp1;
-            self.iRec2[0] = ((fTemp1 == 0.0) as i32) * (i32::wrapping_add(self.iRec2[1], 1));
-            self.fRec3[0] =
-                fTemp1 + self.fRec3[1] * ((self.fVec2[1] >= fTemp1) as i32) as u32 as F32;
-            *output0 = F32::max(
-                0.0,
-                F32::min(
-                    self.fConst4 * self.fRec3[0],
-                    F32::max(1.7 - self.fConst5 * self.fRec3[0], 0.3),
-                ) * (1.0 - self.fConst2 * (self.iRec2[0]) as F32),
-            ) * ftbl0DspSIG0.with_borrow(|data| {
-                data[(std::cmp::max(0, std::cmp::min((65536.0 * self.fRec1[0]) as i32, 65535)))
-                    as usize]
-            });
-            self.iVec1[1] = self.iVec1[0];
-            self.fRec1[1] = self.fRec1[0];
-            self.fVec2[1] = self.fVec2[0];
-            self.iRec2[1] = self.iRec2[0];
-            self.fRec3[1] = self.fRec3[0];
-        }
+        ftbl0DspSIG0.with_borrow(|ftbl0DspSIG0_borrow| {
+            for ((input0, input1), output0) in zipped_iterators {
+                self.iVec1[0] = 1;
+                let mut fTemp0: F32 = (if i32::wrapping_sub(1, self.iVec1[1]) != 0 {
+                    0.0
+                } else {
+                    self.fRec1[1] + self.fConst1 * *input1
+                });
+                self.fRec1[0] = fTemp0 - F32::floor(fTemp0);
+                let mut fTemp1: F32 = *input0;
+                self.fVec2[0] = fTemp1;
+                self.iRec2[0] = ((fTemp1 == 0.0) as i32) * (i32::wrapping_add(self.iRec2[1], 1));
+                self.fRec3[0] =
+                    fTemp1 + self.fRec3[1] * ((self.fVec2[1] >= fTemp1) as i32) as u32 as F32;
+                *output0 = F32::max(
+                    0.0,
+                    F32::min(
+                        self.fConst4 * self.fRec3[0],
+                        F32::max(1.7 - self.fConst5 * self.fRec3[0], 0.3),
+                    ) * (1.0 - self.fConst2 * (self.iRec2[0]) as F32),
+                ) * ftbl0DspSIG0_borrow[(std::cmp::max(
+                    0,
+                    std::cmp::min((65536.0 * self.fRec1[0]) as i32, 65535),
+                )) as usize];
+
+                self.iVec1[1] = self.iVec1[0];
+                self.fRec1[1] = self.fRec1[0];
+                self.fVec2[1] = self.fVec2[0];
+                self.iRec2[1] = self.iRec2[0];
+                self.fRec3[1] = self.fRec3[0];
+            }
+        });
     }
 }
 
