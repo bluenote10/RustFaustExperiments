@@ -12,3 +12,4 @@ cd $(dirname $0)
 ./gen_and_run.sh ../dsp/math.dsp "../results/math/$RESULT_FILE"
 ./gen_and_run.sh ../dsp/karplus32.dsp "../results/karplus32/$RESULT_FILE"
 ./gen_and_run.sh ../dsp/reverb.dsp "../results/reverb/$RESULT_FILE"
+./gen_and_run.sh ../dsp/osci.dsp "../results/osci/$RESULT_FILE"

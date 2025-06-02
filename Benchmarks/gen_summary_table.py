@@ -53,6 +53,7 @@ benchmarks = [
     "math",
     "karplus32",
     "reverb",
+    "osci",
 ]
 
 print_table(
