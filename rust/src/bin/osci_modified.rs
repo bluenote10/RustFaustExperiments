@@ -85,7 +85,7 @@ pub fn newDspSIG0() -> DspSIG0 {
     }
 }
 thread_local! {
-    static ftbl0DspSIG0: RefCell<Vec<F32>> = RefCell::new(vec![0.0; 65536]);
+    static ftbl0DspSIG0: RefCell<[F32; 65536]> = RefCell::new([0.0; 65536]);
 }
 mod ffi {
     use std::os::raw::c_float;
