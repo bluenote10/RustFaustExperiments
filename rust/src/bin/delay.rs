@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "delay"
-Code generated with Faust 2.81.0 (https://faust.grame.fr)
+Code generated with Faust 2.81.1 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
@@ -38,7 +38,7 @@ mod ffi {
     use std::os::raw::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
     #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
-    extern "C" {
+    unsafe extern "C" {
         pub fn remainderf(from: c_float, to: c_float) -> c_float;
         pub fn rintf(val: c_float) -> c_float;
     }
@@ -76,7 +76,9 @@ impl Dsp {
         self.fSampleRate as i32
     }
 
-    pub fn class_init(sample_rate: i32) {}
+    pub fn class_init(sample_rate: i32) {
+        // Obtaining locks on 0 static var(s)
+    }
     pub fn instance_reset_params(&mut self) {}
     pub fn instance_clear(&mut self) {
         self.IOTA0 = 0;
@@ -124,6 +126,7 @@ impl Dsp {
         inputs: &[impl AsRef<[FaustFloat]>],
         outputs: &mut [impl AsMut<[FaustFloat]>],
     ) {
+        // Obtaining locks on 0 static var(s)
         let [inputs0, ..] = inputs.as_ref() else {
             panic!("wrong number of input buffers");
         };

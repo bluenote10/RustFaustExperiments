@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "osci"
-Code generated with Faust 2.81.0 (https://faust.grame.fr)
+Code generated with Faust 2.81.1 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
@@ -83,12 +83,12 @@ pub fn newDspSIG0() -> DspSIG0 {
         iRec0: [0; 2],
     }
 }
-static mut ftbl0DspSIG0: [F32; 65536] = [0.0; 65536];
+static ftbl0DspSIG0: std::sync::RwLock<[F32; 65536]> = std::sync::RwLock::new([0.0; 65536]);
 mod ffi {
     use std::os::raw::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
     #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
-    extern "C" {
+    unsafe extern "C" {
         pub fn remainderf(from: c_float, to: c_float) -> c_float;
         pub fn rintf(val: c_float) -> c_float;
     }
@@ -153,9 +153,11 @@ impl Dsp {
     }
 
     pub fn class_init(sample_rate: i32) {
+        // Obtaining locks on 1 static var(s)
+        let mut ftbl0DspSIG0_guard = ftbl0DspSIG0.write().unwrap();
         let mut sig0: DspSIG0 = newDspSIG0();
         sig0.instance_initDspSIG0(sample_rate);
-        sig0.fillDspSIG0(65536, unsafe { &mut ftbl0DspSIG0 });
+        sig0.fillDspSIG0(65536, ftbl0DspSIG0_guard.as_mut());
     }
     pub fn instance_reset_params(&mut self) {}
     pub fn instance_clear(&mut self) {
@@ -221,6 +223,8 @@ impl Dsp {
         inputs: &[impl AsRef<[FaustFloat]>],
         outputs: &mut [impl AsMut<[FaustFloat]>],
     ) {
+        // Obtaining locks on 1 static var(s)
+        let ftbl0DspSIG0_guard = ftbl0DspSIG0.read().unwrap();
         let [inputs0, inputs1, ..] = inputs.as_ref() else {
             panic!("wrong number of input buffers");
         };
@@ -249,9 +253,8 @@ impl Dsp {
                     self.fConst4 * self.fRec3[0],
                     F32::max(1.7 - self.fConst5 * self.fRec3[0], 0.3),
                 ) * (1.0 - self.fConst2 * (self.iRec2[0]) as F32),
-            ) * unsafe {
-                ftbl0DspSIG0[(std::cmp::max(0, std::cmp::min((65536.0 * self.fRec1[0]) as i32, 65535))) as usize]
-            };
+            ) * ftbl0DspSIG0_guard
+                [(std::cmp::max(0, std::cmp::min((65536.0 * self.fRec1[0]) as i32, 65535))) as usize];
             self.iVec1[1] = self.iVec1[0];
             self.fRec1[1] = self.fRec1[0];
             self.fVec2[1] = self.fVec2[0];
