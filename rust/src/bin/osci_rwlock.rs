@@ -89,7 +89,7 @@ mod ffi {
     use std::os::raw::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
     #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
-    extern "C" {
+    unsafe extern "C" {
         pub fn remainderf(from: c_float, to: c_float) -> c_float;
         pub fn rintf(val: c_float) -> c_float;
     }

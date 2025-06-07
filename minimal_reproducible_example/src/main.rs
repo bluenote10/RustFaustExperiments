@@ -14,6 +14,7 @@ Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 #![allow(non_upper_case_globals)]
+#![allow(unexpected_cfgs)]
 
 extern crate libm;
 
