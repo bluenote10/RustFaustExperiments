@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "delay"
-Code generated with Faust 2.81.1 (https://faust.grame.fr)
-Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
+Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Compilation options: -a ./console-bench.cpp -lang cpp -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
 #ifndef  __Dsp_H__
@@ -59,8 +59,14 @@ class Dsp : public dsp {
 	Dsp() {
 	}
 	
+	Dsp(const Dsp&) = default;
+	
+	virtual ~Dsp() = default;
+	
+	Dsp& operator=(const Dsp&) = default;
+	
 	void metadata(Meta* m) { 
-		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
+		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
 		m->declare("filename", "delay.dsp");
 		m->declare("name", "delay");
 	}
@@ -101,7 +107,7 @@ class Dsp : public dsp {
 	}
 	
 	virtual Dsp* clone() {
-		return new Dsp();
+		return new Dsp(*this);
 	}
 	
 	virtual int getSampleRate() {
@@ -117,8 +123,8 @@ class Dsp : public dsp {
 		FAUSTFLOAT* input0 = inputs[0];
 		FAUSTFLOAT* output0 = outputs[0];
 		for (int i0 = 0; i0 < count; i0 = i0 + 1) {
-			fVec0[IOTA0 & 2047] = float(input0[i0]);
-			output0[i0] = FAUSTFLOAT(fVec0[(IOTA0 - 1024) & 2047]);
+			fVec0[IOTA0 & 2047] = static_cast<float>(input0[i0]);
+			output0[i0] = static_cast<FAUSTFLOAT>(fVec0[(IOTA0 - 1024) & 2047]);
 			IOTA0 = IOTA0 + 1;
 		}
 	}

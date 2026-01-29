@@ -4,8 +4,8 @@ copyright: "(c)GRAME 2006"
 license: "BSD"
 name: "karplus32"
 version: "1.0"
-Code generated with Faust 2.81.1 (https://faust.grame.fr)
-Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
+Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Compilation options: -a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
 #![allow(non_camel_case_types)]
@@ -29,7 +29,7 @@ type F32 = f32;
 // Generated intrinsics:
 
 // Generated class:
-#[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
+
 #[repr(C)]
 pub struct Dsp {
     fHslider0: F32,
@@ -112,6 +112,7 @@ pub struct Dsp {
 }
 
 pub type FaustFloat = F32;
+#[cfg(not(target_arch = "wasm32"))] // Compile ffi bindings only on non-wasm targets
 mod ffi {
     use std::os::raw::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
@@ -122,10 +123,20 @@ mod ffi {
     }
 }
 fn remainder_f32(from: f32, to: f32) -> f32 {
-    unsafe { ffi::remainderf(from, to) }
+    #[cfg(not(target_arch = "wasm32"))] // non-wasm targets use ffi bindings
+    unsafe {
+        ffi::remainderf(from, to)
+    }
+    #[cfg(target_arch = "wasm32")] // wasm relies on libm
+    libm::remainderf(from, to)
 }
 fn rint_f32(val: f32) -> f32 {
-    unsafe { ffi::rintf(val) }
+    #[cfg(not(target_arch = "wasm32"))] // non-wasm targets use ffi bindings
+    unsafe {
+        ffi::rintf(val)
+    }
+    #[cfg(target_arch = "wasm32")] // wasm relies on libm
+    libm::rintf(val)
 }
 
 pub const FAUST_INPUTS: usize = 0;
@@ -217,18 +228,15 @@ impl Dsp {
     }
     pub fn metadata(&self, m: &mut dyn Meta) {
         m.declare("author", r"Grame");
-        m.declare(
-            "compile_options",
-            r"-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0",
-        );
+        m.declare("compile_options", r"-a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
         m.declare("copyright", r"(c)GRAME 2006");
         m.declare("delays.lib/name", r"Faust Delay Library");
-        m.declare("delays.lib/version", r"1.1.0");
+        m.declare("delays.lib/version", r"1.2.0");
         m.declare("filename", r"karplus32.dsp");
         m.declare("license", r"BSD");
         m.declare("name", r"karplus32");
         m.declare("noises.lib/name", r"Faust Noise Generator Library");
-        m.declare("noises.lib/version", r"1.4.1");
+        m.declare("noises.lib/version", r"1.5.0");
         m.declare("version", r"1.0");
     }
 
@@ -454,6 +462,7 @@ impl Dsp {
         }
     }
     pub fn instance_constants(&mut self, sample_rate: i32) {
+        // Obtaining locks on 0 static var(s)
         self.fSampleRate = sample_rate;
     }
     pub fn instance_init(&mut self, sample_rate: i32) {

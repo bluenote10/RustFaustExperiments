@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "osci"
-Code generated with Faust 2.81.1 (https://faust.grame.fr)
-Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
+Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Compilation options: -a ./console-bench.cpp -lang cpp -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
 #ifndef  __Dsp_H__
@@ -53,6 +53,7 @@ class DspSIG0 {
 	
 	int iVec0[2];
 	int iRec0[2];
+	int fSampleRate;
 	
   public:
 	
@@ -64,6 +65,7 @@ class DspSIG0 {
 	}
 	
 	void instanceInitDspSIG0(int sample_rate) {
+		fSampleRate = sample_rate;
 		for (int l0 = 0; l0 < 2; l0 = l0 + 1) {
 			iVec0[l0] = 0;
 		}
@@ -76,7 +78,7 @@ class DspSIG0 {
 		for (int i1 = 0; i1 < count; i1 = i1 + 1) {
 			iVec0[0] = 1;
 			iRec0[0] = (iVec0[1] + iRec0[1]) % 65536;
-			table[i1] = std::sin(9.58738e-05f * float(iRec0[0]));
+			table[i1] = std::sin(9.58738e-05f * static_cast<float>(iRec0[0]));
 			iVec0[1] = iVec0[0];
 			iRec0[1] = iRec0[0];
 		}
@@ -110,10 +112,16 @@ class Dsp : public dsp {
 	Dsp() {
 	}
 	
+	Dsp(const Dsp&) = default;
+	
+	virtual ~Dsp() = default;
+	
+	Dsp& operator=(const Dsp&) = default;
+	
 	void metadata(Meta* m) { 
 		m->declare("basics.lib/name", "Faust Basic Element Library");
-		m->declare("basics.lib/version", "1.21.0");
-		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
+		m->declare("basics.lib/version", "1.22.0");
+		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
 		m->declare("envelopes.lib/adsr:author", "Yann Orlarey and Andrey Bundin");
 		m->declare("envelopes.lib/author", "GRAME");
 		m->declare("envelopes.lib/copyright", "GRAME");
@@ -125,10 +133,10 @@ class Dsp : public dsp {
 		m->declare("maths.lib/copyright", "GRAME");
 		m->declare("maths.lib/license", "LGPL with exception");
 		m->declare("maths.lib/name", "Faust Math Library");
-		m->declare("maths.lib/version", "2.8.1");
+		m->declare("maths.lib/version", "2.9.0");
 		m->declare("name", "osci");
 		m->declare("oscillators.lib/name", "Faust Oscillator Library");
-		m->declare("oscillators.lib/version", "1.6.0");
+		m->declare("oscillators.lib/version", "1.7.0");
 		m->declare("platform.lib/name", "Generic Platform Library");
 		m->declare("platform.lib/version", "1.3.0");
 	}
@@ -149,7 +157,7 @@ class Dsp : public dsp {
 	
 	virtual void instanceConstants(int sample_rate) {
 		fSampleRate = sample_rate;
-		fConst0 = std::min<float>(1.92e+05f, std::max<float>(1.0f, float(fSampleRate)));
+		fConst0 = std::min<float>(1.92e+05f, std::max<float>(1.0f, static_cast<float>(fSampleRate)));
 		fConst1 = 1.0f / fConst0;
 		fConst2 = 1.0f / std::max<float>(1.0f, 0.1f * fConst0);
 		fConst3 = std::max<float>(1.0f, 0.01f * fConst0);
@@ -190,7 +198,7 @@ class Dsp : public dsp {
 	}
 	
 	virtual Dsp* clone() {
-		return new Dsp();
+		return new Dsp(*this);
 	}
 	
 	virtual int getSampleRate() {
@@ -208,13 +216,13 @@ class Dsp : public dsp {
 		FAUSTFLOAT* output0 = outputs[0];
 		for (int i0 = 0; i0 < count; i0 = i0 + 1) {
 			iVec1[0] = 1;
-			float fTemp0 = ((1 - iVec1[1]) ? 0.0f : fRec1[1] + fConst1 * float(input1[i0]));
+			float fTemp0 = ((1 - iVec1[1]) ? 0.0f : fRec1[1] + fConst1 * static_cast<float>(input1[i0]));
 			fRec1[0] = fTemp0 - std::floor(fTemp0);
-			float fTemp1 = float(input0[i0]);
+			float fTemp1 = static_cast<float>(input0[i0]);
 			fVec2[0] = fTemp1;
 			iRec2[0] = (fTemp1 == 0.0f) * (iRec2[1] + 1);
-			fRec3[0] = fTemp1 + fRec3[1] * float(fVec2[1] >= fTemp1);
-			output0[i0] = FAUSTFLOAT(std::max<float>(0.0f, std::min<float>(fConst4 * fRec3[0], std::max<float>(1.7f - fConst5 * fRec3[0], 0.3f)) * (1.0f - fConst2 * float(iRec2[0]))) * ftbl0DspSIG0[std::max<int>(0, std::min<int>(int(65536.0f * fRec1[0]), 65535))]);
+			fRec3[0] = fTemp1 + fRec3[1] * static_cast<float>(fVec2[1] >= fTemp1);
+			output0[i0] = static_cast<FAUSTFLOAT>(std::max<float>(0.0f, std::min<float>(fConst4 * fRec3[0], std::max<float>(1.7f - fConst5 * fRec3[0], 0.3f)) * (1.0f - fConst2 * static_cast<float>(iRec2[0]))) * ftbl0DspSIG0[std::max<int>(0, std::min<int>(static_cast<int>(65536.0f * fRec1[0]), 65535))]);
 			iVec1[1] = iVec1[0];
 			fRec1[1] = fRec1[0];
 			fVec2[1] = fVec2[0];

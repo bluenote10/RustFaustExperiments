@@ -40,3 +40,11 @@ faust -a ./architecture/benchmark.rs -lang rust "$DSP_FILE" -o ./src/bin/$RUST_F
 rustfmt --config max_width=120 ./src/bin/$RUST_FILE
 
 cargo run --bin ${FILE_WITHOUT_EXTENSION} --release -- "$RESULT_FILE"
+
+# Compute binary sha256 and size for tracking codegen changes
+BINARY_PATH="./target/release/${FILE_WITHOUT_EXTENSION}"
+BINARY_SHA256=$(sha256sum "$BINARY_PATH" | awk '{print $1}')
+BINARY_SIZE=$(stat --format=%s "$BINARY_PATH")
+BINARY_INFO_FILE="${RESULT_FILE%.json}_binary_info.json"
+echo "{\"sha256\": \"${BINARY_SHA256}\", \"size\": ${BINARY_SIZE}}" > "$BINARY_INFO_FILE"
+echo "Binary: sha256=${BINARY_SHA256} size=${BINARY_SIZE}"

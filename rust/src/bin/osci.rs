@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "osci"
-Code generated with Faust 2.81.1 (https://faust.grame.fr)
-Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
+Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Compilation options: -a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
 #![allow(non_camel_case_types)]
@@ -25,7 +25,7 @@ type F32 = f32;
 // Generated intrinsics:
 
 // Generated class:
-#[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
+
 #[repr(C)]
 pub struct Dsp {
     iVec1: [i32; 2],
@@ -47,6 +47,7 @@ pub type FaustFloat = F32;
 pub struct DspSIG0 {
     iVec0: [i32; 2],
     iRec0: [i32; 2],
+    fSampleRate: i32,
 }
 
 impl DspSIG0 {
@@ -58,6 +59,7 @@ impl DspSIG0 {
     }
 
     pub fn instance_initDspSIG0(&mut self, sample_rate: i32) {
+        self.fSampleRate = sample_rate;
         for l0 in 0..2 {
             self.iVec0[l0 as usize] = 0;
         }
@@ -81,9 +83,11 @@ pub fn newDspSIG0() -> DspSIG0 {
     DspSIG0 {
         iVec0: [0; 2],
         iRec0: [0; 2],
+        fSampleRate: 0,
     }
 }
 static ftbl0DspSIG0: std::sync::RwLock<[F32; 65536]> = std::sync::RwLock::new([0.0; 65536]);
+#[cfg(not(target_arch = "wasm32"))] // Compile ffi bindings only on non-wasm targets
 mod ffi {
     use std::os::raw::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
@@ -94,10 +98,20 @@ mod ffi {
     }
 }
 fn remainder_f32(from: f32, to: f32) -> f32 {
-    unsafe { ffi::remainderf(from, to) }
+    #[cfg(not(target_arch = "wasm32"))] // non-wasm targets use ffi bindings
+    unsafe {
+        ffi::remainderf(from, to)
+    }
+    #[cfg(target_arch = "wasm32")] // wasm relies on libm
+    libm::remainderf(from, to)
 }
 fn rint_f32(val: f32) -> f32 {
-    unsafe { ffi::rintf(val) }
+    #[cfg(not(target_arch = "wasm32"))] // non-wasm targets use ffi bindings
+    unsafe {
+        ffi::rintf(val)
+    }
+    #[cfg(target_arch = "wasm32")] // wasm relies on libm
+    libm::rintf(val)
 }
 
 pub const FAUST_INPUTS: usize = 2;
@@ -124,11 +138,8 @@ impl Dsp {
     }
     pub fn metadata(&self, m: &mut dyn Meta) {
         m.declare("basics.lib/name", r"Faust Basic Element Library");
-        m.declare("basics.lib/version", r"1.21.0");
-        m.declare(
-            "compile_options",
-            r"-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0",
-        );
+        m.declare("basics.lib/version", r"1.22.0");
+        m.declare("compile_options", r"-a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
         m.declare("envelopes.lib/adsr:author", r"Yann Orlarey and Andrey Bundin");
         m.declare("envelopes.lib/author", r"GRAME");
         m.declare("envelopes.lib/copyright", r"GRAME");
@@ -140,10 +151,10 @@ impl Dsp {
         m.declare("maths.lib/copyright", r"GRAME");
         m.declare("maths.lib/license", r"LGPL with exception");
         m.declare("maths.lib/name", r"Faust Math Library");
-        m.declare("maths.lib/version", r"2.8.1");
+        m.declare("maths.lib/version", r"2.9.0");
         m.declare("name", r"osci");
         m.declare("oscillators.lib/name", r"Faust Oscillator Library");
-        m.declare("oscillators.lib/version", r"1.6.0");
+        m.declare("oscillators.lib/version", r"1.7.0");
         m.declare("platform.lib/name", r"Generic Platform Library");
         m.declare("platform.lib/version", r"1.3.0");
     }
@@ -178,6 +189,8 @@ impl Dsp {
         }
     }
     pub fn instance_constants(&mut self, sample_rate: i32) {
+        // Obtaining locks on 1 static var(s)
+        let ftbl0DspSIG0_guard = ftbl0DspSIG0.read().unwrap();
         self.fSampleRate = sample_rate;
         self.fConst0 = F32::min(1.92e+05, F32::max(1.0, (self.fSampleRate) as F32));
         self.fConst1 = 1.0 / self.fConst0;

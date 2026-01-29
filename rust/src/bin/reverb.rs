@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "reverb"
-Code generated with Faust 2.81.1 (https://faust.grame.fr)
-Compilation options: -a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
+Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Compilation options: -a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
 #![allow(non_camel_case_types)]
@@ -25,7 +25,7 @@ type F32 = f32;
 // Generated intrinsics:
 
 // Generated class:
-#[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
+
 #[repr(C)]
 pub struct Dsp {
     fSampleRate: i32,
@@ -220,6 +220,7 @@ pub type FaustFloat = F32;
 fn Dsp_faustpower2_f(value: F32) -> F32 {
     return value * value;
 }
+#[cfg(not(target_arch = "wasm32"))] // Compile ffi bindings only on non-wasm targets
 mod ffi {
     use std::os::raw::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
@@ -230,10 +231,20 @@ mod ffi {
     }
 }
 fn remainder_f32(from: f32, to: f32) -> f32 {
-    unsafe { ffi::remainderf(from, to) }
+    #[cfg(not(target_arch = "wasm32"))] // non-wasm targets use ffi bindings
+    unsafe {
+        ffi::remainderf(from, to)
+    }
+    #[cfg(target_arch = "wasm32")] // wasm relies on libm
+    libm::remainderf(from, to)
 }
 fn rint_f32(val: f32) -> f32 {
-    unsafe { ffi::rintf(val) }
+    #[cfg(not(target_arch = "wasm32"))] // non-wasm targets use ffi bindings
+    unsafe {
+        ffi::rintf(val)
+    }
+    #[cfg(target_arch = "wasm32")] // wasm relies on libm
+    libm::rintf(val)
 }
 
 pub const FAUST_INPUTS: usize = 2;
@@ -434,15 +445,12 @@ impl Dsp {
     }
     pub fn metadata(&self, m: &mut dyn Meta) {
         m.declare("basics.lib/name", r"Faust Basic Element Library");
-        m.declare("basics.lib/version", r"1.21.0");
-        m.declare(
-            "compile_options",
-            r"-a ./architecture/benchmark.rs -lang rust -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0",
-        );
+        m.declare("basics.lib/version", r"1.22.0");
+        m.declare("compile_options", r"-a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
         m.declare("delays.lib/name", r"Faust Delay Library");
-        m.declare("delays.lib/version", r"1.1.0");
+        m.declare("delays.lib/version", r"1.2.0");
         m.declare("demos.lib/name", r"Faust Demos Library");
-        m.declare("demos.lib/version", r"1.2.0");
+        m.declare("demos.lib/version", r"1.4.0");
         m.declare("demos.lib/zita_light:author", r"Julius O. Smith III");
         m.declare("demos.lib/zita_light:licence", r"MIT");
         m.declare("filename", r"reverb.dsp");
@@ -502,12 +510,12 @@ impl Dsp {
         m.declare("maths.lib/copyright", r"GRAME");
         m.declare("maths.lib/license", r"LGPL with exception");
         m.declare("maths.lib/name", r"Faust Math Library");
-        m.declare("maths.lib/version", r"2.8.1");
+        m.declare("maths.lib/version", r"2.9.0");
         m.declare("name", r"reverb");
         m.declare("platform.lib/name", r"Generic Platform Library");
         m.declare("platform.lib/version", r"1.3.0");
         m.declare("reverbs.lib/name", r"Faust Reverb Library");
-        m.declare("reverbs.lib/version", r"1.4.0");
+        m.declare("reverbs.lib/version", r"1.5.1");
         m.declare("routes.lib/hadamard:author", r"Remy Muller, revised by Romain Michon");
         m.declare("routes.lib/name", r"Faust Signal Routing Library");
         m.declare("routes.lib/version", r"1.2.0");
@@ -698,6 +706,7 @@ impl Dsp {
         }
     }
     pub fn instance_constants(&mut self, sample_rate: i32) {
+        // Obtaining locks on 0 static var(s)
         self.fSampleRate = sample_rate;
         self.fConst0 = F32::min(1.92e+05, F32::max(1.0, (self.fSampleRate) as F32));
         self.fConst1 = 9424.778 / self.fConst0;

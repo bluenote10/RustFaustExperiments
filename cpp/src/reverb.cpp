@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
 name: "reverb"
-Code generated with Faust 2.81.1 (https://faust.grame.fr)
-Compilation options: -a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
+Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Compilation options: -a ./console-bench.cpp -lang cpp -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
 #ifndef  __Dsp_H__
@@ -246,14 +246,20 @@ class Dsp : public dsp {
 	Dsp() {
 	}
 	
+	Dsp(const Dsp&) = default;
+	
+	virtual ~Dsp() = default;
+	
+	Dsp& operator=(const Dsp&) = default;
+	
 	void metadata(Meta* m) { 
 		m->declare("basics.lib/name", "Faust Basic Element Library");
-		m->declare("basics.lib/version", "1.21.0");
-		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
+		m->declare("basics.lib/version", "1.22.0");
+		m->declare("compile_options", "-a ./console-bench.cpp -lang cpp -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
 		m->declare("delays.lib/name", "Faust Delay Library");
-		m->declare("delays.lib/version", "1.1.0");
+		m->declare("delays.lib/version", "1.2.0");
 		m->declare("demos.lib/name", "Faust Demos Library");
-		m->declare("demos.lib/version", "1.2.0");
+		m->declare("demos.lib/version", "1.4.0");
 		m->declare("demos.lib/zita_light:author", "Julius O. Smith III");
 		m->declare("demos.lib/zita_light:licence", "MIT");
 		m->declare("filename", "reverb.dsp");
@@ -289,12 +295,12 @@ class Dsp : public dsp {
 		m->declare("maths.lib/copyright", "GRAME");
 		m->declare("maths.lib/license", "LGPL with exception");
 		m->declare("maths.lib/name", "Faust Math Library");
-		m->declare("maths.lib/version", "2.8.1");
+		m->declare("maths.lib/version", "2.9.0");
 		m->declare("name", "reverb");
 		m->declare("platform.lib/name", "Generic Platform Library");
 		m->declare("platform.lib/version", "1.3.0");
 		m->declare("reverbs.lib/name", "Faust Reverb Library");
-		m->declare("reverbs.lib/version", "1.4.0");
+		m->declare("reverbs.lib/version", "1.5.1");
 		m->declare("routes.lib/hadamard:author", "Remy Muller, revised by Romain Michon");
 		m->declare("routes.lib/name", "Faust Signal Routing Library");
 		m->declare("routes.lib/version", "1.2.0");
@@ -314,7 +320,7 @@ class Dsp : public dsp {
 	
 	virtual void instanceConstants(int sample_rate) {
 		fSampleRate = sample_rate;
-		fConst0 = std::min<float>(1.92e+05f, std::max<float>(1.0f, float(fSampleRate)));
+		fConst0 = std::min<float>(1.92e+05f, std::max<float>(1.0f, static_cast<float>(fSampleRate)));
 		fConst1 = 9424.778f / fConst0;
 		fConst2 = (1.0f - fConst1) / (fConst1 + 1.0f);
 		fConst3 = std::cos(fConst1) * (fConst2 + 1.0f);
@@ -337,9 +343,9 @@ class Dsp : public dsp {
 		fConst20 = std::exp(-(2.3025851f * fConst8)) / fConst9 + -1.0f;
 		fConst21 = fConst9 * (fConst14 + (1.0f - fConst15));
 		fConst22 = std::floor(0.022904f * fConst0 + 0.5f);
-		iConst23 = int(std::min<float>(8192.0f, std::max<float>(0.0f, fConst7 - fConst22)));
-		iConst24 = int(std::min<float>(8192.0f, std::max<float>(0.0f, 0.06f * fConst0)));
-		iConst25 = int(std::min<float>(2048.0f, std::max<float>(0.0f, fConst22 + -1.0f)));
+		iConst23 = static_cast<int>(std::min<float>(8192.0f, std::max<float>(0.0f, fConst7 - fConst22)));
+		iConst24 = static_cast<int>(std::min<float>(8192.0f, std::max<float>(0.0f, 0.06f * fConst0)));
+		iConst25 = static_cast<int>(std::min<float>(2048.0f, std::max<float>(0.0f, fConst22 + -1.0f)));
 		fConst26 = std::floor(0.153129f * fConst0 + 0.5f);
 		fConst27 = fConst26 / fConst0;
 		fConst28 = std::exp(-(3.4538777f * fConst27));
@@ -352,8 +358,8 @@ class Dsp : public dsp {
 		fConst35 = std::exp(-(2.3025851f * fConst27)) / fConst28 + -1.0f;
 		fConst36 = fConst28 * (fConst32 + (1.0f - fConst33));
 		fConst37 = std::floor(0.020346f * fConst0 + 0.5f);
-		iConst38 = int(std::min<float>(8192.0f, std::max<float>(0.0f, fConst26 - fConst37)));
-		iConst39 = int(std::min<float>(1024.0f, std::max<float>(0.0f, fConst37 + -1.0f)));
+		iConst38 = static_cast<int>(std::min<float>(8192.0f, std::max<float>(0.0f, fConst26 - fConst37)));
+		iConst39 = static_cast<int>(std::min<float>(1024.0f, std::max<float>(0.0f, fConst37 + -1.0f)));
 		fConst40 = std::floor(0.127837f * fConst0 + 0.5f);
 		fConst41 = fConst40 / fConst0;
 		fConst42 = std::exp(-(3.4538777f * fConst41));
@@ -366,8 +372,8 @@ class Dsp : public dsp {
 		fConst49 = std::exp(-(2.3025851f * fConst41)) / fConst42 + -1.0f;
 		fConst50 = fConst42 * (fConst46 + (1.0f - fConst47));
 		fConst51 = std::floor(0.031604f * fConst0 + 0.5f);
-		iConst52 = int(std::min<float>(8192.0f, std::max<float>(0.0f, fConst40 - fConst51)));
-		iConst53 = int(std::min<float>(2048.0f, std::max<float>(0.0f, fConst51 + -1.0f)));
+		iConst52 = static_cast<int>(std::min<float>(8192.0f, std::max<float>(0.0f, fConst40 - fConst51)));
+		iConst53 = static_cast<int>(std::min<float>(2048.0f, std::max<float>(0.0f, fConst51 + -1.0f)));
 		fConst54 = std::floor(0.125f * fConst0 + 0.5f);
 		fConst55 = fConst54 / fConst0;
 		fConst56 = std::exp(-(3.4538777f * fConst55));
@@ -380,8 +386,8 @@ class Dsp : public dsp {
 		fConst63 = std::exp(-(2.3025851f * fConst55)) / fConst56 + -1.0f;
 		fConst64 = fConst56 * (fConst60 + (1.0f - fConst61));
 		fConst65 = std::floor(0.013458f * fConst0 + 0.5f);
-		iConst66 = int(std::min<float>(8192.0f, std::max<float>(0.0f, fConst54 - fConst65)));
-		iConst67 = int(std::min<float>(1024.0f, std::max<float>(0.0f, fConst65 + -1.0f)));
+		iConst66 = static_cast<int>(std::min<float>(8192.0f, std::max<float>(0.0f, fConst54 - fConst65)));
+		iConst67 = static_cast<int>(std::min<float>(1024.0f, std::max<float>(0.0f, fConst65 + -1.0f)));
 		fConst68 = std::floor(0.210389f * fConst0 + 0.5f);
 		fConst69 = fConst68 / fConst0;
 		fConst70 = std::exp(-(3.4538777f * fConst69));
@@ -394,8 +400,8 @@ class Dsp : public dsp {
 		fConst77 = std::exp(-(2.3025851f * fConst69)) / fConst70 + -1.0f;
 		fConst78 = fConst70 * (fConst74 + (1.0f - fConst75));
 		fConst79 = std::floor(0.024421f * fConst0 + 0.5f);
-		iConst80 = int(std::min<float>(16384.0f, std::max<float>(0.0f, fConst68 - fConst79)));
-		iConst81 = int(std::min<float>(2048.0f, std::max<float>(0.0f, fConst79 + -1.0f)));
+		iConst80 = static_cast<int>(std::min<float>(16384.0f, std::max<float>(0.0f, fConst68 - fConst79)));
+		iConst81 = static_cast<int>(std::min<float>(2048.0f, std::max<float>(0.0f, fConst79 + -1.0f)));
 		fConst82 = std::floor(0.192303f * fConst0 + 0.5f);
 		fConst83 = fConst82 / fConst0;
 		fConst84 = std::exp(-(3.4538777f * fConst83));
@@ -408,8 +414,8 @@ class Dsp : public dsp {
 		fConst91 = std::exp(-(2.3025851f * fConst83)) / fConst84 + -1.0f;
 		fConst92 = fConst84 * (fConst88 + (1.0f - fConst89));
 		fConst93 = std::floor(0.029291f * fConst0 + 0.5f);
-		iConst94 = int(std::min<float>(8192.0f, std::max<float>(0.0f, fConst82 - fConst93)));
-		iConst95 = int(std::min<float>(2048.0f, std::max<float>(0.0f, fConst93 + -1.0f)));
+		iConst94 = static_cast<int>(std::min<float>(8192.0f, std::max<float>(0.0f, fConst82 - fConst93)));
+		iConst95 = static_cast<int>(std::min<float>(2048.0f, std::max<float>(0.0f, fConst93 + -1.0f)));
 		fConst96 = std::floor(0.256891f * fConst0 + 0.5f);
 		fConst97 = fConst96 / fConst0;
 		fConst98 = std::exp(-(3.4538777f * fConst97));
@@ -422,8 +428,8 @@ class Dsp : public dsp {
 		fConst105 = std::exp(-(2.3025851f * fConst97)) / fConst98 + -1.0f;
 		fConst106 = fConst98 * (fConst102 + (1.0f - fConst103));
 		fConst107 = std::floor(0.027333f * fConst0 + 0.5f);
-		iConst108 = int(std::min<float>(16384.0f, std::max<float>(0.0f, fConst96 - fConst107)));
-		iConst109 = int(std::min<float>(2048.0f, std::max<float>(0.0f, fConst107 + -1.0f)));
+		iConst108 = static_cast<int>(std::min<float>(16384.0f, std::max<float>(0.0f, fConst96 - fConst107)));
+		iConst109 = static_cast<int>(std::min<float>(2048.0f, std::max<float>(0.0f, fConst107 + -1.0f)));
 		fConst110 = std::floor(0.219991f * fConst0 + 0.5f);
 		fConst111 = fConst110 / fConst0;
 		fConst112 = std::exp(-(3.4538777f * fConst111));
@@ -436,15 +442,15 @@ class Dsp : public dsp {
 		fConst119 = std::exp(-(2.3025851f * fConst111)) / fConst112 + -1.0f;
 		fConst120 = fConst112 * (fConst116 + (1.0f - fConst117));
 		fConst121 = std::floor(0.019123f * fConst0 + 0.5f);
-		iConst122 = int(std::min<float>(16384.0f, std::max<float>(0.0f, fConst110 - fConst121)));
-		iConst123 = int(std::min<float>(1024.0f, std::max<float>(0.0f, fConst121 + -1.0f)));
+		iConst122 = static_cast<int>(std::min<float>(16384.0f, std::max<float>(0.0f, fConst110 - fConst121)));
+		iConst123 = static_cast<int>(std::min<float>(1024.0f, std::max<float>(0.0f, fConst121 + -1.0f)));
 		fConst124 = 44.1f / fConst0;
 		fConst125 = 1.0f - fConst124;
 	}
 	
 	virtual void instanceResetUserInterface() {
-		fVslider0 = FAUSTFLOAT(0.0f);
-		fVslider1 = FAUSTFLOAT(-6.0f);
+		fVslider0 = static_cast<FAUSTFLOAT>(0.0f);
+		fVslider1 = static_cast<FAUSTFLOAT>(-6.0f);
 	}
 	
 	virtual void instanceClear() {
@@ -631,7 +637,7 @@ class Dsp : public dsp {
 	}
 	
 	virtual Dsp* clone() {
-		return new Dsp();
+		return new Dsp(*this);
 	}
 	
 	virtual int getSampleRate() {
@@ -657,15 +663,15 @@ class Dsp : public dsp {
 		FAUSTFLOAT* input1 = inputs[1];
 		FAUSTFLOAT* output0 = outputs[0];
 		FAUSTFLOAT* output1 = outputs[1];
-		float fSlow0 = fConst124 * float(fVslider0);
-		float fSlow1 = fConst124 * std::pow(1e+01f, 0.05f * float(fVslider1));
+		float fSlow0 = fConst124 * static_cast<float>(fVslider0);
+		float fSlow1 = fConst124 * std::pow(1e+01f, 0.05f * static_cast<float>(fVslider1));
 		for (int i0 = 0; i0 < count; i0 = i0 + 1) {
 			float fTemp0 = fConst3 * fRec0[1];
 			float fTemp1 = fConst6 * fRec1[1];
 			fRec13[0] = -(fConst19 * (fConst18 * fRec13[1] - (fRec6[1] + fRec6[2])));
 			fRec12[0] = fConst21 * (fRec6[1] + fConst20 * fRec13[0]) + fConst16 * fRec12[1];
 			fVec0[IOTA0 & 16383] = 0.35355338f * fRec12[0] + 1e-20f;
-			float fTemp2 = float(input0[i0]);
+			float fTemp2 = static_cast<float>(input0[i0]);
 			fVec1[IOTA0 & 16383] = fTemp2;
 			float fTemp3 = 0.3f * fVec1[(IOTA0 - iConst24) & 16383];
 			float fTemp4 = fTemp3 + fVec0[(IOTA0 - iConst23) & 16383] - 0.6f * fRec10[1];
@@ -698,7 +704,7 @@ class Dsp : public dsp {
 			fRec29[0] = -(fConst19 * (fConst18 * fRec29[1] - (fRec3[1] + fRec3[2])));
 			fRec28[0] = fConst78 * (fRec3[1] + fConst77 * fRec29[0]) + fConst76 * fRec28[1];
 			fVec9[IOTA0 & 32767] = 0.35355338f * fRec28[0] + 1e-20f;
-			float fTemp10 = float(input1[i0]);
+			float fTemp10 = static_cast<float>(input1[i0]);
 			fVec10[IOTA0 & 16383] = fTemp10;
 			float fTemp11 = 0.3f * fVec10[(IOTA0 - iConst24) & 16383];
 			float fTemp12 = fTemp11 + 0.6f * fRec26[1] + fVec9[(IOTA0 - iConst80) & 32767];
@@ -751,7 +757,7 @@ class Dsp : public dsp {
 			float fTemp27 = fRec42[0] + 1.0f;
 			float fTemp28 = 1.0f - 0.5f * fTemp27;
 			fRec43[0] = fSlow1 + fConst125 * fRec43[1];
-			output0[i0] = FAUSTFLOAT(0.5f * fRec43[0] * (fTemp2 * fTemp27 + fTemp28 * (fTemp26 + fTemp24 + fRec0[2] - fTemp0 + (fRec0[2] + fTemp26 - fTemp25))));
+			output0[i0] = static_cast<FAUSTFLOAT>(0.5f * fRec43[0] * (fTemp2 * fTemp27 + fTemp28 * (fTemp26 + fTemp24 + fRec0[2] - fTemp0 + (fRec0[2] + fTemp26 - fTemp25))));
 			float fTemp29 = fConst3 * fRec44[1];
 			float fTemp30 = fConst6 * fRec45[1];
 			float fTemp31 = 0.37f * (fRec3[0] - fRec4[0]);
@@ -762,7 +768,7 @@ class Dsp : public dsp {
 			float fTemp35 = fTemp34 + fTemp29;
 			fRec44[0] = fTemp35 - fConst2 * fRec44[2];
 			float fTemp36 = fConst2 * fRec44[0];
-			output1[i0] = FAUSTFLOAT(0.5f * fRec43[0] * (fTemp10 * fTemp27 + fTemp28 * (fTemp36 + fTemp34 + fRec44[2] - fTemp29 + (fRec44[2] + fTemp36 - fTemp35))));
+			output1[i0] = static_cast<FAUSTFLOAT>(0.5f * fRec43[0] * (fTemp10 * fTemp27 + fTemp28 * (fTemp36 + fTemp34 + fRec44[2] - fTemp29 + (fRec44[2] + fTemp36 - fTemp35))));
 			fRec13[1] = fRec13[0];
 			fRec12[1] = fRec12[0];
 			IOTA0 = IOTA0 + 1;
