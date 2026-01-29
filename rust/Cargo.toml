@@ -6,4 +6,15 @@ edition = "2024"
 
 [dependencies]
 
-libm = "0.2.15"
+# None needed
+
+[profile.release]
+
+# It's recommended to set codegen units to 1 for benchmarking and reproducible builds.
+# https://doc.rust-lang.org/rustc/codegen-options/index.html#codegen-units
+
+codegen-units = 1
+
+# The default release profile only strips "debuginfo", but for reproducible builds it
+# makes sense to go for full symbol stripping.
+strip = "symbols"

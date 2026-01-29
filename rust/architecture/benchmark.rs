@@ -7,8 +7,6 @@
 #![allow(unused_parens)]
 #![allow(unused_variables)]
 
-extern crate libm;
-
 use std::env;
 use std::path::PathBuf;
 

@@ -6,6 +6,13 @@ RESULT_FILE=rust.json
 
 cd $(dirname $0)
 
+# Archive previous target folder for binary comparison
+if [ -d target ]; then
+  TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+  mv target "target_${TIMESTAMP}"
+  echo "Archived previous target/ as target_${TIMESTAMP}/"
+fi
+
 ./gen_and_run.sh ../dsp/copy1.dsp "../results/copy1/$RESULT_FILE"
 ./gen_and_run.sh ../dsp/copy2.dsp "../results/copy2/$RESULT_FILE"
 ./gen_and_run.sh ../dsp/delay.dsp "../results/delay/$RESULT_FILE"

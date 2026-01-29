@@ -12,8 +12,6 @@ Compilation options: -a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -c
 #![allow(unused_parens)]
 #![allow(unused_variables)]
 
-extern crate libm;
-
 use std::env;
 use std::path::PathBuf;
 
