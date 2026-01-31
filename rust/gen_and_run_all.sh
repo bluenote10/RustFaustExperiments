@@ -8,7 +8,7 @@ cd $(dirname $0)
 
 # Archive previous target folder for binary comparison
 if [ -d target ]; then
-  TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+  TIMESTAMP=$(date -r target +%Y%m%d_%H%M%S)
   mv target "target_${TIMESTAMP}"
   echo "Archived previous target/ as target_${TIMESTAMP}/"
 fi

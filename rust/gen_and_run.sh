@@ -47,9 +47,11 @@ BINARY_PATH="./target/release/${FILE_WITHOUT_EXTENSION}"
 BINARY_SHA256=$(sha256sum "$BINARY_PATH" | awk '{print $1}')
 BINARY_SIZE=$(stat --format=%s "$BINARY_PATH")
 BINARY_INFO_FILE="${RESULT_FILE%.json}_binary_info.json"
-echo "{\"sha256\": \"${BINARY_SHA256}\", \"size\": ${BINARY_SIZE}}" > "$BINARY_INFO_FILE"
-echo "Binary: sha256=${BINARY_SHA256} size=${BINARY_SIZE}"
-
 # Dump disassembly for diffing against previous versions
-objdump -d "$BINARY_PATH" > "${BINARY_PATH}.asm"
-echo "Disassembly written to ${BINARY_PATH}.asm"
+ASM_PATH="${BINARY_PATH}.asm"
+objdump -d "$BINARY_PATH" > "$ASM_PATH"
+echo "Disassembly written to $ASM_PATH"
+
+ASM_SHA256=$(sha256sum "$ASM_PATH" | awk '{print $1}')
+echo "{\"sha256\": \"${BINARY_SHA256}\", \"asm_sha256\": \"${ASM_SHA256}\", \"size\": ${BINARY_SIZE}}" > "$BINARY_INFO_FILE"
+echo "Binary: sha256=${BINARY_SHA256} asm_sha256=${ASM_SHA256} size=${BINARY_SIZE}"

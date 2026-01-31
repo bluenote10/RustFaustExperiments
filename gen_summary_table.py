@@ -54,6 +54,7 @@ def print_binary_info_table(benchmarks: List[str], entry: str):
                 {
                     "benchmark": benchmark,
                     "sha256": info["sha256"][:16] + "…",
+                    "asm_sha256": info["asm_sha256"][:16] + "…",
                     "size (bytes)": info["size"],
                 }
             )
