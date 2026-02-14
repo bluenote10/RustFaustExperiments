@@ -4,7 +4,7 @@ copyright: "(c)GRAME 2006"
 license: "BSD"
 name: "karplus32"
 version: "1.0"
-Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Code generated with Faust 2.84.4 (https://faust.grame.fr)
 Compilation options: -a ./console-bench.cpp -lang cpp -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 

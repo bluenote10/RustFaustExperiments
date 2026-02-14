@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "osci"
-Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Code generated with Faust 2.84.4 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
@@ -19,6 +19,7 @@ use faust_benchmarks::benchmark_runner::run_benchmark;
 use faust_benchmarks::types::{FaustDsp, Meta, ParamIndex, UI};
 
 type F32 = f32;
+type FaustFloat = f32;
 
 // Generated intrinsics:
 
@@ -39,8 +40,6 @@ pub struct Dsp {
     fConst4: F32,
     fConst5: F32,
 }
-
-pub type FaustFloat = F32;
 
 pub struct DspSIG0 {
     iVec0: [i32; 2],
@@ -66,7 +65,7 @@ impl DspSIG0 {
         }
     }
 
-    pub fn fillDspSIG0(&mut self, count: i32, table: &mut [FaustFloat]) {
+    pub fn fillDspSIG0(&mut self, count: i32, table: &mut [F32]) {
         for i1 in 0..count {
             self.iVec0[0] = 1;
             self.iRec0[0] = (i32::wrapping_add(self.iVec0[1], self.iRec0[1])) % 65536;
@@ -87,7 +86,7 @@ pub fn newDspSIG0() -> DspSIG0 {
 static ftbl0DspSIG0: std::sync::RwLock<[F32; 65536]> = std::sync::RwLock::new([0.0; 65536]);
 #[cfg(not(target_arch = "wasm32"))] // Compile ffi bindings only on non-wasm targets
 mod ffi {
-    use std::os::raw::c_float;
+    use core::ffi::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
     #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
     unsafe extern "C" {
@@ -251,21 +250,22 @@ impl Dsp {
             let mut fTemp0: F32 = (if i32::wrapping_sub(1, self.iVec1[1]) != 0 {
                 0.0
             } else {
-                self.fRec1[1] + self.fConst1 * *input1
+                self.fRec1[1] + self.fConst1 * (*input1) as F32
             });
             self.fRec1[0] = fTemp0 - F32::floor(fTemp0);
-            let mut fTemp1: F32 = *input0;
+            let mut fTemp1: F32 = (*input0) as F32;
             self.fVec2[0] = fTemp1;
             self.iRec2[0] = ((fTemp1 == 0.0) as i32) * (i32::wrapping_add(self.iRec2[1], 1));
             self.fRec3[0] = fTemp1 + self.fRec3[1] * ((self.fVec2[1] >= fTemp1) as i32) as u32 as F32;
-            *output0 = F32::max(
+            *output0 = (F32::max(
                 0.0,
                 F32::min(
                     self.fConst4 * self.fRec3[0],
                     F32::max(1.7 - self.fConst5 * self.fRec3[0], 0.3),
                 ) * (1.0 - self.fConst2 * (self.iRec2[0]) as F32),
             ) * ftbl0DspSIG0_guard
-                [(std::cmp::max(0, std::cmp::min((65536.0 * self.fRec1[0]) as i32, 65535))) as usize];
+                [(std::cmp::max(0, std::cmp::min((65536.0 * self.fRec1[0]) as i32, 65535))) as usize])
+                as FaustFloat;
             self.iVec1[1] = self.iVec1[0];
             self.fRec1[1] = self.fRec1[0];
             self.fVec2[1] = self.fVec2[0];

@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "math"
-Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Code generated with Faust 2.84.4 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
@@ -19,6 +19,7 @@ use faust_benchmarks::benchmark_runner::run_benchmark;
 use faust_benchmarks::types::{FaustDsp, Meta, ParamIndex, UI};
 
 type F32 = f32;
+type FaustFloat = f32;
 
 // Generated intrinsics:
 
@@ -29,10 +30,9 @@ pub struct Dsp {
     fSampleRate: i32,
 }
 
-pub type FaustFloat = F32;
 #[cfg(not(target_arch = "wasm32"))] // Compile ffi bindings only on non-wasm targets
 mod ffi {
-    use std::os::raw::c_float;
+    use core::ffi::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
     #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
     unsafe extern "C" {
@@ -149,7 +149,9 @@ impl Dsp {
             .zip(outputs0);
         for ((((((((input0, input1), input2), input3), input4), input5), input6), input7), output0) in zipped_iterators
         {
-            *output0 = (*input2 + *input3) * (*input0 + *input1) / ((*input6 + *input7) * (*input4 + *input5));
+            *output0 = (((*input2) as F32 + (*input3) as F32) * ((*input0) as F32 + (*input1) as F32)
+                / (((*input6) as F32 + (*input7) as F32) * ((*input4) as F32 + (*input5) as F32)))
+                as FaustFloat;
         }
     }
 }

@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------
 name: "reverb"
-Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Code generated with Faust 2.84.4 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
@@ -19,6 +19,7 @@ use faust_benchmarks::benchmark_runner::run_benchmark;
 use faust_benchmarks::types::{FaustDsp, Meta, ParamIndex, UI};
 
 type F32 = f32;
+type FaustFloat = f32;
 
 // Generated intrinsics:
 
@@ -206,21 +207,20 @@ pub struct Dsp {
     fRec0: [F32; 3],
     fConst124: F32,
     fConst125: F32,
-    fVslider0: F32,
+    fVslider0: FaustFloat,
     fRec42: [F32; 2],
-    fVslider1: F32,
+    fVslider1: FaustFloat,
     fRec43: [F32; 2],
     fRec45: [F32; 3],
     fRec44: [F32; 3],
 }
 
-pub type FaustFloat = F32;
 fn Dsp_faustpower2_f(value: F32) -> F32 {
     return value * value;
 }
 #[cfg(not(target_arch = "wasm32"))] // Compile ffi bindings only on non-wasm targets
 mod ffi {
-    use std::os::raw::c_float;
+    use core::ffi::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
     #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
     unsafe extern "C" {
@@ -529,8 +529,8 @@ impl Dsp {
         // Obtaining locks on 0 static var(s)
     }
     pub fn instance_reset_params(&mut self) {
-        self.fVslider0 = 0.0;
-        self.fVslider1 = -6.0;
+        self.fVslider0 = (0.0) as FaustFloat;
+        self.fVslider1 = (-6.0) as FaustFloat;
     }
     pub fn instance_clear(&mut self) {
         for l0 in 0..2 {
@@ -922,8 +922,8 @@ impl Dsp {
         };
         let outputs0 = outputs0.as_mut()[..count].iter_mut();
         let outputs1 = outputs1.as_mut()[..count].iter_mut();
-        let mut fSlow0: F32 = self.fConst124 * self.fVslider0;
-        let mut fSlow1: F32 = self.fConst124 * F32::powf(1e+01, 0.05 * self.fVslider1);
+        let mut fSlow0: F32 = self.fConst124 * (self.fVslider0) as F32;
+        let mut fSlow1: F32 = self.fConst124 * F32::powf(1e+01, 0.05 * (self.fVslider1) as F32);
         let zipped_iterators = inputs0.zip(inputs1).zip(outputs0).zip(outputs1);
         for (((input0, input1), output0), output1) in zipped_iterators {
             let mut fTemp0: F32 = self.fConst3 * self.fRec0[1];
@@ -932,7 +932,7 @@ impl Dsp {
             self.fRec12[0] =
                 self.fConst21 * (self.fRec6[1] + self.fConst20 * self.fRec13[0]) + self.fConst16 * self.fRec12[1];
             self.fVec0[(self.IOTA0 & 16383) as usize] = 0.35355338 * self.fRec12[0] + 1e-20;
-            let mut fTemp2: F32 = *input0;
+            let mut fTemp2: F32 = (*input0) as F32;
             self.fVec1[(self.IOTA0 & 16383) as usize] = fTemp2;
             let mut fTemp3: F32 = 0.3 * self.fVec1[((i32::wrapping_sub(self.IOTA0, self.iConst24)) & 16383) as usize];
             let mut fTemp4: F32 = fTemp3
@@ -975,7 +975,7 @@ impl Dsp {
             self.fRec28[0] =
                 self.fConst78 * (self.fRec3[1] + self.fConst77 * self.fRec29[0]) + self.fConst76 * self.fRec28[1];
             self.fVec9[(self.IOTA0 & 32767) as usize] = 0.35355338 * self.fRec28[0] + 1e-20;
-            let mut fTemp10: F32 = *input1;
+            let mut fTemp10: F32 = (*input1) as F32;
             self.fVec10[(self.IOTA0 & 16383) as usize] = fTemp10;
             let mut fTemp11: F32 = 0.3 * self.fVec10[((i32::wrapping_sub(self.IOTA0, self.iConst24)) & 16383) as usize];
             let mut fTemp12: F32 = fTemp11
@@ -1070,10 +1070,11 @@ impl Dsp {
             let mut fTemp27: F32 = self.fRec42[0] + 1.0;
             let mut fTemp28: F32 = 1.0 - 0.5 * fTemp27;
             self.fRec43[0] = fSlow1 + self.fConst125 * self.fRec43[1];
-            *output0 = 0.5
+            *output0 = (0.5
                 * self.fRec43[0]
                 * (fTemp2 * fTemp27
-                    + fTemp28 * (fTemp26 + fTemp24 + self.fRec0[2] - fTemp0 + (self.fRec0[2] + fTemp26 - fTemp25)));
+                    + fTemp28 * (fTemp26 + fTemp24 + self.fRec0[2] - fTemp0 + (self.fRec0[2] + fTemp26 - fTemp25))))
+                as FaustFloat;
             let mut fTemp29: F32 = self.fConst3 * self.fRec44[1];
             let mut fTemp30: F32 = self.fConst6 * self.fRec45[1];
             let mut fTemp31: F32 = 0.37 * (self.fRec3[0] - self.fRec4[0]);
@@ -1085,10 +1086,11 @@ impl Dsp {
             let mut fTemp35: F32 = fTemp34 + fTemp29;
             self.fRec44[0] = fTemp35 - self.fConst2 * self.fRec44[2];
             let mut fTemp36: F32 = self.fConst2 * self.fRec44[0];
-            *output1 = 0.5
+            *output1 = (0.5
                 * self.fRec43[0]
                 * (fTemp10 * fTemp27
-                    + fTemp28 * (fTemp36 + fTemp34 + self.fRec44[2] - fTemp29 + (self.fRec44[2] + fTemp36 - fTemp35)));
+                    + fTemp28 * (fTemp36 + fTemp34 + self.fRec44[2] - fTemp29 + (self.fRec44[2] + fTemp36 - fTemp35))))
+                as FaustFloat;
             self.fRec13[1] = self.fRec13[0];
             self.fRec12[1] = self.fRec12[0];
             self.IOTA0 = i32::wrapping_add(self.IOTA0, 1);

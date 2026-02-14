@@ -14,6 +14,7 @@ use faust_benchmarks::types::{FaustDsp, Meta, UI, ParamIndex};
 use faust_benchmarks::benchmark_runner::run_benchmark;
 
 type F32 = f32;
+type FaustFloat = f32;
 
 // Generated intrinsics:
 <<includeIntrinsic>>

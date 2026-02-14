@@ -4,7 +4,7 @@ copyright: "(c)GRAME 2006"
 license: "BSD"
 name: "karplus32"
 version: "1.0"
-Code generated with Faust 2.83.10 (https://faust.grame.fr)
+Code generated with Faust 2.84.4 (https://faust.grame.fr)
 Compilation options: -a ./architecture/benchmark.rs -lang rust -fpga-mem-th 4 -ct 1 -cn Dsp -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 #![allow(dead_code)]
@@ -23,6 +23,7 @@ use faust_benchmarks::benchmark_runner::run_benchmark;
 use faust_benchmarks::types::{FaustDsp, Meta, ParamIndex, UI};
 
 type F32 = f32;
+type FaustFloat = f32;
 
 // Generated intrinsics:
 
@@ -30,19 +31,19 @@ type F32 = f32;
 
 #[repr(C)]
 pub struct Dsp {
-    fHslider0: F32,
+    fHslider0: FaustFloat,
     iRec1: [i32; 2],
-    fHslider1: F32,
-    fButton0: F32,
+    fHslider1: FaustFloat,
+    fButton0: FaustFloat,
     fVec0: [F32; 2],
     fRec2: [F32; 2],
-    fHslider2: F32,
+    fHslider2: FaustFloat,
     IOTA0: i32,
     fVec1: [F32; 8192],
-    fHslider3: F32,
-    fHslider4: F32,
+    fHslider3: FaustFloat,
+    fHslider4: FaustFloat,
     fRec0: [F32; 3],
-    fHslider5: F32,
+    fHslider5: FaustFloat,
     fVec2: [F32; 8192],
     fRec3: [F32; 3],
     fVec3: [F32; 8192],
@@ -73,7 +74,7 @@ pub struct Dsp {
     fRec16: [F32; 3],
     fVec16: [F32; 512],
     fRec17: [F32; 3],
-    fHslider6: F32,
+    fHslider6: FaustFloat,
     fVec17: [F32; 8192],
     fRec18: [F32; 3],
     fVec18: [F32; 8192],
@@ -109,10 +110,9 @@ pub struct Dsp {
     fSampleRate: i32,
 }
 
-pub type FaustFloat = F32;
 #[cfg(not(target_arch = "wasm32"))] // Compile ffi bindings only on non-wasm targets
 mod ffi {
-    use std::os::raw::c_float;
+    use core::ffi::c_float;
     // Conditionally compile the link attribute only on non-Windows platforms
     #[cfg_attr(not(target_os = "windows"), link(name = "m"))]
     unsafe extern "C" {
@@ -246,14 +246,14 @@ impl Dsp {
         // Obtaining locks on 0 static var(s)
     }
     pub fn instance_reset_params(&mut self) {
-        self.fHslider0 = 0.1;
-        self.fHslider1 = 128.0;
-        self.fButton0 = 0.0;
-        self.fHslider2 = 0.5;
-        self.fHslider3 = 32.0;
-        self.fHslider4 = 128.0;
-        self.fHslider5 = 1.0;
-        self.fHslider6 = 0.5;
+        self.fHslider0 = (0.1) as FaustFloat;
+        self.fHslider1 = (128.0) as FaustFloat;
+        self.fButton0 = (0.0) as FaustFloat;
+        self.fHslider2 = (0.5) as FaustFloat;
+        self.fHslider3 = (32.0) as FaustFloat;
+        self.fHslider4 = (128.0) as FaustFloat;
+        self.fHslider5 = (1.0) as FaustFloat;
+        self.fHslider6 = (0.5) as FaustFloat;
     }
     pub fn instance_clear(&mut self) {
         for l0 in 0..2 {
@@ -536,14 +536,14 @@ impl Dsp {
         };
         let outputs0 = outputs0.as_mut()[..count].iter_mut();
         let outputs1 = outputs1.as_mut()[..count].iter_mut();
-        let mut fSlow0: F32 = 0.5 * (1.0 - self.fHslider0);
-        let mut fSlow1: F32 = 1.0 / self.fHslider1;
-        let mut fSlow2: F32 = self.fButton0;
-        let mut fSlow3: F32 = 4.656613e-10 * self.fHslider2;
-        let mut fSlow4: F32 = self.fHslider3;
-        let mut fSlow5: F32 = self.fHslider4;
+        let mut fSlow0: F32 = 0.5 * (1.0 - (self.fHslider0) as F32);
+        let mut fSlow1: F32 = 1.0 / (self.fHslider1) as F32;
+        let mut fSlow2: F32 = (self.fButton0) as F32;
+        let mut fSlow3: F32 = 4.656613e-10 * (self.fHslider2) as F32;
+        let mut fSlow4: F32 = (self.fHslider3) as F32;
+        let mut fSlow5: F32 = (self.fHslider4) as F32;
         let mut iSlow6: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 3e+01 * fSlow4 + -1.5))) as i32;
-        let mut fSlow7: F32 = self.fHslider5;
+        let mut fSlow7: F32 = (self.fHslider5) as F32;
         let mut fSlow8: F32 = ((fSlow7 > 3e+01) as i32) as u32 as F32;
         let mut iSlow9: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 28.0 * fSlow4 + -1.5))) as i32;
         let mut fSlow10: F32 = ((fSlow7 > 28.0) as i32) as u32 as F32;
@@ -575,7 +575,7 @@ impl Dsp {
         let mut fSlow36: F32 = ((fSlow7 > 2.0) as i32) as u32 as F32;
         let mut iSlow37: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + -1.5))) as i32;
         let mut fSlow38: F32 = ((fSlow7 > 0.0) as i32) as u32 as F32;
-        let mut fSlow39: F32 = self.fHslider6;
+        let mut fSlow39: F32 = (self.fHslider6) as F32;
         let mut iSlow40: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 31.0 * fSlow4 + -1.5))) as i32;
         let mut fSlow41: F32 = ((fSlow7 > 31.0) as i32) as u32 as F32;
         let mut iSlow42: i32 = (F32::min(4096.0, F32::max(0.0, fSlow5 + 29.0 * fSlow4 + -1.5))) as i32;
@@ -648,7 +648,7 @@ impl Dsp {
             self.fRec16[0] = self.fVec15[((i32::wrapping_sub(self.IOTA0, iSlow35)) & 2047) as usize];
             self.fVec16[(self.IOTA0 & 511) as usize] = fSlow0 * (self.fRec17[1] + self.fRec17[2]) + fTemp0;
             self.fRec17[0] = self.fVec16[((i32::wrapping_sub(self.IOTA0, iSlow37)) & 511) as usize];
-            *output0 = fSlow39
+            *output0 = (fSlow39
                 * (fSlow38 * self.fRec17[0]
                     + fSlow36 * self.fRec16[0]
                     + fSlow34 * self.fRec15[0]
@@ -664,7 +664,7 @@ impl Dsp {
                     + fSlow14 * self.fRec5[0]
                     + fSlow12 * self.fRec4[0]
                     + fSlow10 * self.fRec3[0]
-                    + fSlow8 * self.fRec0[0]);
+                    + fSlow8 * self.fRec0[0])) as FaustFloat;
             self.fVec17[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec18[1] + self.fRec18[2]);
             self.fRec18[0] = self.fVec17[((i32::wrapping_sub(self.IOTA0, iSlow40)) & 8191) as usize];
             self.fVec18[(self.IOTA0 & 8191) as usize] = fTemp0 + fSlow0 * (self.fRec19[1] + self.fRec19[2]);
@@ -697,7 +697,7 @@ impl Dsp {
             self.fRec32[0] = self.fVec31[((i32::wrapping_sub(self.IOTA0, iSlow68)) & 2047) as usize];
             self.fVec32[(self.IOTA0 & 1023) as usize] = fTemp0 + fSlow0 * (self.fRec33[1] + self.fRec33[2]);
             self.fRec33[0] = self.fVec32[((i32::wrapping_sub(self.IOTA0, iSlow70)) & 1023) as usize];
-            *output1 = fSlow39
+            *output1 = (fSlow39
                 * (fSlow71 * self.fRec33[0]
                     + fSlow69 * self.fRec32[0]
                     + fSlow67 * self.fRec31[0]
@@ -713,7 +713,7 @@ impl Dsp {
                     + fSlow47 * self.fRec21[0]
                     + fSlow45 * self.fRec20[0]
                     + fSlow43 * self.fRec19[0]
-                    + fSlow41 * self.fRec18[0]);
+                    + fSlow41 * self.fRec18[0])) as FaustFloat;
             self.iRec1[1] = self.iRec1[0];
             self.fVec0[1] = self.fVec0[0];
             self.fRec2[1] = self.fRec2[0];
